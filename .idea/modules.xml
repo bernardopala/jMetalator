@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jmetalator.iml" filepath="$PROJECT_DIR$/jmetalator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jmetalatorFx/jmetalatorFx.iml" filepath="$PROJECT_DIR$/jmetalatorFx/jmetalatorFx.iml" />
+    </modules>
+  </component>
+</project>
