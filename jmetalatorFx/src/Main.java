@@ -1,33 +1,42 @@
 import javafx.application.Platform;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Region;
+import jmetalhelpers.ExperimentParams;
+import jmetalhelpers.QualityIndicator;
+import jmetalhelpers.SolutionDto;
+import jmetalhelpers.algorithms.AlgorithmParameter;
 import jmetalhelpers.algorithms.NSGAIIManager;
 import jmetalhelpers.algorithms.SPEA2Manager;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.impl.AbstractEvolutionaryAlgorithm;
 import org.uma.jmetal.algorithm.util.CurrentSolutionSetReceiver;
+import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.qualityindicator.impl.*;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
 
+import javax.swing.text.TableView;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,61 +46,281 @@ import java.util.ResourceBundle;
 
 public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initializable {
 
+    //region View controls
+
+    @FXML
     public ScatterChart<Double, Double> objectiveSpaceChart;
+
+    @FXML
     public Label qiResultsLabel;
 
+    @FXML
+    public Label receivedSSLabel;
+
+    @FXML
+    public Label printedQILabel;
+
+    @FXML
     public ComboBox algorithmsComboBox;
+
+    @FXML
     public ComboBox problemsComboBox;
+
+    @FXML
+    public javafx.scene.control.TableView<SolutionDto> solutionsTableView;
+
+    @FXML
+    public TableColumn<SolutionDto, String> solutionsV1TableColumn;
+
+    @FXML
+    public TableColumn<SolutionDto, String> solutionsV2TableColumn;
+
+    @FXML
+    public LineChart<Integer, Double> gdChart;
+
+    @FXML
+    public LineChart<Integer, Double> spreadChart;
+
+    @FXML javafx.scene.control.TableView<AlgorithmParameter> algorithmParametersTableView;
+
+    @FXML
+    public TableColumn<AlgorithmParameter, String> algorithmParametersNameTableColumn;
+
+    @FXML
+    public TableColumn<AlgorithmParameter, Double> algorithmParametersValueTableColumn;
+
+    //endregion
+
+    //region Private variables
+
+    ExperimentParams ep;
+    ObservableList<AlgorithmParameter> algorithmParams = FXCollections.observableArrayList();
 
     Algorithm<List<DoubleSolution>> algorithm;
     AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> eaAlgorithm;
-    Property<ObservableList<XYChart.Series<Double, Double>>> sourceData = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<XYChart.Series<Double, Double>>()));
-    private final StringProperty qiResults = new SimpleStringProperty();
-    String result = "";
-    //public ObservableList<XYChart.Data<Double, Double>> solutionSetData = new ObservableList<>();
+    Property<ObservableList<XYChart.Series<Double, Double>>> osData = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<XYChart.Series<Double, Double>>()));
 
-    String problemName = "org.uma.jmetal.problem.multiobjective.ConstrEx";
-    String referenceParetoFront = "/pareto_fronts/ConstrEx.pf";
+    XYChart.Series pfSeries = new XYChart.Series();
+
+    Property<ObservableList<XYChart.Series<Integer, Double>>> gdData = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<XYChart.Series<Integer, Double>>()));
+    Property<ObservableList<XYChart.Series<Integer, Double>>> spreadData = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<XYChart.Series<Integer, Double>>()));
+    private final List<QualityIndicator> gdArray = new ArrayList<>();
+    private final List<QualityIndicator> spreadArray = new ArrayList<>();
+
+    private final StringProperty qiResults = new SimpleStringProperty();
+    private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty printedQIProperty = new SimpleIntegerProperty();
+
+    String result = "";
+
     int receiveSolutionSetCount = 0;
     int printQIsCount = 0;
 
+    Thread mainLoop = new Thread();
+
+    //endregion
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        objectiveSpaceChart.dataProperty().bind(sourceData);
+        ep = new ExperimentParams();
+
+        objectiveSpaceChart.dataProperty().bind(osData);
+        gdChart.dataProperty().bind(gdData);
+        spreadChart.dataProperty().bind(spreadData);
+
         qiResultsLabel.textProperty().bind(qiResults);
-//        qiResultsLabel.setMinHeight(Region.USE_PREF_SIZE);
+        receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
+        printedQILabel.textProperty().bind(printedQIProperty.asString());
+        solutionsV1TableColumn.setCellValueFactory(r -> r.getValue().v1Property());
+        solutionsV2TableColumn.setCellValueFactory(r -> r.getValue().v2Property());
+
+        algorithmParametersNameTableColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        algorithmParametersValueTableColumn.setCellValueFactory(new PropertyValueFactory<>("Value"));
+        algorithmParametersValueTableColumn.setCellFactory(col -> new SpinnerCell<AlgorithmParameter, Double>());
+        algorithmParametersValueTableColumn.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<AlgorithmParameter, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<AlgorithmParameter, Double> t) {
+                        ((AlgorithmParameter) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setValue(Double.valueOf(t.getNewValue()));
+                    }
+                }
+        );
+
         FillComboBoxAlgorithms();
         FillComboBoxProblems();
     }
 
     @Override
     public void ReceiveCurrentSolutionSet(final List<DoubleSolution> solutionSet) {
+
+//        List<DoubleSolution> solutionSetResult =  algorithm.getResult();
+//        if (Thread.currentThread().isInterrupted()){
+//            algorithm = null;
+//            return;
+//        }
+        ObservableList<XYChart.Series<Double, Double>> osList = FXCollections.observableArrayList();
+        XYChart.Series osSeries = new XYChart.Series();
         receiveSolutionSetCount++;
+        if (osList.contains(osSeries))
+            osList.remove(osSeries);
 
-        ObservableList<XYChart.Series<Double, Double>> seriesList = FXCollections.observableArrayList();
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Pareto front approximation");
+        osSeries = new XYChart.Series();
+        osSeries.setName("Pareto front approximation");
+
+        ObservableList<SolutionDto> solutionList = FXCollections.observableArrayList();
+
         for (int i = 0; i < solutionSet.size(); i++) {
-            series.getData().add(new XYChart.Data(solutionSet.get(i).getObjective(0), solutionSet.get(i).getObjective(1)));
-        }
-        seriesList.add(series);
+            osSeries.getData().add(new XYChart.Data(solutionSet.get(i).getObjective(0), solutionSet.get(i).getObjective(1)));
 
-        result = "Ni ma wynik�w...";
+            SolutionDto dto = new SolutionDto();
+            dto.setV1(String.valueOf(solutionSet.get(i).getObjective(0)));
+            dto.setV2(String.valueOf(solutionSet.get(i).getObjective(1)));
+            solutionList.add(dto);
+        }
+
+        osList.add(osSeries);
+        solutionsTableView.setItems(solutionList);
+
+        ObservableList<XYChart.Series<Integer, Double>> gdList = FXCollections.observableArrayList();
+        XYChart.Series gdSeries = new XYChart.Series();
+        gdSeries.setName("Generational distance");
+
+        ObservableList<XYChart.Series<Integer, Double>> spreadList = FXCollections.observableArrayList();
+        XYChart.Series spreadSeries = new XYChart.Series();
+        spreadSeries.setName("Spread");
 
         try {
-            result = printQualityIndicators(solutionSet, referenceParetoFront);
+            ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
+            FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
+            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
+            Front normalizedFront = frontNormalizer.normalize(new ArrayFront(solutionSet));
+            List normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
+
+            gdArray.add(new QualityIndicator(receiveSolutionSetCount, (new GenerationalDistance<DoubleSolution>(referenceFront)).evaluate(solutionSet)));
+            spreadArray.add(new QualityIndicator(receiveSolutionSetCount, (new Spread<DoubleSolution>(referenceFront)).evaluate(solutionSet)));
+
+            for (int i = 0; i < gdArray.size(); i++) {
+                gdSeries.getData().add(new XYChart.Data<>(gdArray.get(i).getId(), gdArray.get(i).getValue()));
+                spreadSeries.getData().add(new XYChart.Data<>(spreadArray.get(i).getId(), spreadArray.get(i).getValue()));
+            }
+            gdList.add(gdSeries);
+            spreadList.add(spreadSeries);
+
+//            gdArray.add(new QualityIndicator(receiveSolutionSetCount, (new PISAHypervolume(normalizedReferenceFront)).evaluate(normalizedPopulation)));
+//
+//            List<XYChart.Data<Integer, Double>> update = new ArrayList<XYChart.Data<Integer, Double>>();
+//            for (int i = 0; i < gdArray.size(); i++) {
+//                update.add(new XYChart.Data<>(gdArray.get(i).getId(), gdArray.get(i).getValue()));
+//            }
+//            ObservableList<XYChart.Data<Integer, Double>> updateList = FXCollections.observableArrayList(update);
+//            gdSeries.setData(updateList);
+//            gdList.add(gdSeries);
+
             printQIsCount++;
+            //result = printQualityIndicators(solutionSet, referenceParetoFront);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    osData.setValue(osList);
+                    gdData.setValue(gdList);
+                    spreadData.setValue(spreadList);
+
+                    //qiResults.setValue(result);
+                    receivedSSProperty.setValue(receiveSolutionSetCount);
+                    printedQIProperty.setValue(printQIsCount);
+                }
+            });
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                sourceData.setValue(seriesList);
-                qiResults.setValue(result);
-            }
-        });
+    //region Events
+    public void startButtonClicked(ActionEvent actionEvent){
+        if (!ep.IsReady()){
+            new Alert(Alert.AlertType.ERROR, "Select algorithm and problem!").showAndWait();
+            return;
+        }
+
+        eaAlgorithm = ep.getJMetalAlgorithm();
+        eaAlgorithm.subscribeCurrentSolutionSetReceiver(this);
+        algorithm = eaAlgorithm;
+
+        Runnable task = () -> {
+            algorithm.run();
+        };
+
+        mainLoop = new Thread(task);
+        mainLoop.setDaemon(true);
+        mainLoop.start();
+    }
+
+    public void stopButtonClicked(ActionEvent actionEvent){
+        //mainLoop.interrupt();
+
+    }
+
+    public void algorithmSelected(ActionEvent actionEvent){
+        String selectedAlgorithmName = (String)algorithmsComboBox.getValue();
+        if (selectedAlgorithmName != null && !selectedAlgorithmName.isEmpty()) {
+            ep.setAlgorithmName(selectedAlgorithmName);
+            algorithmParams = FXCollections.observableArrayList(ep.getAlgorithmParameterList());
+            algorithmParametersTableView.setItems(algorithmParams);
+        }
+    }
+
+    public void problemSelected(ActionEvent actionEvent) throws ClassNotFoundException {
+        String selectedProblemName = (String)problemsComboBox.getValue();
+        if (selectedProblemName != null && !selectedProblemName.isEmpty())
+            ep.setProblemName(selectedProblemName);
+
+//        try
+//        {
+//            String selectedProblemName = (String)problemsComboBox.getValue();
+//            prepareProblemData(selectedProblemName);
+//
+//            if (osList.contains(pfSeries))
+//                osList.remove(pfSeries);
+//
+//            pfSeries = new XYChart.Series();
+//            pfSeries.setName("True Pareto front");
+//
+//            ArrayFront referenceFront = new ArrayFront(referenceParetoFront);
+////            FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
+////            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
+////            Front normalizedFront = frontNormalizer.normalize(new ArrayFront(solutionSet));
+////            List normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
+//
+//            for (int i = 0; i < referenceFront.getNumberOfPoints(); i++) {
+//                pfSeries.getData().add(new XYChart.Data(referenceFront.getPoint(i).getDimensionValue(0), referenceFront.getPoint(i).getDimensionValue(1)));
+//            }
+//
+//            osList.add(pfSeries);
+//            osData.setValue(osList);
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+    }
+    //endregion
+
+    //region Methods
+    public void FillComboBoxAlgorithms()
+    {
+        ObservableList<String> algoritmhs = FXCollections.observableArrayList();
+        algoritmhs.addAll("NSGAII", "SPEA2");
+
+        algorithmsComboBox.setItems(algoritmhs);
+    }
+
+    public void FillComboBoxProblems()
+    {
+        ObservableList<String> problems = FXCollections.observableArrayList();
+        problems.addAll("Binh2", "ConstrEx", "Fonseca", "Golinski", "Kursawe", "Osyczka2", "Schaffer", "Srinivas", "Tanaka");
+
+        problemsComboBox.setItems(problems);
     }
 
     public String printQualityIndicators(List<DoubleSolution> population, String paretoFrontFile) throws FileNotFoundException {
@@ -118,55 +347,43 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         return outputString;
         //JMetalLogger.logger.info(outputString);
     }
+    //endregion
+}
 
-    public void startButtonClicked(ActionEvent actionEvent) throws ClassNotFoundException {
+class SpinnerCell<S, T extends Number> extends TableCell<S, T> {
 
-        String selectedAlgorithmName = (String)algorithmsComboBox.getValue();
-        String selectedProblemName = (String)problemsComboBox.getValue();
-        if (selectedAlgorithmName == null || selectedProblemName == null) {
-            new Alert(Alert.AlertType.ERROR, "Select algorithm and problem!").showAndWait();
-            return;
-        }
+    private Spinner<T> spinner;
+    private ObservableValue<T> ov;
 
-        problemName = "org.uma.jmetal.problem.multiobjective." + selectedProblemName;
-        referenceParetoFront = "/pareto_fronts/" + selectedProblemName + ".pf";
+    public SpinnerCell() {
+        this(0.1);
+    }
 
-        Map<String, String> params = NSGAIIManager.getDefaultParams();
-        params.replace("problemName", problemName);
-        eaAlgorithm = new NSGAIIManager(params).Create();
+    public SpinnerCell(double step) {
+        this.spinner = new Spinner<>(0.0, 1000000.0, step);
+        setAlignment(Pos.CENTER);
+    }
 
-        if (selectedAlgorithmName == "SPEA2") {
-            params = SPEA2Manager.getDefaultParams();
-            params.replace("problemName", problemName);
-            eaAlgorithm = new SPEA2Manager(params).Create();
-        }
+    @Override
+    protected void updateItem(T item, boolean empty) {
+        super.updateItem(item, empty);
 
-        eaAlgorithm.subscribeCurrentSolutionSetReceiver(this);
-        algorithm = eaAlgorithm;
+        if (empty) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            setText(null);
+            setGraphic(this.spinner);
 
-        Thread mainLoop = new Thread(new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                algorithm.run();
-                return null;
+            if(this.ov instanceof Property) {
+                this.spinner.getValueFactory().valueProperty().unbindBidirectional(((Property) this.ov));
             }
-        });
-        mainLoop.start();
-    }
 
-    public void FillComboBoxAlgorithms()
-    {
-        ObservableList<String> algoritmhs = FXCollections.observableArrayList();
-        algoritmhs.addAll("NSGAII", "SPEA2");
+            this.ov = getTableColumn().getCellObservableValue(getIndex());
 
-        algorithmsComboBox.setItems(algoritmhs);
-    }
-
-    public void FillComboBoxProblems()
-    {
-        ObservableList<String> problems = FXCollections.observableArrayList();
-        problems.addAll("Binh2", "ConstrEx", "Fonseca", "Golinski", "Kursawe", "Osyczka2", "Schaffer", "Srinivas", "Tanaka");
-
-        problemsComboBox.setItems(problems);
+            if(this.ov instanceof Property) {
+                this.spinner.getValueFactory().valueProperty().bindBidirectional(((Property) this.ov));
+            }
+        }
     }
 }

@@ -35,11 +35,11 @@ public class NSGAIIManager {
     }
 
     public void setParameters(Map<String, String> params){
-        problemName = params.get("problemName");
+        problemName = createProblemUrl(params.get("problemName"));
         crossoverProbability = Double.valueOf(params.get("crossoverProbability"));
-        crossoverDistributionIndex = Double.valueOf(params.get("crossoverDistributionIndex"));
+        crossoverDistributionIndex = 20.0D; // Double.valueOf(params.get("crossoverDistributionIndex"));
         mutationProbability = Double.valueOf(params.get("mutationProbability"));
-        mutationDistributionIndex = Double.valueOf(params.get("mutationDistributionIndex"));
+        mutationDistributionIndex = 20.0D; // Double.valueOf(params.get("mutationDistributionIndex"));
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
     }
@@ -52,13 +52,17 @@ public class NSGAIIManager {
         return (new NSGAIIBuilder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxEvaluations(maxEvaluations).setPopulationSize(populationSize).build();
     }
 
+    private String createProblemUrl(String problemName){
+        return "org.uma.jmetal.problem.multiobjective." + problemName;
+    }
+
     public static Map<String, String> getDefaultParams() {
         Map<String, String> params = new HashMap<>();
-        params.put("problemName", "org.uma.jmetal.problem.multiobjective.ConstrEx");
+        params.put("problemName", "ConstrEx");
         params.put("crossoverProbability", "0.7D");
-        params.put("crossoverDistributionIndex", "20.0D");
+        //params.put("crossoverDistributionIndex", "20.0D");
         params.put("mutationProbability", "0.5D");
-        params.put("mutationDistributionIndex", "20.0D");
+        //params.put("mutationDistributionIndex", "20.0D");
         params.put("maxEvaluations", "100000");
         params.put("populationSize", "100");
 

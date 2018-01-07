@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.ScatterChart?>
 <?import javafx.scene.control.Button?>
@@ -18,16 +19,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Main">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
    <left>
-      <VBox prefHeight="400.0" prefWidth="153.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="400.0" prefWidth="126.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Algorithm">
                <VBox.margin>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="algorithmsComboBox" prefWidth="150.0">
+            <ComboBox fx:id="algorithmsComboBox" onAction="#algorithmSelected" prefWidth="150.0">
                <VBox.margin>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
@@ -37,11 +38,38 @@
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="problemsComboBox" prefWidth="150.0">
+            <ComboBox fx:id="problemsComboBox" onAction="#problemSelected" prefWidth="150.0">
                <VBox.margin>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </ComboBox>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Received solution sets">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Printed QI results" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="receivedSSLabel" text="0" GridPane.columnIndex="1" />
+                  <Label fx:id="printedQILabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </GridPane>
          </children>
       </VBox>
    </left>
@@ -52,43 +80,64 @@
             <content>
                 <ScatterChart fx:id="objectiveSpaceChart" animated="false">
                     <xAxis>
-                        <NumberAxis side="BOTTOM" />
+                        <NumberAxis animated="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
-                        <NumberAxis side="LEFT" />
+                        <NumberAxis animated="false" side="LEFT" />
                     </yAxis>
                 </ScatterChart>
             </content>
           </Tab>
           <Tab text="Solutions">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="solutionsTableView" prefHeight="371.0" prefWidth="217.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                           <columns>
+                              <TableColumn fx:id="solutionsV1TableColumn" prefWidth="75.0" text="V1" />
+                              <TableColumn fx:id="solutionsV2TableColumn" prefWidth="75.0" text="V2" />
+                           </columns></TableView>
+                     </children></AnchorPane>
             </content>
           </Tab>
             <Tab text="Generational Distance">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <LineChart fx:id="gdChart" animated="false" createSymbols="false">
+                  <xAxis>
+                    <NumberAxis animated="false" side="BOTTOM" />
+                  </xAxis>
+                  <yAxis>
+                    <NumberAxis animated="false" side="LEFT" />
+                  </yAxis>
+                </LineChart>
               </content>
             </Tab>
             <Tab text="Spread">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
+               <content>
+                  <LineChart fx:id="spreadChart" animated="false" createSymbols="false">
+                    <xAxis>
+                      <NumberAxis animated="false" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis animated="false" side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+               </content>
             </Tab>
         </tabs>
       </TabPane>
    </center>
    <right>
-      <VBox prefHeight="400.0" prefWidth="226.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="400.0" prefWidth="221.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Algorithm parameters">
                <VBox.margin>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <TableView fx:id="algorithmParametersTableView" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="algorithmParametersTableView" editable="true" prefHeight="200.0" prefWidth="200.0">
                <columns>
-                  <TableColumn fx:id="algorithmParametersNameTableColumn" prefWidth="75.0" text="Name" />
+                  <TableColumn fx:id="algorithmParametersNameTableColumn" editable="false" prefWidth="75.0" text="Name" />
                   <TableColumn fx:id="algorithmParametersValueTableColumn" prefWidth="75.0" text="Value" />
                </columns>
                <VBox.margin>
@@ -131,6 +180,7 @@
                </VBox.margin>
             </GridPane>
             <Button fx:id="startButton" mnemonicParsing="false" onAction="#startButtonClicked" prefHeight="25.0" prefWidth="247.0" text="Start" />
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopButtonClicked" prefHeight="25.0" prefWidth="226.0" text="Stop" />
          </children>
       </VBox>
    </right>
