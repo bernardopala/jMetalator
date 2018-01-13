@@ -356,11 +356,12 @@ class SpinnerCell<S, T extends Number> extends TableCell<S, T> {
     private ObservableValue<T> ov;
 
     public SpinnerCell() {
-        this(0.1);
+        this(0, 1, 0, 0.1);
     }
 
-    public SpinnerCell(double step) {
-        this.spinner = new Spinner<>(0.0, 1000000.0, step);
+    public SpinnerCell(double min, double max, double initial, double step) {
+        this.spinner = new Spinner<>(min, max, initial, step);
+        spinner.setEditable(true);
         setAlignment(Pos.CENTER);
     }
 
