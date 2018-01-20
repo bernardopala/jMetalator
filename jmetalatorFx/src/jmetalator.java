@@ -23,7 +23,7 @@ public class jmetalator extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
         primaryStage.setScene(new Scene(root));
 
-        primaryStage.setTitle("jMetalator v1.0 - jMetal Framework Simulator");
+        primaryStage.setTitle("jMetalator v0.1 - jMetal 5.x Simulator");
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

@@ -46,6 +46,7 @@ public class AlgorithmParameter {
 
     private static Map<String, String> getCrossoverProbabilitySettings(){
         Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Crossover probability");
         settings.put("dataType", "Double");
         settings.put("min", "0.0");
         settings.put("max", "1.0");
@@ -55,6 +56,7 @@ public class AlgorithmParameter {
 
     private static Map<String, String> getMutationProbabilitySettings(){
         Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Mutation probability");
         settings.put("dataType", "Double");
         settings.put("min", "0.0");
         settings.put("max", "1.0");
@@ -64,6 +66,7 @@ public class AlgorithmParameter {
 
     private static Map<String, String> getPopulationSizeSettings(){
         Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Population size");
         settings.put("dataType", "Integer");
         settings.put("min", "1");
         settings.put("max", "1000");
@@ -73,6 +76,7 @@ public class AlgorithmParameter {
 
     private static Map<String, String> getArchiveSizeSettings(){
         Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Archive size");
         settings.put("dataType", "Integer");
         settings.put("min", "1");
         settings.put("max", "1000");
@@ -82,6 +86,7 @@ public class AlgorithmParameter {
 
     private static Map<String, String> getMaxEvaluationsSizeSettings(){
         Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Max. evaluations");
         settings.put("dataType", "Integer");
         settings.put("min", "1");
         settings.put("max", "1000000");

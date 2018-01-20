@@ -17,6 +17,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Region;
+import javafx.util.Callback;
+import javafx.util.Pair;
 import jmetalhelpers.ExperimentParams;
 import jmetalhelpers.QualityIndicator;
 import jmetalhelpers.SolutionDto;
@@ -35,6 +37,9 @@ import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
+import view.PairKeyFactory;
+import view.PairValueCell;
+import view.PairValueFactory;
 
 import javax.swing.text.TableView;
 import java.io.FileNotFoundException;
@@ -56,9 +61,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     @FXML
     public Label receivedSSLabel;
-
-    @FXML
-    public Label printedQILabel;
 
     @FXML
     public ComboBox algorithmsComboBox;
@@ -87,7 +89,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public TableColumn<AlgorithmParameter, String> algorithmParametersNameTableColumn;
 
     @FXML
-    public TableColumn<AlgorithmParameter, Double> algorithmParametersValueTableColumn;
+    public TableColumn<AlgorithmParameter, Object> algorithmParametersValueTableColumn;
 
     //endregion
 
@@ -130,23 +132,31 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         qiResultsLabel.textProperty().bind(qiResults);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
-        printedQILabel.textProperty().bind(printedQIProperty.asString());
         solutionsV1TableColumn.setCellValueFactory(r -> r.getValue().v1Property());
         solutionsV2TableColumn.setCellValueFactory(r -> r.getValue().v2Property());
 
-        algorithmParametersNameTableColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        algorithmParametersValueTableColumn.setCellValueFactory(new PropertyValueFactory<>("Value"));
-        algorithmParametersValueTableColumn.setCellFactory(col -> new SpinnerCell<AlgorithmParameter, Double>());
-        algorithmParametersValueTableColumn.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<AlgorithmParameter, Double>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<AlgorithmParameter, Double> t) {
-                        ((AlgorithmParameter) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setValue(Double.valueOf(t.getNewValue()));
-                    }
-                }
-        );
+//        algorithmParametersNameTableColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+//        algorithmParametersValueTableColumn.setCellValueFactory(new PropertyValueFactory<>("Value"));
+        algorithmParametersNameTableColumn.setCellValueFactory(new PairKeyFactory());
+        algorithmParametersValueTableColumn.setCellValueFactory(new PairValueFactory());
+//        algorithmParametersValueTableColumn.setCellFactory(col -> new SpinnerCell<AlgorithmParameter, Double>());
+        algorithmParametersValueTableColumn.setCellFactory(new Callback<TableColumn<AlgorithmParameter, Object>, TableCell<AlgorithmParameter, Object>>() {
+            @Override
+            public TableCell<AlgorithmParameter, Object> call(TableColumn<AlgorithmParameter, Object> column) {
+                return new PairValueCell();
+            }
+        });
+
+//        algorithmParametersValueTableColumn.setOnEditCommit(
+//                new EventHandler<TableColumn.CellEditEvent<AlgorithmParameter, Double>>() {
+//                    @Override
+//                    public void handle(TableColumn.CellEditEvent<AlgorithmParameter, Double> t) {
+//                        ((AlgorithmParameter) t.getTableView().getItems().get(
+//                                t.getTablePosition().getRow())
+//                        ).setValue(Double.valueOf(t.getNewValue()));
+//                    }
+//                }
+//        );
 
         FillComboBoxAlgorithms();
         FillComboBoxProblems();
