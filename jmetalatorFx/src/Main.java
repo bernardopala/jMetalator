@@ -49,6 +49,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static jdk.nashorn.internal.objects.NativeFunction.bind;
+
 public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initializable {
 
     //region View controls
@@ -61,6 +63,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     @FXML
     public Label receivedSSLabel;
+
+    @FXML
+    public Label gdErrorValueLabel;
+
+    @FXML
+    public Label spreadErrorValueLabel;
 
     @FXML
     public ComboBox algorithmsComboBox;
@@ -118,6 +126,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final StringProperty qiResults = new SimpleStringProperty();
     private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
     private final SimpleIntegerProperty printedQIProperty = new SimpleIntegerProperty();
+    private final SimpleDoubleProperty gdErrorProperty = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty spreadErrorProperty = new SimpleDoubleProperty();
+
 
     String result = "";
 
@@ -138,6 +149,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         qiResultsLabel.textProperty().bind(qiResults);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
+        gdErrorValueLabel.textProperty().bind(gdErrorProperty.asString());
+        spreadErrorValueLabel.textProperty().bind(spreadErrorProperty.asString());
         solutionsV1TableColumn.setCellValueFactory(r -> r.getValue().v1Property());
         solutionsV2TableColumn.setCellValueFactory(r -> r.getValue().v2Property());
 
@@ -216,8 +229,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             Front normalizedFront = frontNormalizer.normalize(new ArrayFront(solutionSetResult));
             List normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
 
-            gdArray.add(new QualityIndicator(receiveSolutionSetCount, (new GenerationalDistance<DoubleSolution>(referenceFront)).evaluate(solutionSetResult)));
-            spreadArray.add(new QualityIndicator(receiveSolutionSetCount, (new Spread<DoubleSolution>(referenceFront)).evaluate(solutionSetResult)));
+            QualityIndicator gd = new QualityIndicator(receiveSolutionSetCount, (new GenerationalDistance<DoubleSolution>(referenceFront)).evaluate(solutionSetResult));
+            QualityIndicator spread = new QualityIndicator(receiveSolutionSetCount, (new Spread<DoubleSolution>(referenceFront)).evaluate(solutionSetResult));
+            gdArray.add(gd);
+            spreadArray.add(spread);
 
             for (int i = 0; i < gdArray.size(); i++) {
                 gdSeries.getData().add(new XYChart.Data<>(gdArray.get(i).getId(), gdArray.get(i).getValue()));
@@ -248,6 +263,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                     //qiResults.setValue(result);
                     receivedSSProperty.setValue(receiveSolutionSetCount);
                     printedQIProperty.setValue(printQIsCount);
+                    gdErrorProperty.setValue(gd.getValue());
+                    spreadErrorProperty.setValue(spread.getValue());
                 }
             });
         } catch (FileNotFoundException e) {
@@ -263,6 +280,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         stopButton.setDisable(false);
 
         receiveSolutionSetCount = 0;
+        gdErrorProperty.setValue(0.0);
+        spreadErrorProperty.setValue(0.0);
         gdArray.clear();
         spreadArray.clear();
         osData.getValue().clear();
