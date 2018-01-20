@@ -91,6 +91,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     @FXML
     public TableColumn<AlgorithmParameter, Object> algorithmParametersValueTableColumn;
 
+    @FXML
+    public Button startButton;
+
+    @FXML
+    public Button stopButton;
+
     //endregion
 
     //region Private variables
@@ -163,9 +169,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     @Override
-    public void ReceiveCurrentSolutionSet(final List<DoubleSolution> solutionSet) {
+    public void ReceiveCurrentSolutionSet(final List<DoubleSolution> solutionSett) {
 
-//        List<DoubleSolution> solutionSetResult =  algorithm.getResult();
+        List<DoubleSolution> solutionSetResult =  algorithm.getResult();
+        if (solutionSetResult.size() == 0)
+            solutionSetResult = solutionSett;
 //        if (Thread.currentThread().isInterrupted()){
 //            algorithm = null;
 //            return;
@@ -181,12 +189,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         ObservableList<SolutionDto> solutionList = FXCollections.observableArrayList();
 
-        for (int i = 0; i < solutionSet.size(); i++) {
-            osSeries.getData().add(new XYChart.Data(solutionSet.get(i).getObjective(0), solutionSet.get(i).getObjective(1)));
+        for (int i = 0; i < solutionSetResult.size(); i++) {
+            osSeries.getData().add(new XYChart.Data(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1)));
 
             SolutionDto dto = new SolutionDto();
-            dto.setV1(String.valueOf(solutionSet.get(i).getObjective(0)));
-            dto.setV2(String.valueOf(solutionSet.get(i).getObjective(1)));
+            dto.setV1(String.valueOf(solutionSetResult.get(i).getObjective(0)));
+            dto.setV2(String.valueOf(solutionSetResult.get(i).getObjective(1)));
             solutionList.add(dto);
         }
 
@@ -205,11 +213,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
             FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
             Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
-            Front normalizedFront = frontNormalizer.normalize(new ArrayFront(solutionSet));
+            Front normalizedFront = frontNormalizer.normalize(new ArrayFront(solutionSetResult));
             List normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
 
-            gdArray.add(new QualityIndicator(receiveSolutionSetCount, (new GenerationalDistance<DoubleSolution>(referenceFront)).evaluate(solutionSet)));
-            spreadArray.add(new QualityIndicator(receiveSolutionSetCount, (new Spread<DoubleSolution>(referenceFront)).evaluate(solutionSet)));
+            gdArray.add(new QualityIndicator(receiveSolutionSetCount, (new GenerationalDistance<DoubleSolution>(referenceFront)).evaluate(solutionSetResult)));
+            spreadArray.add(new QualityIndicator(receiveSolutionSetCount, (new Spread<DoubleSolution>(referenceFront)).evaluate(solutionSetResult)));
 
             for (int i = 0; i < gdArray.size(); i++) {
                 gdSeries.getData().add(new XYChart.Data<>(gdArray.get(i).getId(), gdArray.get(i).getValue()));
@@ -247,6 +255,27 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
     }
 
+    public void disableControlsOnStart(){
+        algorithmsComboBox.setDisable(true);
+        problemsComboBox.setDisable(true);
+        algorithmParametersTableView.setDisable(true);
+        startButton.setDisable(true);
+        stopButton.setDisable(false);
+
+        receiveSolutionSetCount = 0;
+        gdArray.clear();
+        spreadArray.clear();
+        osData.getValue().clear();
+    }
+
+    public void enableControlsOnStop(){
+        algorithmsComboBox.setDisable(false);
+        problemsComboBox.setDisable(false);
+        algorithmParametersTableView.setDisable(false);
+        startButton.setDisable(false);
+        stopButton.setDisable(true);
+    }
+
     //region Events
     public void startButtonClicked(ActionEvent actionEvent){
         if (!ep.IsReady()){
@@ -254,6 +283,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             return;
         }
 
+        disableControlsOnStart();
+
+        ep.setAlgorithmParameterList(algorithmParametersTableView.getItems());
         eaAlgorithm = ep.getJMetalAlgorithm();
         eaAlgorithm.subscribeCurrentSolutionSetReceiver(this);
         algorithm = eaAlgorithm;
@@ -263,13 +295,20 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         };
 
         mainLoop = new Thread(task);
-        mainLoop.setDaemon(true);
+        mainLoop.setDaemon(false);
         mainLoop.start();
     }
 
     public void stopButtonClicked(ActionEvent actionEvent){
-        //mainLoop.interrupt();
+        mainLoop.interrupt();
+        try {
+            algorithm = null;
+        } catch (Exception ex)
+        {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+        }
 
+        enableControlsOnStop();
     }
 
     public void algorithmSelected(ActionEvent actionEvent){
@@ -358,43 +397,4 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         //JMetalLogger.logger.info(outputString);
     }
     //endregion
-}
-
-class SpinnerCell<S, T extends Number> extends TableCell<S, T> {
-
-    private Spinner<T> spinner;
-    private ObservableValue<T> ov;
-
-    public SpinnerCell() {
-        this(0, 1, 0, 0.1);
-    }
-
-    public SpinnerCell(double min, double max, double initial, double step) {
-        this.spinner = new Spinner<>(min, max, initial, step);
-        spinner.setEditable(true);
-        setAlignment(Pos.CENTER);
-    }
-
-    @Override
-    protected void updateItem(T item, boolean empty) {
-        super.updateItem(item, empty);
-
-        if (empty) {
-            setText(null);
-            setGraphic(null);
-        } else {
-            setText(null);
-            setGraphic(this.spinner);
-
-            if(this.ov instanceof Property) {
-                this.spinner.getValueFactory().valueProperty().unbindBidirectional(((Property) this.ov));
-            }
-
-            this.ov = getTableColumn().getCellObservableValue(getIndex());
-
-            if(this.ov instanceof Property) {
-                this.spinner.getValueFactory().valueProperty().bindBidirectional(((Property) this.ov));
-            }
-        }
-    }
 }

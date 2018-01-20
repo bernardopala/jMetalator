@@ -18,6 +18,8 @@ import java.util.Map;
 
 
 public class PairValueCell extends TableCell<AlgorithmParameter, Object> {
+
+
     @Override
     protected void updateItem(Object item, boolean empty) {
         super.updateItem(item, empty);
@@ -40,13 +42,13 @@ public class PairValueCell extends TableCell<AlgorithmParameter, Object> {
                 ctrl.getEditor().setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        setDoubleSpinnerValue(ctrl, (Double)ap.getValue(), min, max);
+                        setDoubleSpinnerValue(ctrl, (AlgorithmParameter) item,(Double)ap.getValue(), min, max);
                     }
                 });
 
                 ctrl.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
                     if (!newValue){
-                        setDoubleSpinnerValue(ctrl, (Double)ap.getValue(), min, max);
+                        setDoubleSpinnerValue(ctrl, (AlgorithmParameter) item, (Double)ap.getValue(), min, max);
                     }
                 });
 
@@ -66,13 +68,13 @@ public class PairValueCell extends TableCell<AlgorithmParameter, Object> {
 
                     @Override
                     public void handle(ActionEvent event) {
-                        setIntegerSpinnerValue(ctrl, ((Double) ap.getValue()).intValue(), min, max);
+                        setIntegerSpinnerValue(ctrl, (AlgorithmParameter) item, ((Double) ap.getValue()).intValue(), min, max);
                     }
                 });
 
                 ctrl.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
                     if (!newValue){
-                        setIntegerSpinnerValue(ctrl, ((Double) ap.getValue()).intValue(), min, max);
+                        setIntegerSpinnerValue(ctrl, (AlgorithmParameter) item, ((Double) ap.getValue()).intValue(), min, max);
                     }
                 });
 
@@ -106,7 +108,7 @@ public class PairValueCell extends TableCell<AlgorithmParameter, Object> {
         }
     }
 
-    private void setIntegerSpinnerValue(Spinner<Integer> ctrl, Integer defaultValue, Integer min, Integer max){
+    private void setIntegerSpinnerValue(Spinner<Integer> ctrl, AlgorithmParameter item, Integer defaultValue, Integer min, Integer max){
         String text = ctrl.getEditor().getText();
 
         if (NumberUtils.isNumber(text)) {
@@ -118,15 +120,16 @@ public class PairValueCell extends TableCell<AlgorithmParameter, Object> {
 
             ctrl.getValueFactory().setValue(enterValue);
             ctrl.getEditor().setText(enterValue.toString());
+            item.setValue(enterValue);
         }
         else {
             ctrl.getValueFactory().setValue(defaultValue);
             ctrl.getEditor().setText(defaultValue.toString());
+            item.setValue(defaultValue);
         }
-
     }
 
-    private void setDoubleSpinnerValue(Spinner<Double> ctrl, Double defaultValue, Double min, Double max){
+    private void setDoubleSpinnerValue(Spinner<Double> ctrl, AlgorithmParameter item, Double defaultValue, Double min, Double max){
         String text = ctrl.getEditor().getText();
 
         if (NumberUtils.isNumber(text)) {
@@ -138,12 +141,12 @@ public class PairValueCell extends TableCell<AlgorithmParameter, Object> {
 
             ctrl.getValueFactory().setValue(enterValue);
             ctrl.getEditor().setText(enterValue.toString());
-
+            item.setValue(enterValue);
         }
         else {
             ctrl.getValueFactory().setValue(defaultValue);
             ctrl.getEditor().setText(defaultValue.toString());
-
+            item.setValue(defaultValue);
         }
     }
 }

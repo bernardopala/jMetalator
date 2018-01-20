@@ -17,7 +17,7 @@ public class ExperimentParams{
         String problemName;
         String referenceParetoFront;
 
-        //List<AlgorithmParameter> algorithmParameterList;
+        List<AlgorithmParameter> algorithmParameterList;
 
         public String getAlgorithmName() {
                 return algorithmName;
@@ -86,17 +86,47 @@ public class ExperimentParams{
         }
 
         public AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> getJMetalAlgorithm() {
+            Map<String, String> params = NSGAIIManager.getDefaultParams();
 
-                Map<String, String> params = NSGAIIManager.getDefaultParams();
-                params.replace("problemName", this.problemName);
-                AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> ea = new NSGAIIManager(params).Create();
+            if (algorithmParameterList != null)
+                params = updateParameterList(params, algorithmParameterList);
 
-                if (this.algorithmName == "SPEA2") {
-                        params = SPEA2Manager.getDefaultParams();
-                        params.replace("problemName", this.problemName);
-                        ea = new SPEA2Manager(params).Create();
-                }
+            params.replace("problemName", this.problemName);
+            AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> ea = new NSGAIIManager(params).Create();
 
-                return ea;
+            if (this.algorithmName == "SPEA2") {
+                    params = SPEA2Manager.getDefaultParams();
+                    if (algorithmParameterList != null)
+                        params = updateParameterList(params, algorithmParameterList);
+
+                    params.replace("problemName", this.problemName);
+                    ea = new SPEA2Manager(params).Create();
+            }
+
+            return ea;
         }
+
+        private Map<String, String> updateParameterList(Map<String, String> defaultParams, List<AlgorithmParameter> newParams)
+        {
+            Map<String, String> returnParams = defaultParams;
+
+            newParams.forEach((AlgorithmParameter ap) -> {
+                if (returnParams.containsKey(ap.getName())) {
+                    Map<String,String> settings = AlgorithmParameter.getParameterSettings(ap.getName());
+                    String dataType = settings.get("dataType");
+                    if (dataType == "Double")
+                        returnParams.replace(ap.getName(), String.valueOf(Double.valueOf(ap.getValue())));
+                    else if (dataType == "Integer")
+                        returnParams.replace(ap.getName(), String.valueOf(Double.valueOf(ap.getValue()).intValue()));
+                    else
+                        returnParams.replace(ap.getName(), String.valueOf(ap.getValue()));
+                }
+            });
+
+            return returnParams;
+        }
+
+    public void setAlgorithmParameterList(List<AlgorithmParameter> algorithmParameterList) {
+        this.algorithmParameterList = algorithmParameterList;
+    }
 }
