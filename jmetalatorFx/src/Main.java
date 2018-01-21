@@ -179,6 +179,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         FillComboBoxAlgorithms();
         FillComboBoxProblems();
+        enableControlsOnStop();
     }
 
     @Override
@@ -310,7 +311,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         algorithm = eaAlgorithm;
 
         Runnable task = () -> {
-            algorithm.run();
+            try {
+                algorithm.run();
+            }
+            finally
+            {
+                enableControlsOnStop();
+            }
         };
 
         mainLoop = new Thread(task);
