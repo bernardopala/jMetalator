@@ -167,6 +167,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     //region Private variables
 
+    Lock lock = new ReentrantLock();
+
     private ExperimentParams ep;
     private ObservableList<AlgorithmParameter> algorithmParams = FXCollections.observableArrayList();
 
@@ -222,26 +224,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public void initialize(URL url, ResourceBundle rb){
         tabPane.getSelectionModel().selectedItemProperty().addListener(
             (ov, t, t1) -> {
-                //lock.lock();
+                lock.lock();
                 selectedTab.setValue(t1.getId());
-                //lock.unlock();
+                lock.unlock();
             }
         );
 
-        XYPlot plotGD = (XYPlot) chartGD.getPlot();
-        XYSeriesCollection datasetGD = (XYSeriesCollection)plotGD.getDataset();
-        datasetGD.addSeries(gdSeries);
-        plotGD.setDataset(datasetGD);
-
-        XYPlot plotIGD = (XYPlot) chartIGD.getPlot();
-        XYSeriesCollection datasetIGD = (XYSeriesCollection)plotIGD.getDataset();
-        datasetIGD.addSeries(igdSeries);
-        plotIGD.setDataset(datasetIGD);
-
-        XYPlot plotSpread = (XYPlot) chartSpread.getPlot();
-        XYSeriesCollection datasetSpread = (XYSeriesCollection)plotSpread.getDataset();
-        datasetSpread.addSeries(spreadSeries);
-        plotSpread.setDataset(datasetSpread);
+        clearControls();
 
         renderer.setSize(0.20);
         renderer.setColors(Colors.getEarthColors());
@@ -286,6 +275,31 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         enableControlsOnStop();
     }
 
+    private void clearControls()
+    {
+        gdSeries.clear();
+        XYSeriesCollection datasetGD = new XYSeriesCollection();
+        datasetGD.addSeries(gdSeries);
+        XYPlot plotGD = (XYPlot) chartGD.getPlot();
+        plotGD.setDataset(datasetGD);
+
+        igdSeries.clear();
+        XYSeriesCollection datasetIGD = new XYSeriesCollection();
+        datasetIGD.addSeries(igdSeries);
+        XYPlot plotIGD = (XYPlot) chartIGD.getPlot();
+        plotIGD.setDataset(datasetIGD);
+
+        spreadSeries.clear();
+        XYSeriesCollection datasetSpread = new XYSeriesCollection();
+        datasetSpread.addSeries(spreadSeries);
+        XYPlot plotSpread = (XYPlot) chartSpread.getPlot();
+        plotSpread.setDataset(datasetSpread);
+
+        solutionSetResult = new ArrayList<>();
+        solutionsTableView.getItems().clear();
+        counter.set(-1);
+    }
+
     @Override
     public void ReceiveCurrentSolutionSet(final List<DoubleSolution> solutionSett) {
         try {
@@ -293,6 +307,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
             solutionSetResult = algorithm.getResult();
             if (solutionSetResult.size() == 0) {
+                mutex.release();
                 return;
             }
 
@@ -396,7 +411,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         gdErrorProperty.setValue(0.0);
         spreadErrorProperty.setValue(0.0);
 
+        mutex.release();
+        semaphore.release();
 
+        clearControls();
     }
 
     public void enableControlsOnStop(){
@@ -415,6 +433,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
 
         disableControlsOnStart();
+        selectProblem((String)problemsComboBox.getValue());
 
         ep.setAlgorithmParameterList(algorithmParametersTableView.getItems());
         eaAlgorithm = ep.getJMetalAlgorithm();
@@ -452,39 +471,44 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
     }
 
+    private void selectProblem(String problemName){
+        ep.setProblemName(problemName);
+        try {
+            ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
+            if (referenceFront.getPointDimensions() == 2) {
+                seriesFront2D = createFront2D(referenceFront);
+                XYPlot plot2D = (XYPlot) chart2D.getPlot();
+                XYSeriesCollection dataset2D = new XYSeriesCollection();
+                dataset2D.addSeries(seriesFront2D);
+                plot2D.setDataset(dataset2D);
+
+                solutionsTableView.getColumns().get(2).setVisible(false);
+            }
+            else if (referenceFront.getPointDimensions() == 3) {
+                serieFront3D = createFront3D(referenceFront);
+
+                XYZPlot plot3D = (XYZPlot) viewer.getChart().getPlot();
+                XYZSeriesCollection<String> dataset3D = new XYZSeriesCollection<>();
+                dataset3D.add(serieFront3D);
+                plot3D.setDataset(dataset3D);
+
+                solutionsTableView.getColumns().get(2).setVisible(true);
+            }
+
+            gdIdicator = new GenerationalDistance<DoubleSolution>(referenceFront);
+            igdIdicator = new InvertedGenerationalDistance<DoubleSolution>(referenceFront);
+            spreadIdicator = new GeneralizedSpread<DoubleSolution>(referenceFront);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void problemSelected(ActionEvent actionEvent) throws ClassNotFoundException {
         String selectedProblemName = (String)problemsComboBox.getValue();
         if (selectedProblemName != null && !selectedProblemName.isEmpty()) {
-            ep.setProblemName(selectedProblemName);
-            try {
-                ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
-                if (referenceFront.getPointDimensions() == 2) {
-                    seriesFront2D = createFront2D(referenceFront);
-                    XYPlot plot2D = (XYPlot) chart2D.getPlot();
-                    XYSeriesCollection dataset2D = new XYSeriesCollection();
-                    dataset2D.addSeries(seriesFront2D);
-                    plot2D.setDataset(dataset2D);
-
-                    solutionsTableView.getColumns().get(2).setVisible(false);
-                }
-                else if (referenceFront.getPointDimensions() == 3) {
-                    serieFront3D = createFront3D(referenceFront);
-
-                    XYZPlot plot3D = (XYZPlot) viewer.getChart().getPlot();
-                    XYZSeriesCollection<String> dataset3D = new XYZSeriesCollection<>();
-                    dataset3D.add(serieFront3D);
-                    plot3D.setDataset(dataset3D);
-
-                    solutionsTableView.getColumns().get(2).setVisible(true);
-                }
-
-                gdIdicator = new GenerationalDistance<DoubleSolution>(referenceFront);
-                igdIdicator = new InvertedGenerationalDistance<DoubleSolution>(referenceFront);
-                spreadIdicator = new GeneralizedSpread<DoubleSolution>(referenceFront);
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            selectProblem(selectedProblemName);
         }
     }
     //endregion
