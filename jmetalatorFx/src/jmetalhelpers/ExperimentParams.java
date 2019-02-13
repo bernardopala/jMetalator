@@ -2,9 +2,7 @@ package jmetalhelpers;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import jmetalhelpers.algorithms.AlgorithmParameter;
-import jmetalhelpers.algorithms.NSGAIIManager;
-import jmetalhelpers.algorithms.SPEA2Manager;
+import jmetalhelpers.algorithms.*;
 import org.uma.jmetal.algorithm.impl.AbstractEvolutionaryAlgorithm;
 import org.uma.jmetal.solution.DoubleSolution;
 
@@ -13,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ExperimentParams{
-        String algorithmName;
-        String problemName;
-        String referenceParetoFront;
+        private String algorithmName;
+        private String problemName;
+        private String referenceParetoFront;
 
-        List<AlgorithmParameter> algorithmParameterList;
+        private List<AlgorithmParameter> algorithmParameterList;
 
         public String getAlgorithmName() {
                 return algorithmName;
@@ -33,8 +31,12 @@ public class ExperimentParams{
         }
 
         public void setProblemName(String problemName) {
+            if (problemName == "DTLZ1" || problemName == "DTLZ2")
+                this.problemName = "dtlz." + problemName;
+            else
                 this.problemName = problemName;
-                setReferenceParetoFront(problemName);
+
+            setReferenceParetoFront(problemName);
         }
 
         public List<AlgorithmParameter> getAlgorithmParameterList() {
@@ -59,22 +61,22 @@ public class ExperimentParams{
         private Map<String,String> getAlgorithmDefaultParameters(String algorithmName) {
                 Map<String, String> params = NSGAIIManager.getDefaultParams();
                 if (this.algorithmName == "SPEA2") {
-                        params = SPEA2Manager.getDefaultParams();
+                    params = SPEA2Manager.getDefaultParams();
                 }
-
+                if (this.algorithmName == "DBSPEA2") {
+                    params = DBSPEA2Manager.getDefaultParams();
+                }
+                else if (this.algorithmName == "SPEA3") {
+                    params = SPEA3Manager.getDefaultParams();
+                }
                 return params;
         }
 
 
         public boolean IsReady()
         {
-                if (this.algorithmName != null && !this.algorithmName.isEmpty()
-                        && this.problemName != null && !this.problemName.isEmpty())
-                {
-                        return true;
-                }
-
-                return false;
+            return this.algorithmName != null && !this.algorithmName.isEmpty()
+                    && this.problemName != null && !this.problemName.isEmpty();
         }
 
         public String getReferenceParetoFront() {
@@ -82,6 +84,9 @@ public class ExperimentParams{
         }
 
         private void setReferenceParetoFront(String problemName) {
+            if (problemName == "DTLZ1" || problemName == "DTLZ2")
+                this.referenceParetoFront = "/pareto_fronts/" + problemName + ".3D.pf";
+            else
                 this.referenceParetoFront = "/pareto_fronts/" + problemName + ".pf";
         }
 
@@ -95,12 +100,28 @@ public class ExperimentParams{
             AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> ea = new NSGAIIManager(params).Create();
 
             if (this.algorithmName == "SPEA2") {
-                    params = SPEA2Manager.getDefaultParams();
-                    if (algorithmParameterList != null)
-                        params = updateParameterList(params, algorithmParameterList);
+                params = SPEA2Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
 
-                    params.replace("problemName", this.problemName);
-                    ea = new SPEA2Manager(params).Create();
+                params.replace("problemName", this.problemName);
+                ea = new SPEA2Manager(params).Create();
+            }
+            else if (this.algorithmName == "DBSPEA2") {
+                params = DBSPEA2Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new DBSPEA2Manager(params).Create();
+            }
+            else if (this.algorithmName == "SPEA3") {
+                params = SPEA3Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new SPEA3Manager(params).Create();
             }
 
             return ea;

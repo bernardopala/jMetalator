@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.object-refinery:orson-charts-fx:1.0" type="repository">
+    <properties maven-id="com.object-refinery:orson-charts-fx:1.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/object-refinery/orson-charts-fx/1.0/orson-charts-fx-1.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/object-refinery/orsoncharts/1.7/orsoncharts-1.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jfree/fxgraphics2d/1.6/fxgraphics2d-1.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

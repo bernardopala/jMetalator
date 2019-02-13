@@ -2,28 +2,28 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2018-01-04T13:07:25</date>
-  <millis>1515067645200</millis>
+  <date>2019-01-26T14:48:47</date>
+  <millis>1548510527981</millis>
   <sequence>0</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>INFO</level>
   <class>org.uma.jmetal.util.JMetalLogger</class>
   <method>configureLoggers</method>
-  <thread>16</thread>
+  <thread>12</thread>
   <message>Loggers configured with null</message>
 </record>
 <record>
-  <date>2018-01-04T13:07:25</date>
-  <millis>1515067645237</millis>
+  <date>2019-01-26T14:48:48</date>
+  <millis>1548510528011</millis>
   <sequence>1</sequence>
   <logger>org.uma.jmetal.util.JMetalLogger</logger>
   <level>SEVERE</level>
   <class>org.uma.jmetal.util.JMetalException</class>
   <method>&lt;init&gt;</method>
-  <thread>16</thread>
+  <thread>12</thread>
   <message>Class.forName() did not recognized the name of the class</message>
   <exception>
-    <message>java.lang.ClassNotFoundException: org.uma.jmetal.problem.multiobjective.NSGAII</message>
+    <message>java.lang.ClassNotFoundException: org.uma.jmetal.problem.multiobjective.DTLZ1</message>
     <frame>
       <class>java.net.URLClassLoader</class>
       <method>findClass</method>
@@ -64,14 +64,14 @@
       <line>48</line>
     </frame>
     <frame>
-      <class>Main</class>
-      <method>PrepareExperiment</method>
-      <line>160</line>
+      <class>jmetalhelpers.ExperimentParams</class>
+      <method>getJMetalAlgorithm</method>
+      <line>101</line>
     </frame>
     <frame>
       <class>Main</class>
       <method>startButtonClicked</method>
-      <line>122</line>
+      <line>311</line>
     </frame>
     <frame>
       <class>sun.reflect.NativeMethodAccessorImpl</class>
@@ -361,3 +361,4 @@
     </frame>
   </exception>
 </record>
+</log>

@@ -1,7 +1,7 @@
 package jmetalhelpers.algorithms;
 
-import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2;
-import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
+import org.uma.jmetal.algorithm.multiobjective.dbspea2.DBSPEA2;
+import org.uma.jmetal.algorithm.multiobjective.dbspea2.DBSPEA2Builder;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
@@ -12,7 +12,7 @@ import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SPEA2Manager {
+public class DBSPEA2Manager {
 
     private String problemName;
     private double crossoverProbability;
@@ -23,15 +23,15 @@ public class SPEA2Manager {
     private int populationSize;
     private int archiveSize;
 
-    public SPEA2Manager(Map<String, String> params) {
+    public DBSPEA2Manager(Map<String, String> params) {
         if (params == null || params.isEmpty())
-            params = SPEA2Manager.getDefaultParams();
+            params = DBSPEA2Manager.getDefaultParams();
 
         setParameters(params);
     }
 
-    public SPEA2Manager(){
-        setParameters(SPEA2Manager.getDefaultParams());
+    public DBSPEA2Manager(){
+        setParameters(DBSPEA2Manager.getDefaultParams());
     }
 
     public void setParameters(Map<String, String> params){
@@ -45,12 +45,12 @@ public class SPEA2Manager {
         archiveSize = Integer.valueOf(params.get("archiveSize"));
     }
 
-    public SPEA2 Create() {
+    public DBSPEA2 Create() {
         Problem problem = ProblemUtils.loadProblem(problemName);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
-        return (new SPEA2Builder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxIterations(maxEvaluations).setPopulationSize(populationSize).setArchiveSize(archiveSize).build();
+        return (new DBSPEA2Builder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxIterations(maxEvaluations).setPopulationSize(populationSize).setArchiveSize(archiveSize).build();
     }
 
     private String createProblemUrl(String problemName){
@@ -71,3 +71,4 @@ public class SPEA2Manager {
         return params;
     }
 }
+
