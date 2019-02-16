@@ -45,21 +45,21 @@
    <center>
       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-            <Tab text="Orson" fx:id="tab3d">
+            <Tab text="Objective space" fx:id="tab3d">
                 <content>
                     <StackPane fx:id="stackPaneOrson">
 
                     </StackPane>
                 </content>
             </Tab>
-            <Tab text="JFREE" fx:id="tab2d">
+            <Tab text="Objective space" fx:id="tab2d">
                 <content>
                     <StackPane fx:id="stackPaneJFREE">
 
                     </StackPane>
                 </content>
             </Tab>
-            <Tab text="Solutions" fx:id="tabAproximationSet">
+            <Tab text="Solution set" fx:id="tabAproximationSet">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -72,21 +72,21 @@
                      </children></AnchorPane>
             </content>
             </Tab>
-            <Tab text="JFREE GD" fx:id="tabGD">
+            <Tab text="GD" fx:id="tabGD">
             <content>
                 <StackPane fx:id="stackPaneGD">
 
                 </StackPane>
             </content>
             </Tab>
-              <Tab text="JFREE IGD" fx:id="tabIGD">
+              <Tab text="IGD" fx:id="tabIGD">
                   <content>
                       <StackPane fx:id="stackPaneIGD">
 
                       </StackPane>
                   </content>
             </Tab>
-            <Tab text="JFREE Spread" fx:id="tabSread">
+            <Tab text="Spread" fx:id="tabSread">
                 <content>
                     <StackPane fx:id="stackPaneSpread">
 

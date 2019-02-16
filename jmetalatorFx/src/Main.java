@@ -48,6 +48,7 @@ import jmetalhelpers.SolutionDto;
 import jmetalhelpers.algorithms.AlgorithmParameter;
 import jmetalhelpers.algorithms.NSGAIIManager;
 import jmetalhelpers.algorithms.SPEA2Manager;
+import org.apache.commons.lang3.SerializationUtils;
 import org.jfree.chart.*;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.fx.ChartCanvas;
@@ -163,11 +164,15 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     @FXML
     public StackPane stackPaneSpread;
 
+    private List<Tab> tabs = new ArrayList<>();
+    private Tab tab2D = new Tab();
+    private Tab tab3D = new Tab();
     //endregion
 
     //region Private variables
 
-    Lock lock = new ReentrantLock();
+    private Lock lock = new ReentrantLock();
+    private boolean isAlgorithmWorking = false;
 
     private ExperimentParams ep;
     private ObservableList<AlgorithmParameter> algorithmParams = FXCollections.observableArrayList();
@@ -178,12 +183,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final StringProperty selectedTab = new SimpleStringProperty();
     private final StringProperty qiResults = new SimpleStringProperty();
     private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
-    private final SimpleIntegerProperty printedQIProperty = new SimpleIntegerProperty();
     private final SimpleDoubleProperty gdErrorProperty = new SimpleDoubleProperty();
     private final SimpleDoubleProperty spreadErrorProperty = new SimpleDoubleProperty();
 
-    int receiveSolutionSetCount = 0;
-    int printQIsCount = 0;
+    private int receiveSolutionSetCount = 0;
+    private int printQIsCount = 0;
 
     private Thread mainLoop = new Thread();
 
@@ -202,11 +206,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     private JFreeChart chartIGD = createLine2D(new XYSeriesCollection());
     private ChartCanvas canvasIGD = new ChartCanvas(chartIGD);
-    private XYSeries igdSeries = new XYSeries("gd");
+    private XYSeries igdSeries = new XYSeries("igd");
 
     private JFreeChart chartSpread = createLine2D(new XYSeriesCollection());
     private ChartCanvas canvasSpread = new ChartCanvas(chartSpread);
-    private XYSeries spreadSeries = new XYSeries("gd");
+    private XYSeries spreadSeries = new XYSeries("spread");
 
     private List<DoubleSolution> solutionSetResult = new ArrayList<>();
 
@@ -214,9 +218,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private InvertedGenerationalDistance igdIdicator = new InvertedGenerationalDistance<DoubleSolution>();
     private GeneralizedSpread spreadIdicator = new GeneralizedSpread<DoubleSolution>();
 
+    private List<Double> gdValues = new ArrayList<>();
+    private List<Double> igdValues = new ArrayList<>();
+    private List<Double> spreadValues = new ArrayList<>();
+
     private final AtomicLong counter = new AtomicLong(-1);
-    private static Semaphore semaphore = new Semaphore(0);
-    private static Semaphore mutex = new Semaphore(1);
 
     //endregion
 
@@ -224,11 +230,33 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public void initialize(URL url, ResourceBundle rb){
         tabPane.getSelectionModel().selectedItemProperty().addListener(
             (ov, t, t1) -> {
-                lock.lock();
+                if (t == null || t1 == null)
+                    return;
+
                 selectedTab.setValue(t1.getId());
-                lock.unlock();
+
+                if (!isAlgorithmWorking && solutionSetResult != null && solutionSetResult.size() > 0) {
+                    if (selectedTab.getValue().equalsIgnoreCase("tab3d")) {
+                        if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
+                            update3dChartRelatedUI();
+                        }
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tab2d")) {
+                        if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
+                            update2dChartRelatedUI();
+                        }
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabAproximationSet")) {
+                        updateSetRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabGD")) {
+                        updateGDRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabIGD")) {
+                        updateIGDRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabSread")) {
+                        updateSpreadRelatedIU();
+                    }
+                }
             }
         );
+        selectedTab.setValue("tab3d");
 
         clearControls();
 
@@ -273,22 +301,27 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         FillComboBoxAlgorithms();
         FillComboBoxProblems();
         enableControlsOnStop();
+
+        tabs = FXCollections.observableArrayList(tabPane.getTabs());
     }
 
     private void clearControls()
     {
+        gdValues.clear();
         gdSeries.clear();
         XYSeriesCollection datasetGD = new XYSeriesCollection();
         datasetGD.addSeries(gdSeries);
         XYPlot plotGD = (XYPlot) chartGD.getPlot();
         plotGD.setDataset(datasetGD);
 
+        igdValues.clear();
         igdSeries.clear();
         XYSeriesCollection datasetIGD = new XYSeriesCollection();
         datasetIGD.addSeries(igdSeries);
         XYPlot plotIGD = (XYPlot) chartIGD.getPlot();
         plotIGD.setDataset(datasetIGD);
 
+        spreadValues.clear();
         spreadSeries.clear();
         XYSeriesCollection datasetSpread = new XYSeriesCollection();
         datasetSpread.addSeries(spreadSeries);
@@ -303,104 +336,153 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     @Override
     public void ReceiveCurrentSolutionSet(final List<DoubleSolution> solutionSett) {
         try {
-            mutex.acquire();
+            lock.lock();
+
+            printQIsCount++;
+
+            if (algorithm == null){
+                lock.unlock();
+                return;
+            }
 
             solutionSetResult = algorithm.getResult();
             if (solutionSetResult.size() == 0) {
-                mutex.release();
+                lock.unlock();
                 return;
+            }
+
+            receiveSolutionSetCount++;
+
+            if (receiveSolutionSetCount % 100 == 0) {
+                int a = 0;
             }
 
             double gd = gdIdicator.evaluate(solutionSetResult);
             double igd = igdIdicator.evaluate(solutionSetResult);
             double spread = spreadIdicator.evaluate(solutionSetResult);
 
-            gdSeries.add(receiveSolutionSetCount, gd);
-            igdSeries.add(receiveSolutionSetCount, igd);
-            spreadSeries.add(receiveSolutionSetCount, spread);
+            gdValues.add(gd);
+            igdValues.add(igd);
+            spreadValues.add(spread);
 
-            printQIsCount++;
-            receiveSolutionSetCount++;
+            lock.unlock();
 
             if (counter.getAndSet(1) != -1)
                 return;
 
-            mutex.release();
-            semaphore.release();
-
             Platform.runLater(() -> {
                 try {
-                    semaphore.acquire();
+                    lock.lock();
 
                     gdErrorProperty.setValue(gd);
                     spreadErrorProperty.setValue(spread);
                     receivedSSProperty.setValue(receiveSolutionSetCount);
-                    printedQIProperty.setValue(printQIsCount);
 
-                    if (selectedTab.getValue().toString().equalsIgnoreCase("tab3d")) {
-                        //if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
-                        XYZPlot plot = (XYZPlot) viewer.getChart().getPlot();
-                        XYZSeriesCollection<String> dataset3D = createDataset(solutionSetResult);
-                        dataset3D.add(serieFront3D);
-                        plot.setDataset(dataset3D);
-                        //}
-                    } else if (selectedTab.getValue().toString().equalsIgnoreCase("tab2d")) {
-                        XYPlot plot2D = (XYPlot) chart2D.getPlot();
-                        XYSeriesCollection dataset2D = createDataset2D(solutionSetResult);
-                        dataset2D.addSeries(seriesFront2D);
-                        plot2D.setDataset(dataset2D);
-                    } else if (selectedTab.getValue().toString().equalsIgnoreCase("tabAproximationSet")) {
-                        ObservableList<SolutionDto> solutionList = FXCollections.observableArrayList();
-                        if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
-                            for (int i = 0; i < solutionSetResult.size(); i++) {
-                                SolutionDto dto = new SolutionDto();
-                                dto.setV1(String.valueOf(solutionSetResult.get(i).getObjective(0)));
-                                dto.setV2(String.valueOf(solutionSetResult.get(i).getObjective(1)));
-                                solutionList.add(dto);
-                            }
-                        } else if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
-                            for (int i = 0; i < solutionSetResult.size(); i++) {
-                                SolutionDto dto = new SolutionDto();
-                                dto.setV1(String.valueOf(solutionSetResult.get(i).getObjective(0)));
-                                dto.setV2(String.valueOf(solutionSetResult.get(i).getObjective(1)));
-                                dto.setV3(String.valueOf(solutionSetResult.get(i).getObjective(2)));
-                                solutionList.add(dto);
-                            }
+                    if (selectedTab.getValue().equalsIgnoreCase("tab3d")) {
+                        if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
+                            update3dChartRelatedUI();
                         }
-
-                        solutionsTableView.setItems(solutionList);
-                    } else if (selectedTab.getValue().toString().equalsIgnoreCase("tabGD")) {
-
-                        XYSeriesCollection datasetGD = new XYSeriesCollection();
-                        datasetGD.addSeries(gdSeries);
-                        XYPlot plotGD = (XYPlot) chartGD.getPlot();
-                        plotGD.setDataset(datasetGD);
-                    } else if (selectedTab.getValue().toString().equalsIgnoreCase("tabIGD")) {
-                        XYSeriesCollection datasetIGD = new XYSeriesCollection();
-                        datasetIGD.addSeries(igdSeries);
-                        XYPlot plotIGD = (XYPlot) chartIGD.getPlot();
-                        plotIGD.setDataset(datasetIGD);
-                    } else if (selectedTab.getValue().toString().equalsIgnoreCase("tabSread")) {
-                        XYSeriesCollection datasetSpread = new XYSeriesCollection();
-                        datasetSpread.addSeries(spreadSeries);
-                        XYPlot plotSpread = (XYPlot) chartSpread.getPlot();
-                        plotSpread.setDataset(datasetSpread);
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tab2d")) {
+                        if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
+                            update2dChartRelatedUI();
+                        }
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabAproximationSet")) {
+                        updateSetRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabGD")) {
+                        updateGDRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabIGD")) {
+                        updateIGDRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabSread")) {
+                        updateSpreadRelatedIU();
                     }
 
                     counter.set(-1);
-                    mutex.release();
-                } catch (InterruptedException e) {
+                    lock.unlock();
+                } catch (Exception e) {
                     System.out.println("EXCEPTION: ReceiveCurrentSolutionSet()->Platform.runLater()");
                     e.printStackTrace();
                 }
             });
-        } catch (InterruptedException e) {
+
+        } catch (Exception e) {
             System.out.println("EXCEPTION: ReceiveCurrentSolutionSet()");
             e.printStackTrace();
         }
     }
 
-    public void disableControlsOnStart(){
+    private void update3dChartRelatedUI(){
+        XYZPlot plot = (XYZPlot) viewer.getChart().getPlot();
+        XYZSeriesCollection dataset3D = createDataset(solutionSetResult);
+        dataset3D.add(serieFront3D);
+        plot.setDataset(dataset3D);
+    }
+
+    private void update2dChartRelatedUI(){
+        XYPlot plot2D = (XYPlot) chart2D.getPlot();
+        XYSeriesCollection dataset2D = createDataset2D(solutionSetResult);
+        dataset2D.addSeries(seriesFront2D);
+        plot2D.setDataset(dataset2D);
+    }
+
+    private void updateSetRelatedUI(){
+        ObservableList<SolutionDto> solutionList = FXCollections.observableArrayList();
+        if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
+            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+                SolutionDto dto = new SolutionDto();
+                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
+                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
+                solutionList.add(dto);
+            }
+        } else if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
+            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+                SolutionDto dto = new SolutionDto();
+                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
+                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
+                dto.setV3(String.valueOf(aSolutionSetResult.getObjective(2)));
+                solutionList.add(dto);
+            }
+        }
+
+        solutionsTableView.setItems(solutionList);
+    }
+
+    private void updateGDRelatedUI(){
+        gdSeries = new XYSeries("gd");
+        for (int i = 0; i < gdValues.size(); i++){
+            gdSeries.add(i, gdValues.get(i));
+        }
+
+        XYSeriesCollection datasetGD = new XYSeriesCollection();
+        datasetGD.addSeries(gdSeries);
+        XYPlot plotGD = (XYPlot) chartGD.getPlot();
+        plotGD.setDataset(datasetGD);
+    }
+
+    private void updateIGDRelatedUI(){
+        igdSeries = new XYSeries("igd");
+        for (int i = 0; i < igdValues.size(); i++){
+            igdSeries.add(i, igdValues.get(i));
+        }
+
+        XYSeriesCollection datasetIGD = new XYSeriesCollection();
+        datasetIGD.addSeries(igdSeries);
+        XYPlot plotIGD = (XYPlot) chartIGD.getPlot();
+        plotIGD.setDataset(datasetIGD);
+    }
+
+    private void updateSpreadRelatedIU(){
+        spreadSeries = new XYSeries("spread");
+        for (int i = 0; i < spreadValues.size(); i++){
+            spreadSeries.add(i, spreadValues.get(i));
+        }
+
+        XYSeriesCollection datasetSpread = new XYSeriesCollection();
+        datasetSpread.addSeries(spreadSeries);
+        XYPlot plotSpread = (XYPlot) chartSpread.getPlot();
+        plotSpread.setDataset(datasetSpread);
+    }
+
+    private void disableControlsOnStart(){
         algorithmsComboBox.setDisable(true);
         problemsComboBox.setDisable(true);
         algorithmParametersTableView.setDisable(true);
@@ -411,13 +493,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         gdErrorProperty.setValue(0.0);
         spreadErrorProperty.setValue(0.0);
 
-        mutex.release();
-        semaphore.release();
+//        mutex.release();
+//        semaphore.release();
 
         clearControls();
     }
 
-    public void enableControlsOnStop(){
+    private void enableControlsOnStop(){
         algorithmsComboBox.setDisable(false);
         problemsComboBox.setDisable(false);
         algorithmParametersTableView.setDisable(false);
@@ -435,6 +517,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         disableControlsOnStart();
         selectProblem((String)problemsComboBox.getValue());
 
+        Platform.setImplicitExit(false);
+
         ep.setAlgorithmParameterList(algorithmParametersTableView.getItems());
         eaAlgorithm = ep.getJMetalAlgorithm();
         eaAlgorithm.subscribeCurrentSolutionSetReceiver(this);
@@ -442,12 +526,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         Runnable task = () -> {
             try { algorithm.run();}
-            finally { enableControlsOnStop();}
+            finally {
+                isAlgorithmWorking = false;
+                enableControlsOnStop();
+            }
         };
 
         mainLoop = new Thread(task);
         mainLoop.setDaemon(true);
         mainLoop.start();
+        isAlgorithmWorking = true;
     }
 
     public void stopButtonClicked(ActionEvent actionEvent){
@@ -458,7 +546,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         {
             new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
         }
-
+        isAlgorithmWorking = false;
         enableControlsOnStop();
     }
 
@@ -482,6 +570,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 dataset2D.addSeries(seriesFront2D);
                 plot2D.setDataset(dataset2D);
 
+                tabPane.getTabs().get(0).setDisable(true);
+                tabPane.getTabs().get(1).setDisable(false);
+                selectedTab.setValue("tab2d");
+                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(1);
+
                 solutionsTableView.getColumns().get(2).setVisible(false);
             }
             else if (referenceFront.getPointDimensions() == 3) {
@@ -492,6 +586,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 dataset3D.add(serieFront3D);
                 plot3D.setDataset(dataset3D);
 
+                tabPane.getTabs().get(0).setDisable(false);
+                tabPane.getTabs().get(1).setDisable(true);
+                selectedTab.setValue("tab3d");
+                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+                selectionModel.select(0);
+//                tabPane.getTabs().clear();
+//                tabPane.getTabs().addAll(tabs);
+//                tabPane.getTabs().remove(1);
                 solutionsTableView.getColumns().get(2).setVisible(true);
             }
 
@@ -505,7 +607,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     }
 
-    public void problemSelected(ActionEvent actionEvent) throws ClassNotFoundException {
+    public void problemSelected(ActionEvent actionEvent) {
         String selectedProblemName = (String)problemsComboBox.getValue();
         if (selectedProblemName != null && !selectedProblemName.isEmpty()) {
             selectProblem(selectedProblemName);
@@ -514,7 +616,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     //endregion
 
     //region Methods
-    public void FillComboBoxAlgorithms()
+    private void FillComboBoxAlgorithms()
     {
         ObservableList<String> algoritmhs = FXCollections.observableArrayList();
         algoritmhs.addAll("DBSPEA2","NSGAII", "SPEA2", "SPEA3");
@@ -522,7 +624,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         algorithmsComboBox.setItems(algoritmhs);
     }
 
-    public void FillComboBoxProblems()
+    private void FillComboBoxProblems()
     {
         ObservableList<String> problems = FXCollections.observableArrayList();
         problems.addAll("Binh2", "ConstrEx", "Fonseca", "Golinski", "Kursawe", "Osyczka2", "Schaffer", "Srinivas", "Tanaka", "DTLZ1", "DTLZ2");
@@ -530,7 +632,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         problemsComboBox.setItems(problems);
     }
 
-    public String printQualityIndicators(List<DoubleSolution> population, String paretoFrontFile) throws FileNotFoundException {
+    private String printQualityIndicators(List<DoubleSolution> population, String paretoFrontFile) throws FileNotFoundException {
         ArrayFront referenceFront = new ArrayFront(paretoFrontFile);
         FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
         Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
@@ -563,8 +665,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         XYZSeries serie3D_ = new XYZSeries<>(String.valueOf(Math.random()));
 
-        for (int i = 0; i < solutionSetResult.size(); i++) {
-            serie3D_.add(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1), solutionSetResult.get(i).getObjective(2));
+        for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+            serie3D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1), aSolutionSetResult.getObjective(2));
         }
 
         dataset3D_.add(serie3D_);
@@ -594,8 +696,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         XYSeriesCollection dataset2D_ = new XYSeriesCollection();
         XYSeries series2D_ = new XYSeries(Math.random());
 
-        for (int i = 0; i < solutionSetResult.size(); i++) {
-            series2D_.add(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1));
+        for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+            series2D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1));
         }
 
         dataset2D_.addSeries(series2D_);
