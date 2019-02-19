@@ -120,13 +120,49 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public Label gdErrorValueLabel;
 
     @FXML
+    public Label igdErrorValueLabel;
+
+    @FXML
+    public Label igdPlusErrorValueLabel;
+
+    @FXML
     public Label spreadErrorValueLabel;
+
+    @FXML
+    public Label epsilonErrorValueLabel;
+
+    @FXML
+    public Label hvErrorValueLabel;
+
+    @FXML
+    public Label erErrorValueLabel;
 
     @FXML
     public ComboBox algorithmsComboBox;
 
     @FXML
     public ComboBox problemsComboBox;
+
+    @FXML
+    public CheckBox gdCheckBox;
+
+    @FXML
+    public CheckBox igdCheckBox;
+
+    @FXML
+    public CheckBox igdPlusCheckBox;
+
+    @FXML
+    public CheckBox spreadCheckBox;
+
+    @FXML
+    public CheckBox epsilonCheckBox;
+
+    @FXML
+    public CheckBox hvCheckBox;
+
+    @FXML
+    public CheckBox erCheckBox;
 
     @FXML
     public javafx.scene.control.TableView<SolutionDto> solutionsTableView;
@@ -167,7 +203,19 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public StackPane stackPaneIGD;
 
     @FXML
+    public StackPane stackPaneIGDPlus;
+
+    @FXML
     public StackPane stackPaneSpread;
+
+    @FXML
+    public StackPane stackPaneEpsilon;
+
+    @FXML
+    public StackPane stackPaneHV;
+
+    @FXML
+    public StackPane stackPaneER;
 
     private List<Tab> tabs = new ArrayList<>();
     private Tab tab2D = new Tab();
@@ -189,7 +237,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final StringProperty qiResults = new SimpleStringProperty();
     private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
     private final SimpleDoubleProperty gdErrorProperty = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty igdErrorProperty = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty igdPlusErrorProperty = new SimpleDoubleProperty();
     private final SimpleDoubleProperty spreadErrorProperty = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty epsilonErrorProperty = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty hvErrorProperty = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty erErrorProperty = new SimpleDoubleProperty();
 
     private int receiveSolutionSetCount = 0;
 
@@ -205,27 +258,65 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private JFreeChart chart2D = createChart2D(new XYSeriesCollection());
     private ChartCanvas canvas2D = new ChartCanvas(chart2D);
 
+    boolean isGdActive = false;
+    double gd = 0;
     private JFreeChart chartGD = createLine2D(new XYSeriesCollection());
     private ChartCanvas canvasGD = new ChartCanvas(chartGD);
     private XYSeries gdSeries = new XYSeries("gd");
 
+    boolean isIgdActive = false;
+    double igd = 0;
     private JFreeChart chartIGD = createLine2D(new XYSeriesCollection());
     private ChartCanvas canvasIGD = new ChartCanvas(chartIGD);
     private XYSeries igdSeries = new XYSeries("igd");
 
+    boolean isIgdPlusActive = false;
+    double igdPlus = 0;
+    private JFreeChart chartIGDPlus = createLine2D(new XYSeriesCollection());
+    private ChartCanvas canvasIGDPlus = new ChartCanvas(chartIGDPlus);
+    private XYSeries igdPlusSeries = new XYSeries("igdPlus");
+
+    boolean isSpreadActive = false;
+    double  spread = 0;
     private JFreeChart chartSpread = createLine2D(new XYSeriesCollection());
     private ChartCanvas canvasSpread = new ChartCanvas(chartSpread);
     private XYSeries spreadSeries = new XYSeries("spread");
 
+    boolean isEpsilonActive = false;
+    double epsilon = 0;
+    private JFreeChart chartEpsilon = createLine2D(new XYSeriesCollection());
+    private ChartCanvas canvasEpsilon = new ChartCanvas(chartEpsilon);
+    private XYSeries epsilonSeries = new XYSeries("epsilon");
+
+    boolean isHvActive = false;
+    double hv = 0;
+    private JFreeChart chartHV = createLine2D(new XYSeriesCollection());
+    private ChartCanvas canvasHV = new ChartCanvas(chartHV);
+    private XYSeries hvSeries = new XYSeries("hv");
+
+    boolean isErActive = false;
+    double  er = 0;
+    private JFreeChart chartEr = createLine2D(new XYSeriesCollection());
+    private ChartCanvas canvasEr = new ChartCanvas(chartEr);
+    private XYSeries erSeries = new XYSeries("er");
+
     private List<DoubleSolution> solutionSetResult = new ArrayList<>();
 
-    private GenerationalDistance gdIdicator = new GenerationalDistance<DoubleSolution>();
-    private InvertedGenerationalDistance igdIdicator = new InvertedGenerationalDistance<DoubleSolution>();
-    private GeneralizedSpread spreadIdicator = new GeneralizedSpread<DoubleSolution>();
+    private GenerationalDistance gdIdicator;
+    private InvertedGenerationalDistance igdIdicator;
+    private InvertedGenerationalDistancePlus igdPlusIdicator;
+    private GeneralizedSpread spreadIdicator;
+    private Epsilon epsilonIdicator;
+    private PISAHypervolume hvIdicator;
+    private ErrorRatio erIdicator;
 
     private List<Double> gdValues = new ArrayList<>();
     private List<Double> igdValues = new ArrayList<>();
+    private List<Double> igdPlusValues = new ArrayList<>();
     private List<Double> spreadValues = new ArrayList<>();
+    private List<Double> epsilonValues = new ArrayList<>();
+    private List<Double> hvValues = new ArrayList<>();
+    private List<Double> erValues = new ArrayList<>();
 
     private final AtomicLong counter = new AtomicLong(-1);
 
@@ -255,8 +346,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                         updateGDRelatedUI();
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabIGD")) {
                         updateIGDRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabIGDPlus")) {
+                        updateIGDPlusRelatedUI();
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabSread")) {
                         updateSpreadRelatedIU();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabEpsilon")) {
+                        updateEpsilonRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabHV")) {
+                        updateHvRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabER")) {
+                        updateErRelatedIU();
                     }
                 }
             }
@@ -290,7 +389,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         stackPaneJFREE.getChildren().add(canvas2D);
         stackPaneGD.getChildren().add(canvasGD);
         stackPaneIGD.getChildren().add(canvasIGD);
+        stackPaneIGDPlus.getChildren().add(canvasIGDPlus);
         stackPaneSpread.getChildren().add(canvasSpread);
+        stackPaneEpsilon.getChildren().add(canvasEpsilon);
+        stackPaneHV.getChildren().add(canvasHV);
+        stackPaneER.getChildren().add(canvasEr);
 
         canvas2D.widthProperty().bind( stackPaneJFREE.widthProperty());
         canvas2D.heightProperty().bind( stackPaneJFREE.heightProperty());
@@ -301,15 +404,32 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         canvasIGD.widthProperty().bind( stackPaneIGD.widthProperty());
         canvasIGD.heightProperty().bind( stackPaneIGD.heightProperty());
 
+        canvasIGDPlus.widthProperty().bind( stackPaneIGDPlus.widthProperty());
+        canvasIGDPlus.heightProperty().bind( stackPaneIGDPlus.heightProperty());
+
         canvasSpread.widthProperty().bind( stackPaneSpread.widthProperty());
         canvasSpread.heightProperty().bind( stackPaneSpread.heightProperty());
+
+        canvasEpsilon.widthProperty().bind( stackPaneEpsilon.widthProperty());
+        canvasEpsilon.heightProperty().bind( stackPaneEpsilon.heightProperty());
+
+        canvasHV.widthProperty().bind( stackPaneHV.widthProperty());
+        canvasHV.heightProperty().bind( stackPaneHV.heightProperty());
+
+        canvasEr.widthProperty().bind( stackPaneER.widthProperty());
+        canvasEr.heightProperty().bind( stackPaneER.heightProperty());
 
         ep = new ExperimentParams();
 
         qiResultsLabel.textProperty().bind(qiResults);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
         gdErrorValueLabel.textProperty().bind(gdErrorProperty.asString());
+        igdErrorValueLabel.textProperty().bind(igdErrorProperty.asString());
+        igdPlusErrorValueLabel.textProperty().bind(igdPlusErrorProperty.asString());
         spreadErrorValueLabel.textProperty().bind(spreadErrorProperty.asString());
+        epsilonErrorValueLabel.textProperty().bind(epsilonErrorProperty.asString());
+        hvErrorValueLabel.textProperty().bind(hvErrorProperty.asString());
+        erErrorValueLabel.textProperty().bind(erErrorProperty.asString());
         solutionsV1TableColumn.setCellValueFactory(r -> r.getValue().v1Property());
         solutionsV2TableColumn.setCellValueFactory(r -> r.getValue().v2Property());
         solutionsV3TableColumn.setCellValueFactory(r -> r.getValue().v3Property());
@@ -323,6 +443,21 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         enableControlsOnStop();
 
         tabs = FXCollections.observableArrayList(tabPane.getTabs());
+        tabPane.getTabs().get(3).setDisable(true);
+        tabPane.getTabs().get(4).setDisable(true);
+        tabPane.getTabs().get(5).setDisable(true);
+        tabPane.getTabs().get(6).setDisable(true);
+        tabPane.getTabs().get(7).setDisable(true);
+        tabPane.getTabs().get(8).setDisable(true);
+        tabPane.getTabs().get(9).setDisable(true);
+
+        gdCheckBox.setDisable(true);
+        igdCheckBox.setDisable(true);
+        igdPlusCheckBox.setDisable(true);
+        spreadCheckBox.setDisable(true);
+        epsilonCheckBox.setDisable(true);
+        hvCheckBox.setDisable(true);
+        erCheckBox.setDisable(true);
     }
 
     private void handleZoom(Chart3DViewer viewer, double multiplier) {
@@ -351,12 +486,40 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         XYPlot plotIGD = (XYPlot) chartIGD.getPlot();
         plotIGD.setDataset(datasetIGD);
 
+        igdPlusValues.clear();
+        igdPlusSeries.clear();
+        XYSeriesCollection datasetIGDPlus = new XYSeriesCollection();
+        datasetIGDPlus.addSeries(igdPlusSeries);
+        XYPlot plotIGDPlus = (XYPlot) chartIGDPlus.getPlot();
+        plotIGDPlus.setDataset(datasetIGDPlus);
+
         spreadValues.clear();
         spreadSeries.clear();
         XYSeriesCollection datasetSpread = new XYSeriesCollection();
         datasetSpread.addSeries(spreadSeries);
         XYPlot plotSpread = (XYPlot) chartSpread.getPlot();
         plotSpread.setDataset(datasetSpread);
+
+        epsilonValues.clear();
+        epsilonSeries.clear();
+        XYSeriesCollection datasetEpsilon = new XYSeriesCollection();
+        datasetEpsilon.addSeries(epsilonSeries);
+        XYPlot plotEpsilon = (XYPlot) chartEpsilon.getPlot();
+        plotEpsilon.setDataset(datasetEpsilon);
+
+        hvValues.clear();
+        hvSeries.clear();
+        XYSeriesCollection datasetHV = new XYSeriesCollection();
+        datasetHV.addSeries(hvSeries);
+        XYPlot plotHV = (XYPlot) chartHV.getPlot();
+        plotHV.setDataset(datasetHV);
+
+        erValues.clear();
+        erSeries.clear();
+        XYSeriesCollection datasetEr = new XYSeriesCollection();
+        datasetEr.addSeries(erSeries);
+        XYPlot plotEr = (XYPlot) chartEr.getPlot();
+        plotEr.setDataset(datasetEr);
 
         solutionSetResult = new ArrayList<>();
         solutionsTableView.getItems().clear();
@@ -381,13 +544,47 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
             receiveSolutionSetCount++;
 
-            double gd = gdIdicator.evaluate(solutionSetResult);
-            double igd = igdIdicator.evaluate(solutionSetResult);
-            double spread = spreadIdicator.evaluate(solutionSetResult);
+            gd = 0;
+            if (isGdActive) {
+                gd = gdIdicator.evaluate(solutionSetResult);
+                gdValues.add(gd);
+            }
 
-            gdValues.add(gd);
-            igdValues.add(igd);
-            spreadValues.add(spread);
+            igd = 0;
+            if (isIgdActive) {
+                igd = igdIdicator.evaluate(solutionSetResult);
+                igdValues.add(igd);
+            }
+
+            igdPlus = 0;
+            if (isIgdPlusActive) {
+                igdPlus = igdPlusIdicator.evaluate(solutionSetResult);
+                igdPlusValues.add(igdPlus);
+            }
+
+            spread = 0;
+            if (isSpreadActive) {
+                spread = spreadIdicator.evaluate(solutionSetResult);
+                spreadValues.add(spread);
+            }
+
+            epsilon = 0;
+            if (isEpsilonActive) {
+                epsilon = epsilonIdicator.evaluate(solutionSetResult);
+                epsilonValues.add(epsilon);
+            }
+
+            hv = 0;
+            if (isHvActive) {
+                hv = hvIdicator.evaluate(solutionSetResult);
+                hvValues.add(hv);
+            }
+
+            er = 0;
+            if (isErActive) {
+                er = erIdicator.evaluate(solutionSetResult);
+                erValues.add(er);
+            }
 
             lock.unlock();
 
@@ -399,7 +596,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                     lock.lock();
 
                     gdErrorProperty.setValue(gd);
+                    igdErrorProperty.setValue(igd);
+                    igdPlusErrorProperty.setValue(igdPlus);
                     spreadErrorProperty.setValue(spread);
+                    epsilonErrorProperty.setValue(epsilon);
+                    hvErrorProperty.setValue(hv);
+                    erErrorProperty.setValue(er);
                     receivedSSProperty.setValue(receiveSolutionSetCount);
 
                     if (selectedTab.getValue().equalsIgnoreCase("tab3d")) {
@@ -416,8 +618,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                         updateGDRelatedUI();
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabIGD")) {
                         updateIGDRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabIGDPlus")) {
+                        updateIGDPlusRelatedUI();
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabSread")) {
                         updateSpreadRelatedIU();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabEpsilon")) {
+                        updateEpsilonRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabHV")) {
+                        updateHvRelatedUI();
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabER")) {
+                        updateErRelatedIU();
                     }
 
                     counter.set(-1);
@@ -494,6 +704,18 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         plotIGD.setDataset(datasetIGD);
     }
 
+    private void updateIGDPlusRelatedUI(){
+        igdPlusSeries = new XYSeries("igdPlus");
+        for (int i = 0; i < igdPlusValues.size(); i++){
+            igdPlusSeries.add(i, igdPlusValues.get(i));
+        }
+
+        XYSeriesCollection datasetIGDPlus = new XYSeriesCollection();
+        datasetIGDPlus.addSeries(igdPlusSeries);
+        XYPlot plotIGDPlus = (XYPlot) chartIGDPlus.getPlot();
+        plotIGDPlus.setDataset(datasetIGDPlus);
+    }
+
     private void updateSpreadRelatedIU(){
         spreadSeries = new XYSeries("spread");
         for (int i = 0; i < spreadValues.size(); i++){
@@ -506,6 +728,42 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         plotSpread.setDataset(datasetSpread);
     }
 
+    private void updateEpsilonRelatedUI(){
+        epsilonSeries = new XYSeries("epsilon");
+        for (int i = 0; i < epsilonValues.size(); i++){
+            epsilonSeries.add(i, epsilonValues.get(i));
+        }
+
+        XYSeriesCollection datasetEpsilon = new XYSeriesCollection();
+        datasetEpsilon.addSeries(epsilonSeries);
+        XYPlot plotEpsilon = (XYPlot) chartEpsilon.getPlot();
+        plotEpsilon.setDataset(datasetEpsilon);
+    }
+
+    private void updateHvRelatedUI(){
+        hvSeries = new XYSeries("hv");
+        for (int i = 0; i < hvValues.size(); i++){
+            hvSeries.add(i, hvValues.get(i));
+        }
+
+        XYSeriesCollection datasetHV = new XYSeriesCollection();
+        datasetHV.addSeries(hvSeries);
+        XYPlot plotHV = (XYPlot) chartHV.getPlot();
+        plotHV.setDataset(datasetHV);
+    }
+
+    private void updateErRelatedIU(){
+        erSeries = new XYSeries("er");
+        for (int i = 0; i < erValues.size(); i++){
+            erSeries.add(i, erValues.get(i));
+        }
+
+        XYSeriesCollection datasetEr = new XYSeriesCollection();
+        datasetEr.addSeries(erSeries);
+        XYPlot plotEr = (XYPlot) chartEr.getPlot();
+        plotEr.setDataset(datasetEr);
+    }
+
     private void disableControlsOnStart(){
         algorithmsComboBox.setDisable(true);
         problemsComboBox.setDisable(true);
@@ -515,7 +773,17 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         receiveSolutionSetCount = 0;
         gdErrorProperty.setValue(0.0);
+        igdErrorProperty.setValue(0.0);
+        igdPlusErrorProperty.setValue(0.0);
         spreadErrorProperty.setValue(0.0);
+
+        gdCheckBox.setDisable(true);
+        igdCheckBox.setDisable(true);
+        igdPlusCheckBox.setDisable(true);
+        spreadCheckBox.setDisable(true);
+        epsilonCheckBox.setDisable(true);
+        hvCheckBox.setDisable(true);
+        erCheckBox.setDisable(true);
 
         clearControls();
     }
@@ -526,6 +794,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         algorithmParametersTableView.setDisable(false);
         startButton.setDisable(false);
         stopButton.setDisable(true);
+
+        gdCheckBox.setDisable(false);
+        igdCheckBox.setDisable(false);
+        igdPlusCheckBox.setDisable(false);
+        spreadCheckBox.setDisable(false);
+        epsilonCheckBox.setDisable(false);
+        hvCheckBox.setDisable(false);
+        erCheckBox.setDisable(false);
     }
 
     //region Events
@@ -535,8 +811,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             return;
         }
 
-        disableControlsOnStart();
         selectProblem((String)problemsComboBox.getValue());
+        disableControlsOnStart();
 
         Platform.setImplicitExit(false);
 
@@ -583,9 +859,20 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private void selectProblem(String problemName){
+        gdCheckBox.setDisable(false);
+        igdCheckBox.setDisable(false);
+        igdPlusCheckBox.setDisable(false);
+        spreadCheckBox.setDisable(false);
+        epsilonCheckBox.setDisable(false);
+        hvCheckBox.setDisable(false);
+        erCheckBox.setDisable(false);
+
         ep.setProblemName(problemName);
         try {
             ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
+//            FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
+//            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
+
             if (referenceFront.getPointDimensions() == 2) {
                 seriesFront2D = createFront2D(referenceFront);
                 XYPlot plot2D = (XYPlot) chart2D.getPlot();
@@ -620,7 +907,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
             gdIdicator = new GenerationalDistance<DoubleSolution>(referenceFront);
             igdIdicator = new InvertedGenerationalDistance<DoubleSolution>(referenceFront);
+            igdPlusIdicator = new InvertedGenerationalDistancePlus<DoubleSolution>(referenceFront);
             spreadIdicator = new GeneralizedSpread<DoubleSolution>(referenceFront);
+            epsilonIdicator = new Epsilon<DoubleSolution>(referenceFront);
+            hvIdicator = new PISAHypervolume(referenceFront);
+            erIdicator = new ErrorRatio(referenceFront);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -632,6 +923,90 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         String selectedProblemName = (String)problemsComboBox.getValue();
         if (selectedProblemName != null && !selectedProblemName.isEmpty()) {
             selectProblem(selectedProblemName);
+        }
+    }
+
+    public void gdCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isGdActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(3).setDisable(false);
+            else
+                tabPane.getTabs().get(3).setDisable(true);
+        }
+    }
+
+    public void igdCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isIgdActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(4).setDisable(false);
+            else
+                tabPane.getTabs().get(4).setDisable(true);
+        }
+    }
+
+    public void igdPlusCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isIgdPlusActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(5).setDisable(false);
+            else
+                tabPane.getTabs().get(5).setDisable(true);
+        }
+    }
+
+    public void spreadCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isSpreadActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(6).setDisable(false);
+            else
+                tabPane.getTabs().get(6).setDisable(true);
+        }
+    }
+
+    public void epsilonCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isEpsilonActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(7).setDisable(false);
+            else
+                tabPane.getTabs().get(7).setDisable(true);
+        }
+    }
+
+    public void hvCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isHvActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(8).setDisable(false);
+            else
+                tabPane.getTabs().get(8).setDisable(true);
+        }
+    }
+
+    public void erCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isErActive = chk.isSelected();
+
+            if (chk.isSelected())
+                tabPane.getTabs().get(9).setDisable(false);
+            else
+                tabPane.getTabs().get(9).setDisable(true);
         }
     }
     //endregion
@@ -657,6 +1032,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         ArrayFront referenceFront = new ArrayFront(paretoFrontFile);
         FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
         Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
+
         Front normalizedFront = frontNormalizer.normalize(new ArrayFront(population));
         List normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront);
         String outputString = "\n";

@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.CheckBox?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="663.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
    <left>
       <VBox prefHeight="400.0" prefWidth="126.0" BorderPane.alignment="CENTER">
@@ -39,6 +40,46 @@
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </ComboBox>
+             <Label text="Quality indicators:">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </Label>
+             <CheckBox fx:id="gdCheckBox" text="GD" onAction="#gdCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="igdCheckBox" text="IGD" onAction="#igdCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="igdPlusCheckBox" text="IGD+" onAction="#igdPlusCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="spreadCheckBox" text="Spread" onAction="#spreadCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="epsilonCheckBox" text="Epsilon" onAction="#epsilonCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="hvCheckBox" text="HV" onAction="#hvCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="erCheckBox" text="ER" onAction="#erCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
          </children>
       </VBox>
    </left>
@@ -86,9 +127,37 @@
                       </StackPane>
                   </content>
             </Tab>
+            <Tab text="IGD+" fx:id="tabIGDPlus">
+                <content>
+                    <StackPane fx:id="stackPaneIGDPlus">
+
+                    </StackPane>
+                </content>
+            </Tab>
             <Tab text="Spread" fx:id="tabSread">
                 <content>
                     <StackPane fx:id="stackPaneSpread">
+
+                    </StackPane>
+                </content>
+            </Tab>
+            <Tab text="Epsilon" fx:id="tabEpsilon">
+                <content>
+                    <StackPane fx:id="stackPaneEpsilon">
+
+                    </StackPane>
+                </content>
+            </Tab>
+            <Tab text="HV" fx:id="tabHV">
+                <content>
+                    <StackPane fx:id="stackPaneHV">
+
+                    </StackPane>
+                </content>
+            </Tab>
+            <Tab text="ER" fx:id="tabER">
+                <content>
+                    <StackPane fx:id="stackPaneER">
 
                     </StackPane>
                 </content>
@@ -132,14 +201,20 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+
               </rowConstraints>
                <children>
-                  <Label text="Iterations:">
+                  <Label text="Iterations:" GridPane.rowIndex="0">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label fx:id="receivedSSLabel" text="0" GridPane.columnIndex="1">
+                  <Label fx:id="receivedSSLabel" text="0" GridPane.columnIndex="1"  GridPane.rowIndex="0">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
@@ -154,16 +229,66 @@
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Spread:" GridPane.rowIndex="2">
+                   <Label text="IGD:" GridPane.rowIndex="2">
+                   <GridPane.margin>
+                       <Insets left="5.0" right="5.0" top="5.0" />
+                   </GridPane.margin>
+                   </Label>
+                   <Label fx:id="igdErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label text="IGD+:" GridPane.rowIndex="3">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label fx:id="igdPlusErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                  <Label text="Spread:" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label fx:id="spreadErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Label fx:id="spreadErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
+                   <Label text="Epsilon:" GridPane.rowIndex="5">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label fx:id="epsilonErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label text="HV:" GridPane.rowIndex="6">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label fx:id="hvErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label text="ER:" GridPane.rowIndex="7">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
+                   <Label fx:id="erErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                       <GridPane.margin>
+                           <Insets left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </Label>
                </children>
             </GridPane>
          </children>
