@@ -11,11 +11,13 @@ import com.orsoncharts.data.xyz.XYZSeriesCollection;
 import com.orsoncharts.fx.Chart3DViewer;
 import com.orsoncharts.graphics3d.Dimension3D;
 import com.orsoncharts.graphics3d.ViewPoint3D;
+import com.orsoncharts.graphics3d.swing.DisplayPanel3D;
 import com.orsoncharts.graphics3d.swing.ZoomInAction;
 import com.orsoncharts.label.StandardXYZLabelGenerator;
 import com.orsoncharts.plot.XYZPlot;
 import com.orsoncharts.renderer.xyz.ScatterXYZRenderer;
 import com.orsoncharts.renderer.xyz.XYZRenderer;
+import com.orsoncharts.style.ChartStyles;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -38,6 +40,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
@@ -89,6 +92,8 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -187,13 +192,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final SimpleDoubleProperty spreadErrorProperty = new SimpleDoubleProperty();
 
     private int receiveSolutionSetCount = 0;
-    private int printQIsCount = 0;
 
     private Thread mainLoop = new Thread();
 
     private XYZSeries<String> serieFront3D = new XYZSeries<>("aprox");
     private ScatterXYZRenderer renderer = new ScatterXYZRenderer();
     private XYZPlot plot = new XYZPlot(new XYZSeriesCollection<>(), renderer, new NumberAxis3D("X"), new NumberAxis3D("Y"), new NumberAxis3D("Z"));
+
     private Chart3DViewer viewer = new Chart3DViewer(new Chart3D("", "", plot), false);
 
     private XYSeries seriesFront2D = new XYSeries("front");
@@ -262,11 +267,26 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         renderer.setSize(0.20);
         renderer.setColors(Colors.getEarthColors());
+
         viewer.getCanvas().setPanIncrement(0.01D);
         viewer.getCanvas().setRotateIncrement(0.01D);
-
-        viewer.setZoomMultiplier(1.1D);
+        viewer.getChart().setStyle(ChartStyles.createIceCubeStyle());
+        viewer.setZoomMultiplier(1.05D);
         stackPaneOrson.getChildren().add(viewer);
+
+        viewer.getCanvas().setOnScroll((ScrollEvent event) -> {
+            event.consume();
+            if (event.getDeltaY() == 0)
+                return;
+
+            boolean up = event.getDeltaY() > 0;
+
+            if (up)
+                handleZoom(viewer, viewer.getZoomMultiplier());
+            else
+                handleZoom(viewer, 1.0 / viewer.getZoomMultiplier());
+        });
+
         stackPaneJFREE.getChildren().add(canvas2D);
         stackPaneGD.getChildren().add(canvasGD);
         stackPaneIGD.getChildren().add(canvasIGD);
@@ -305,6 +325,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         tabs = FXCollections.observableArrayList(tabPane.getTabs());
     }
 
+    private void handleZoom(Chart3DViewer viewer, double multiplier) {
+        ViewPoint3D viewPt = viewer.getChart().getViewPoint();
+        double minDistance = viewer.getCanvas().getMinViewingDistance();
+        double maxDistance = minDistance * viewer.getCanvas().getMaxViewingDistanceMultiplier();
+        double valRho = Math.max(minDistance,
+                Math.min(maxDistance, viewPt.getRho() * multiplier));
+        viewPt.setRho(valRho);
+        viewer.getCanvas().draw();
+    }
+
     private void clearControls()
     {
         gdValues.clear();
@@ -338,8 +368,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         try {
             lock.lock();
 
-            printQIsCount++;
-
             if (algorithm == null){
                 lock.unlock();
                 return;
@@ -352,10 +380,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             }
 
             receiveSolutionSetCount++;
-
-            if (receiveSolutionSetCount % 100 == 0) {
-                int a = 0;
-            }
 
             double gd = gdIdicator.evaluate(solutionSetResult);
             double igd = igdIdicator.evaluate(solutionSetResult);
@@ -493,9 +517,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         gdErrorProperty.setValue(0.0);
         spreadErrorProperty.setValue(0.0);
 
-//        mutex.release();
-//        semaphore.release();
-
         clearControls();
     }
 
@@ -533,14 +554,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         };
 
         mainLoop = new Thread(task);
-        mainLoop.setDaemon(true);
+        mainLoop.setDaemon(false);
         mainLoop.start();
         isAlgorithmWorking = true;
     }
 
     public void stopButtonClicked(ActionEvent actionEvent){
         mainLoop.interrupt();
+
         try {
+            mainLoop.join();
             algorithm = null;
         } catch (Exception ex)
         {
@@ -591,9 +614,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 selectedTab.setValue("tab3d");
                 SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
                 selectionModel.select(0);
-//                tabPane.getTabs().clear();
-//                tabPane.getTabs().addAll(tabs);
-//                tabPane.getTabs().remove(1);
+
                 solutionsTableView.getColumns().get(2).setVisible(true);
             }
 
@@ -685,6 +706,21 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 i+=50;
         }
 
+/*
+        for (int i = 0; i < front.getNumberOfPoints(); i+=2) {
+            if (i <= front.getNumberOfPoints())
+                serieFront3D_.add(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2));
+
+            if (i % 2 == 0)
+                i+=10;
+        }
+*/
+/*
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+            serieFront3D_.add(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2));
+        }
+
+*/
         return serieFront3D_;
     }
 
