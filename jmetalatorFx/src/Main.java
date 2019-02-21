@@ -144,6 +144,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public ComboBox problemsComboBox;
 
     @FXML
+    public CheckBox showRefPFCheckBox;
+
+    @FXML
     public CheckBox gdCheckBox;
 
     @FXML
@@ -300,6 +303,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private ChartCanvas canvasEr = new ChartCanvas(chartEr);
     private XYSeries erSeries = new XYSeries("er");
 
+    boolean isShowingRefPFActive = true;
+    int dimCount = 0;
+
     private List<DoubleSolution> solutionSetResult = new ArrayList<>();
 
     private GenerationalDistance gdIdicator;
@@ -360,7 +366,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 }
             }
         );
-        selectedTab.setValue("tab3d");
 
         clearControls();
 
@@ -443,6 +448,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         enableControlsOnStop();
 
         tabs = FXCollections.observableArrayList(tabPane.getTabs());
+        tabPane.getTabs().get(0).setDisable(true);
+        tabPane.getTabs().get(1).setDisable(true);
         tabPane.getTabs().get(3).setDisable(true);
         tabPane.getTabs().get(4).setDisable(true);
         tabPane.getTabs().get(5).setDisable(true);
@@ -450,6 +457,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         tabPane.getTabs().get(7).setDisable(true);
         tabPane.getTabs().get(8).setDisable(true);
         tabPane.getTabs().get(9).setDisable(true);
+        selectedTab.setValue("tabAproximationSet");
+        tabPane.getSelectionModel().select(2);
+
+        showRefPFCheckBox.setSelected(true);
 
         gdCheckBox.setDisable(true);
         igdCheckBox.setDisable(true);
@@ -646,15 +657,27 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     private void update3dChartRelatedUI(){
         XYZPlot plot = (XYZPlot) viewer.getChart().getPlot();
-        XYZSeriesCollection dataset3D = createDataset(solutionSetResult);
-        dataset3D.add(serieFront3D);
+        XYZSeriesCollection dataset3D = new XYZSeriesCollection();
+        if (solutionSetResult != null && solutionSetResult.size() > 0)
+            dataset3D.add(createSeries3D(solutionSetResult));
+        else
+            dataset3D.add(new XYZSeries("3d"));
+
+        if (isShowingRefPFActive)
+            dataset3D.add(serieFront3D);
         plot.setDataset(dataset3D);
     }
 
     private void update2dChartRelatedUI(){
         XYPlot plot2D = (XYPlot) chart2D.getPlot();
-        XYSeriesCollection dataset2D = createDataset2D(solutionSetResult);
-        dataset2D.addSeries(seriesFront2D);
+        XYSeriesCollection dataset2D = new XYSeriesCollection();
+        if (solutionSetResult != null && solutionSetResult.size() > 0)
+            dataset2D.addSeries(createSeries2D(solutionSetResult));
+        else
+            dataset2D.addSeries(new XYSeries("2d"));
+
+        if (isShowingRefPFActive)
+            dataset2D.addSeries(seriesFront2D);
         plot2D.setDataset(dataset2D);
     }
 
@@ -874,11 +897,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 //            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
 
             if (referenceFront.getPointDimensions() == 2) {
+                dimCount = 2;
                 seriesFront2D = createFront2D(referenceFront);
-                XYPlot plot2D = (XYPlot) chart2D.getPlot();
-                XYSeriesCollection dataset2D = new XYSeriesCollection();
-                dataset2D.addSeries(seriesFront2D);
-                plot2D.setDataset(dataset2D);
+                solutionSetResult.clear();
+                update2dChartRelatedUI();
 
                 tabPane.getTabs().get(0).setDisable(true);
                 tabPane.getTabs().get(1).setDisable(false);
@@ -889,12 +911,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 solutionsTableView.getColumns().get(2).setVisible(false);
             }
             else if (referenceFront.getPointDimensions() == 3) {
+                dimCount = 3;
                 serieFront3D = createFront3D(referenceFront);
-
-                XYZPlot plot3D = (XYZPlot) viewer.getChart().getPlot();
-                XYZSeriesCollection<String> dataset3D = new XYZSeriesCollection<>();
-                dataset3D.add(serieFront3D);
-                plot3D.setDataset(dataset3D);
+                solutionSetResult.clear();
+                update3dChartRelatedUI();
 
                 tabPane.getTabs().get(0).setDisable(false);
                 tabPane.getTabs().get(1).setDisable(true);
@@ -923,6 +943,18 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         String selectedProblemName = (String)problemsComboBox.getValue();
         if (selectedProblemName != null && !selectedProblemName.isEmpty()) {
             selectProblem(selectedProblemName);
+        }
+    }
+
+    public void showRefPFCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isShowingRefPFActive = chk.isSelected();
+
+            if (dimCount == 2)
+                update2dChartRelatedUI();
+            else if (dimCount == 3)
+                update3dChartRelatedUI();
         }
     }
 
@@ -1057,18 +1089,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     //region Orson
 
-    private XYZSeriesCollection createDataset(List<DoubleSolution> solutionSetResult){
-        XYZSeriesCollection<String> dataset3D_ = new XYZSeriesCollection<>();
-
+    private XYZSeries createSeries3D(List<DoubleSolution> solutionSetResult){
         XYZSeries serie3D_ = new XYZSeries<>(String.valueOf(Math.random()));
 
         for (DoubleSolution aSolutionSetResult : solutionSetResult) {
             serie3D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1), aSolutionSetResult.getObjective(2));
         }
 
-        dataset3D_.add(serie3D_);
-
-        return dataset3D_;
+        return serie3D_;
     }
 
     private XYZSeries createFront3D(ArrayFront front){
@@ -1104,17 +1132,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     //region JFREE
 
-    private XYSeriesCollection createDataset2D(List<DoubleSolution> solutionSetResult){
-        XYSeriesCollection dataset2D_ = new XYSeriesCollection();
+    private XYSeries createSeries2D(List<DoubleSolution> solutionSetResult){
         XYSeries series2D_ = new XYSeries(Math.random());
 
         for (DoubleSolution aSolutionSetResult : solutionSetResult) {
             series2D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1));
         }
 
-        dataset2D_.addSeries(series2D_);
-
-        return dataset2D_;
+        return series2D_;
     }
 
     private XYSeries createFront2D(ArrayFront front){
