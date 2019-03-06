@@ -111,9 +111,9 @@
                      <children>
                         <TableView fx:id="solutionsTableView" prefHeight="371.0" prefWidth="217.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                            <columns>
-                              <TableColumn fx:id="solutionsV1TableColumn" prefWidth="125.0" text="V1" />
-                              <TableColumn fx:id="solutionsV2TableColumn" prefWidth="125.0" text="V2" />
-                              <TableColumn fx:id="solutionsV3TableColumn" prefWidth="125.0" text="V3" />
+                              <TableColumn fx:id="solutionsV1TableColumn" prefWidth="125.0" text="F1" />
+                              <TableColumn fx:id="solutionsV2TableColumn" prefWidth="125.0" text="F2" />
+                              <TableColumn fx:id="solutionsV3TableColumn" prefWidth="125.0" text="F3" />
                            </columns></TableView>
                      </children></AnchorPane>
             </content>

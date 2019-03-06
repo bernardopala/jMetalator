@@ -253,7 +253,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     private XYZSeries<String> serieFront3D = new XYZSeries<>("aprox");
     private ScatterXYZRenderer renderer = new ScatterXYZRenderer();
-    private XYZPlot plot = new XYZPlot(new XYZSeriesCollection<>(), renderer, new NumberAxis3D("X"), new NumberAxis3D("Y"), new NumberAxis3D("Z"));
+    private XYZPlot plot = new XYZPlot(new XYZSeriesCollection<>(), renderer, new NumberAxis3D("F1"), new NumberAxis3D("F2"), new NumberAxis3D("F3"));
 
     private Chart3DViewer viewer = new Chart3DViewer(new Chart3D("", "", plot), false);
 
@@ -1090,7 +1090,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     //region Orson
 
     private XYZSeries createSeries3D(List<DoubleSolution> solutionSetResult){
-        XYZSeries serie3D_ = new XYZSeries<>(String.valueOf(Math.random()));
+        XYZSeries serie3D_ = new XYZSeries<>("Approximation set");
 
         for (DoubleSolution aSolutionSetResult : solutionSetResult) {
             serie3D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1), aSolutionSetResult.getObjective(2));
@@ -1100,7 +1100,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private XYZSeries createFront3D(ArrayFront front){
-        XYZSeries serieFront3D_ = new XYZSeries<>(String.valueOf(Math.random()));
+        XYZSeries serieFront3D_ = new XYZSeries<>("Pareto front");
 
         for (int i = 0; i < front.getNumberOfPoints(); i+=5) {
             if (i <= front.getNumberOfPoints())
@@ -1133,7 +1133,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     //region JFREE
 
     private XYSeries createSeries2D(List<DoubleSolution> solutionSetResult){
-        XYSeries series2D_ = new XYSeries(Math.random());
+        XYSeries series2D_ = new XYSeries("Approximation set");
 
         for (DoubleSolution aSolutionSetResult : solutionSetResult) {
             series2D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1));
@@ -1143,9 +1143,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private XYSeries createFront2D(ArrayFront front){
-        XYSeries seriesFront2D_ = new XYSeries(Math.random());
+        XYSeries seriesFront2D_ = new XYSeries("Pareto front");
 
-        int count = front.getNumberOfPoints() / 200;
+        int count = 1;
+        if (front.getNumberOfPoints() > 1000)
+            count = front.getNumberOfPoints() / 200;
 
         for (int i = 0; i < front.getNumberOfPoints(); i+=count) {
             if (i <= front.getNumberOfPoints())
@@ -1159,11 +1161,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private static JFreeChart createChart2D(XYDataset dataset) {
-        return ChartFactory.createScatterPlot("", "X", "Y", dataset);
+        return ChartFactory.createScatterPlot("", "F1", "F2", dataset);
     }
 
     private static JFreeChart createLine2D(XYDataset dataset) {
-        return ChartFactory.createXYLineChart("", "X", "Y", dataset);
+        return ChartFactory.createXYLineChart("", "F1", "F2", dataset);
     }
     //endregion
 }
