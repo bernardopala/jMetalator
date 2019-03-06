@@ -469,6 +469,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         epsilonCheckBox.setDisable(true);
         hvCheckBox.setDisable(true);
         erCheckBox.setDisable(true);
+
+        Object alg = (String)algorithmsComboBox.getItems().get(0);
+        algorithmsComboBox.setValue(alg);
+        selectAlgorithm(alg.toString());
+
+        Object prob = (String)problemsComboBox.getItems().get(0);
+        problemsComboBox.setValue(prob);
+        selectProblem(prob.toString());
     }
 
     private void handleZoom(Chart3DViewer viewer, double multiplier) {
@@ -674,7 +682,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         if (solutionSetResult != null && solutionSetResult.size() > 0)
             dataset2D.addSeries(createSeries2D(solutionSetResult));
         else
-            dataset2D.addSeries(new XYSeries("2d"));
+            dataset2D.addSeries(new XYSeries("Solution set"));
 
         if (isShowingRefPFActive)
             dataset2D.addSeries(seriesFront2D);
@@ -874,8 +882,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     public void algorithmSelected(ActionEvent actionEvent){
         String selectedAlgorithmName = (String)algorithmsComboBox.getValue();
-        if (selectedAlgorithmName != null && !selectedAlgorithmName.isEmpty()) {
-            ep.setAlgorithmName(selectedAlgorithmName);
+        selectAlgorithm(selectedAlgorithmName);
+    }
+
+    private void selectAlgorithm(String algorithmName){
+        if (algorithmName != null && !algorithmName.isEmpty()) {
+            ep.setAlgorithmName(algorithmName);
             algorithmParams = FXCollections.observableArrayList(ep.getAlgorithmParameterList());
             algorithmParametersTableView.setItems(algorithmParams);
         }
@@ -1090,7 +1102,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     //region Orson
 
     private XYZSeries createSeries3D(List<DoubleSolution> solutionSetResult){
-        XYZSeries serie3D_ = new XYZSeries<>("Approximation set");
+        XYZSeries serie3D_ = new XYZSeries<>("Solution set");
 
         for (DoubleSolution aSolutionSetResult : solutionSetResult) {
             serie3D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1), aSolutionSetResult.getObjective(2));
@@ -1133,7 +1145,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     //region JFREE
 
     private XYSeries createSeries2D(List<DoubleSolution> solutionSetResult){
-        XYSeries series2D_ = new XYSeries("Approximation set");
+        XYSeries series2D_ = new XYSeries("Solution set");
 
         for (DoubleSolution aSolutionSetResult : solutionSetResult) {
             series2D_.add(aSolutionSetResult.getObjective(0), aSolutionSetResult.getObjective(1));
