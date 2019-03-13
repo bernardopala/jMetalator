@@ -51,7 +51,11 @@ import jmetalhelpers.SolutionDto;
 import jmetalhelpers.algorithms.AlgorithmParameter;
 import jmetalhelpers.algorithms.NSGAIIManager;
 import jmetalhelpers.algorithms.SPEA2Manager;
+import maths.GenLloyd;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.math3.geometry.partitioning.utilities.OrderedTuple;
 import org.jfree.chart.*;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.fx.ChartCanvas;
@@ -67,6 +71,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -666,27 +671,90 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void update3dChartRelatedUI(){
         XYZPlot plot = (XYZPlot) viewer.getChart().getPlot();
         XYZSeriesCollection dataset3D = new XYZSeriesCollection();
+        XYZSeries ssSeries = createSeries3D(solutionSetResult);
         if (solutionSetResult != null && solutionSetResult.size() > 0)
-            dataset3D.add(createSeries3D(solutionSetResult));
+            dataset3D.add(ssSeries);
         else
-            dataset3D.add(new XYZSeries("3d"));
+            dataset3D.add(new XYZSeries("Solution set"));
 
         if (isShowingRefPFActive)
             dataset3D.add(serieFront3D);
         plot.setDataset(dataset3D);
+
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        double minZ = Double.MAX_VALUE;
+        double maxZ = Double.MIN_VALUE;
+
+        List<XYZSeries> union = new ArrayList<>();
+        union.add(ssSeries);
+        union.add(serieFront3D);
+
+        for (XYZSeries s : union) {
+            List<XYZDataItem> items = s.getItems();
+            for (XYZDataItem item : items) {
+                if (item.getX() < minX)
+                    minX = item.getX();
+                if (item.getX() > maxX)
+                    maxX = item.getX();
+                if (item.getY() < minY)
+                    minY = item.getY();
+                if (item.getY() > maxY)
+                    maxY = item.getY();
+                if (item.getZ() < minZ)
+                    minZ = item.getZ();
+                if (item.getZ() > maxZ)
+                    maxZ = item.getZ();
+            }
+        }
+        renderer.getPlot().getXAxis().setRange(minX, maxX);
+        renderer.getPlot().getYAxis().setRange(minY, maxY);
+        renderer.getPlot().getZAxis().setRange(minZ, maxZ);
     }
 
     private void update2dChartRelatedUI(){
         XYPlot plot2D = (XYPlot) chart2D.getPlot();
         XYSeriesCollection dataset2D = new XYSeriesCollection();
+        XYSeries ssSeries = createSeries2D(solutionSetResult);
+
         if (solutionSetResult != null && solutionSetResult.size() > 0)
-            dataset2D.addSeries(createSeries2D(solutionSetResult));
+            dataset2D.addSeries(ssSeries);
         else
             dataset2D.addSeries(new XYSeries("Solution set"));
 
         if (isShowingRefPFActive)
             dataset2D.addSeries(seriesFront2D);
         plot2D.setDataset(dataset2D);
+
+        List<XYSeries> union = new ArrayList<>();
+        union.add(ssSeries);
+        union.add(seriesFront2D);
+
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (XYSeries s : union) {
+            List<XYDataItem> items = (List<XYDataItem>)s.getItems();
+            for (XYDataItem item : items) {
+                if (item.getX().doubleValue() < minX)
+                    minX = item.getX().doubleValue();
+                if (item.getX().doubleValue() > maxX)
+                    maxX = item.getX().doubleValue();
+                if (item.getY().doubleValue() < minY)
+                    minY = item.getY().doubleValue();
+                if (item.getY().doubleValue() > maxY)
+                    maxY = item.getY().doubleValue();
+            }
+        }
+
+        plot2D.getDomainAxis().setRange(minX,maxX);
+        plot2D.getRangeAxis().setRange(minY,maxY);
+//        chart2D.getXYPlot().getRangeAxis(0).setRange(minX,maxX);
+//        chart2D.getXYPlot().getRangeAxis(1).setRange(minY,maxY);
     }
 
     private void updateSetRelatedUI(){
@@ -925,6 +993,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             else if (referenceFront.getPointDimensions() == 3) {
                 dimCount = 3;
                 serieFront3D = createFront3D(referenceFront);
+
                 solutionSetResult.clear();
                 update3dChartRelatedUI();
 
@@ -1067,7 +1136,47 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void FillComboBoxProblems()
     {
         ObservableList<String> problems = FXCollections.observableArrayList();
-        problems.addAll("Binh2", "ConstrEx", "Fonseca", "Golinski", "Kursawe", "Osyczka2", "Schaffer", "Srinivas", "Tanaka", "DTLZ1", "DTLZ2");
+        problems.addAll("Binh2", "ConstrEx",
+                        //"DTLZ1.2D",
+                        "DTLZ1.3D",
+                        //"DTLZ2.2D",
+                        "DTLZ2.3D",
+                        //"DTLZ3.2D",
+                        "DTLZ3.3D",
+                        //"DTLZ4.2D",
+                        "DTLZ4.3D",
+                        //"DTLZ5.2D",
+                        "DTLZ5.3D",
+                        //"DTLZ6.2D",
+                        "DTLZ6.3D",
+                        //"DTLZ7.2D",
+                        "DTLZ7.3D",
+                        "Fonseca",
+                        "GLT1", "GLT2", "GLT3", "GLT4", "GLT5", "GLT6",
+                        "Golinski", "Kursawe",
+                        "LZ09_F1", "LZ09_F2", "LZ09_F3", "LZ09_F4", "LZ09_F5", "LZ09_F6", "LZ09_F7", "LZ09_F8", "LZ09_F9",
+                        "Osyczka2", "Schaffer", "Srinivas", "Tanaka",
+                        "UF1", "UF2", "UF3", "UF4", "UF5", "UF6", "UF7", "UF8", "UF9",  "UF10",
+                        "Viennet2", "Viennet3",
+                        "WFG1.2D",
+                        //"WFG1.3D",
+                        "WFG2.2D",
+                        //"WFG2.3D",
+                        "WFG3.2D",
+                        //"WFG3.3D",
+                        "WFG4.2D", 
+                        //"WFG4.3D",
+                        "WFG5.2D",
+                        //"WFG5.3D",
+                        "WFG6.2D",
+                        //"WFG6.3D",
+                        "WFG7.2D",
+                        //"WFG7.3D",
+                        "WFG8.2D",
+                        //"WFG8.3D",
+                        "WFG9.2D",
+                        //"WFG9.3D",
+                        "ZDT1", "ZDT2", "ZDT3", "ZDT4", "ZDT6");
 
         problemsComboBox.setItems(problems);
     }
@@ -1111,31 +1220,37 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         return serie3D_;
     }
 
+    private static double[] arrayOf(double x, double y, double z)
+    {
+        double[] a = new double[3];
+        a[0] = x;
+        a[1] = y;
+        a[2] = z;
+        return a;
+    }
+
     private XYZSeries createFront3D(ArrayFront front){
         XYZSeries serieFront3D_ = new XYZSeries<>("Pareto front");
 
-        for (int i = 0; i < front.getNumberOfPoints(); i+=5) {
-            if (i <= front.getNumberOfPoints())
+        for (int i = 0; i < front.getNumberOfPoints(); i++ /*i+=5*/) {
+            if (i <= front.getNumberOfPoints()) {
                 serieFront3D_.add(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2));
-
-            if (i % 5 == 0)
-                i+=50;
+            }
+        //    if (i % 5 == 0)
+          //      i+=50;
         }
-
 /*
-        for (int i = 0; i < front.getNumberOfPoints(); i+=2) {
-            if (i <= front.getNumberOfPoints())
-                serieFront3D_.add(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2));
-
-            if (i % 2 == 0)
-                i+=10;
-        }
-*/
-/*
+        ArrayList<double[]> points = new ArrayList<double[]>();
         for (int i = 0; i < front.getNumberOfPoints(); i++) {
-            serieFront3D_.add(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2));
+            points.add(arrayOf(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2)));
         }
 
+        GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][2]));
+        double[][] results = gl.getClusterPoints(5);
+        for (double[] point : results)
+        {
+            serieFront3D_.add(point[0], point[1], point[2]);
+        }
 */
         return serieFront3D_;
     }
@@ -1156,14 +1271,21 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     private XYSeries createFront2D(ArrayFront front){
         XYSeries seriesFront2D_ = new XYSeries("Pareto front");
+        List<Pair<Double, Double>> pairs = new ArrayList<>();
 
         int count = 1;
         if (front.getNumberOfPoints() > 1000)
             count = front.getNumberOfPoints() / 200;
 
-        for (int i = 0; i < front.getNumberOfPoints(); i+=count) {
-            if (i <= front.getNumberOfPoints())
-                seriesFront2D_.add(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1));
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+                pairs.add(new Pair<>(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1)));
+        }
+
+        Collections.sort(pairs, (d2,d1) -> Double.compare(d1.getKey(),d2.getKey()));
+
+        for (int i = 0; i < pairs.size(); i+=5) {
+            if (i <= pairs.size())
+                seriesFront2D_.add(pairs.get(i).getKey(), pairs.get(i).getValue());
 
 //            if (i % count == 0)
 //                i+=count;

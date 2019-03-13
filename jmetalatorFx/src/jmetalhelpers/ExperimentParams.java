@@ -23,7 +23,6 @@ public class ExperimentParams{
 
         public void setAlgorithmName(String algorithmName) {
                 this.algorithmName = algorithmName;
-
         }
 
         public String getProblemName() {
@@ -31,8 +30,18 @@ public class ExperimentParams{
         }
 
         public void setProblemName(String problemName) {
-            if (problemName == "DTLZ1" || problemName == "DTLZ2")
-                this.problemName = "dtlz." + problemName;
+            if (problemName.contains("DTLZ"))
+                this.problemName = "dtlz." + problemName.replace(".3D", "").replace(".2D","");
+            else if (problemName.contains("GLT"))
+                this.problemName = "glt." + problemName;
+            else if (problemName.contains("LZ09"))
+                this.problemName = "lz09." + problemName.replace("_","");
+            else if (problemName.contains("UF"))
+                this.problemName = "UF." + problemName;
+            else if (problemName.contains("WFG"))
+                this.problemName = "wfg." + problemName.replace(".3D", "").replace(".2D","");
+            else if (problemName.contains("ZDT"))
+                this.problemName = "zdt." + problemName;
             else
                 this.problemName = problemName;
 
@@ -84,10 +93,7 @@ public class ExperimentParams{
         }
 
         private void setReferenceParetoFront(String problemName) {
-            if (problemName == "DTLZ1" || problemName == "DTLZ2")
-                this.referenceParetoFront = "/pareto_fronts/" + problemName + ".3D.pf";
-            else
-                this.referenceParetoFront = "/pareto_fronts/" + problemName + ".pf";
+            this.referenceParetoFront = "/pareto_fronts/" + problemName + ".pf";
         }
 
         public AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> getJMetalAlgorithm() {
