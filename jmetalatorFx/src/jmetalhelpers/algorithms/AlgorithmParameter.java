@@ -40,6 +40,8 @@ public class AlgorithmParameter {
             return getPopulationSizeSettings();
         else if  (parameterName == "archiveSize")
             return getArchiveSizeSettings();
+        else if  (parameterName == "alphaFactor")
+            return getAlphaFactorSettings();
         else //if  (parameterName == "maxEvaluationsSize")
             return getMaxEvaluationsSizeSettings();
     }
@@ -57,6 +59,16 @@ public class AlgorithmParameter {
     private static Map<String, String> getMutationProbabilitySettings(){
         Map<String, String> settings = new HashMap<>();
         settings.put("fullName", "Mutation probability");
+        settings.put("dataType", "Double");
+        settings.put("min", "0.0");
+        settings.put("max", "1.0");
+        settings.put("step", "0.1");
+        return settings;
+    }
+
+    private static Map<String, String> getAlphaFactorSettings(){
+        Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Alpha factor");
         settings.put("dataType", "Double");
         settings.put("min", "0.0");
         settings.put("max", "1.0");

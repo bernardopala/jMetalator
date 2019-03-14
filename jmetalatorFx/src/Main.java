@@ -1128,7 +1128,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void FillComboBoxAlgorithms()
     {
         ObservableList<String> algoritmhs = FXCollections.observableArrayList();
-        algoritmhs.addAll("DBSPEA2","NSGAII", "SPEA2", "SPEA3");
+        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DBSPEA2","ASPEA2");
 
         algorithmsComboBox.setItems(algoritmhs);
     }

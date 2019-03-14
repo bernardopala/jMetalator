@@ -75,6 +75,9 @@ public class ExperimentParams{
                 if (this.algorithmName == "DBSPEA2") {
                     params = DBSPEA2Manager.getDefaultParams();
                 }
+                if (this.algorithmName == "ASPEA2") {
+                    params = ASPEA2Manager.getDefaultParams();
+                }
                 else if (this.algorithmName == "SPEA3") {
                     params = SPEA3Manager.getDefaultParams();
                 }
@@ -120,6 +123,14 @@ public class ExperimentParams{
 
                 params.replace("problemName", this.problemName);
                 ea = new DBSPEA2Manager(params).Create();
+            }
+            else if (this.algorithmName == "ASPEA2") {
+                params = ASPEA2Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new ASPEA2Manager(params).Create();
             }
             else if (this.algorithmName == "SPEA3") {
                 params = SPEA3Manager.getDefaultParams();
