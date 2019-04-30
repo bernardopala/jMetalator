@@ -51,7 +51,9 @@ import jmetalhelpers.SolutionDto;
 import jmetalhelpers.algorithms.AlgorithmParameter;
 import jmetalhelpers.algorithms.NSGAIIManager;
 import jmetalhelpers.algorithms.SPEA2Manager;
+import maths.EvenlyDistributedSolutions;
 import maths.GenLloyd;
+import maths.GoodDistribution;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
@@ -77,16 +79,20 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.impl.AbstractEvolutionaryAlgorithm;
+import org.uma.jmetal.algorithm.multiobjective.moead.util.MOEADUtils;
 import org.uma.jmetal.algorithm.util.CurrentSolutionSetReceiver;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.qualityindicator.impl.*;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
+import org.uma.jmetal.util.referencePoint.impl.IdealPoint;
 import view.PairKeyFactory;
 import view.PairValueCell;
 import view.PairValueFactory;
@@ -149,7 +155,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public ComboBox problemsComboBox;
 
     @FXML
+    public CheckBox showSSCheckBox;
+
+    @FXML
     public CheckBox showRefPFCheckBox;
+
+    @FXML
+    public CheckBox showRefPointsCheckBox;
 
     @FXML
     public CheckBox gdCheckBox;
@@ -308,7 +320,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private ChartCanvas canvasEr = new ChartCanvas(chartEr);
     private XYSeries erSeries = new XYSeries("er");
 
+    boolean isShowingRefPointsActive = true;
     boolean isShowingRefPFActive = true;
+    boolean isShowingSSActive = true;
+
     int dimCount = 0;
 
     private List<DoubleSolution> solutionSetResult = new ArrayList<>();
@@ -465,7 +480,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         selectedTab.setValue("tabAproximationSet");
         tabPane.getSelectionModel().select(2);
 
+        showSSCheckBox.setSelected(true);
         showRefPFCheckBox.setSelected(true);
+        showRefPointsCheckBox.setSelected(true);
 
         gdCheckBox.setDisable(true);
         igdCheckBox.setDisable(true);
@@ -666,19 +683,50 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             System.out.println("EXCEPTION: ReceiveCurrentSolutionSet()");
             e.printStackTrace();
         }
+
+        if (!isAlgorithmWorking)
+            lock.unlock();
     }
 
     private void update3dChartRelatedUI(){
         XYZPlot plot = (XYZPlot) viewer.getChart().getPlot();
         XYZSeriesCollection dataset3D = new XYZSeriesCollection();
         XYZSeries ssSeries = createSeries3D(solutionSetResult);
-        if (solutionSetResult != null && solutionSetResult.size() > 0)
+        if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
             dataset3D.add(ssSeries);
         else
             dataset3D.add(new XYZSeries("Solution set"));
 
+        //start
+        XYZSeries laSeries = new XYZSeries("la");
+
+        if (isShowingRefPointsActive && solutionSetResult != null && solutionSetResult.size() > 0) {
+
+            ArrayList<double[]> points = new ArrayList<double[]>();
+            for (int i = 0; i < solutionSetResult.size(); i++) {
+                points.add(arrayOf(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1), solutionSetResult.get(i).getObjective(2)));
+            }
+
+            GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][3]));
+            double[][] results = gl.getClusterPoints(20);
+            for (double[] point : results) {
+                laSeries.add(point[0], point[1], point[2]);
+            }
+            /*
+            List<DoubleSolution> edList = EvenlyDistributedSolutions.get(solutionSetResult, 50);
+            for (DoubleSolution point : edList) {
+                laSeries.add(point.getObjective(0), point.getObjective(1), point.getObjective(2));
+            }
+            */
+        }
+
+        if (isShowingRefPointsActive)
+            dataset3D.add(laSeries);
+        //end
+
         if (isShowingRefPFActive)
             dataset3D.add(serieFront3D);
+
         plot.setDataset(dataset3D);
 
         double minX = Double.MAX_VALUE;
@@ -719,18 +767,56 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         XYSeriesCollection dataset2D = new XYSeriesCollection();
         XYSeries ssSeries = createSeries2D(solutionSetResult);
 
-        if (solutionSetResult != null && solutionSetResult.size() > 0)
+        if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
             dataset2D.addSeries(ssSeries);
         else
             dataset2D.addSeries(new XYSeries("Solution set"));
 
+        //start
+        XYSeries laSeries = new XYSeries("la");
+
+        if (solutionSetResult != null && solutionSetResult.size() > 0) {
+
+            ArrayList<double[]> points = new ArrayList<double[]>();
+            for (int i = 0; i < solutionSetResult.size(); i++) {
+                points.add(arrayOf(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1)));
+            }
+            /*
+            GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][2]));
+            double[][] results = gl.getClusterPoints(20);
+            for (double[] point : results) {
+                laSeries.add(point[0], point[1]);
+            }
+            */
+
+            GoodDistribution gd = new GoodDistribution();
+            double[][] results = gd.get(solutionSetResult);
+            for (double[] point : results) {
+                laSeries.add(point[0], point[1]);
+            }
+
+            /*
+            List<DoubleSolution> edList = EvenlyDistributedSolutions.get(solutionSetResult, 50);
+            for (DoubleSolution point : edList) {
+                laSeries.add(point.getObjective(0), point.getObjective(1));
+            }
+            */
+        }
+
+        if (isShowingRefPointsActive)
+            dataset2D.addSeries(laSeries);
+        //end
+
         if (isShowingRefPFActive)
             dataset2D.addSeries(seriesFront2D);
+
         plot2D.setDataset(dataset2D);
+
 
         List<XYSeries> union = new ArrayList<>();
         union.add(ssSeries);
         union.add(seriesFront2D);
+        union.add(laSeries);
 
         double minX = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
@@ -934,12 +1020,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         isAlgorithmWorking = true;
     }
 
-    public void stopButtonClicked(ActionEvent actionEvent){
-        mainLoop.interrupt();
+    public void stopButtonClicked(ActionEvent actionEvent) throws InterruptedException {
+        //
+
+        //algorithm = null;
 
         try {
-            mainLoop.join();
-            algorithm = null;
+            mainLoop.stop();
+            //mainLoop.interrupt();
         } catch (Exception ex)
         {
             new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
@@ -1027,10 +1115,34 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
     }
 
+    public void showSSCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isShowingSSActive = chk.isSelected();
+
+            if (dimCount == 2)
+                update2dChartRelatedUI();
+            else if (dimCount == 3)
+                update3dChartRelatedUI();
+        }
+    }
+
     public void showRefPFCheckBoxChecked(ActionEvent event) {
         if (event.getSource() instanceof CheckBox) {
             CheckBox chk = (CheckBox) event.getSource();
             isShowingRefPFActive = chk.isSelected();
+
+            if (dimCount == 2)
+                update2dChartRelatedUI();
+            else if (dimCount == 3)
+                update3dChartRelatedUI();
+        }
+    }
+
+    public void showRefPointsCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isShowingRefPointsActive = chk.isSelected();
 
             if (dimCount == 2)
                 update2dChartRelatedUI();
@@ -1128,7 +1240,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void FillComboBoxAlgorithms()
     {
         ObservableList<String> algoritmhs = FXCollections.observableArrayList();
-        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DBSPEA2","ASPEA2");
+        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DB1SPEA2", "DB2SPEA2", "ASPEA2", "AngleSPEA2", "ESPEA2", "ANSGAII", "AngleNSGAII", "CDASNSGAII");
 
         algorithmsComboBox.setItems(algoritmhs);
     }
@@ -1220,6 +1332,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         return serie3D_;
     }
 
+    private static double[] arrayOf(double x, double y)
+    {
+        double[] a = new double[2];
+        a[0] = x;
+        a[1] = y;
+        return a;
+    }
+
     private static double[] arrayOf(double x, double y, double z)
     {
         double[] a = new double[3];
@@ -1302,4 +1422,5 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         return ChartFactory.createXYLineChart("", "F1", "F2", dataset);
     }
     //endregion
+
 }

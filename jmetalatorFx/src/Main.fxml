@@ -40,7 +40,17 @@
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </ComboBox>
+             <CheckBox fx:id="showSSCheckBox" text="Show solution set" onAction="#showSSCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
              <CheckBox fx:id="showRefPFCheckBox" text="Show ref. PF" onAction="#showRefPFCheckBoxChecked">
+                 <VBox.margin>
+                     <Insets left="5.0" right="5.0" top="5.0" />
+                 </VBox.margin>
+             </CheckBox>
+             <CheckBox fx:id="showRefPointsCheckBox" text="Show ref. points" onAction="#showRefPointsCheckBoxChecked">
                  <VBox.margin>
                      <Insets left="5.0" right="5.0" top="5.0" />
                  </VBox.margin>

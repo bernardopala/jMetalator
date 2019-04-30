@@ -2,14 +2,20 @@ package jmetalhelpers.algorithms;
 
 import org.uma.jmetal.algorithm.multiobjective.dbspea2.DBSPEA2;
 import org.uma.jmetal.algorithm.multiobjective.dbspea2.DBSPEA2Builder;
+import org.uma.jmetal.algorithm.multiobjective.dbspea2.util.EnvironmentalSelection;
+import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
+import org.uma.jmetal.util.stash.StashStrategy;
+import org.uma.jmetal.util.stash.impl.SPEA2EnvironmentalSelectionStash;
+import org.uma.jmetal.util.stash.impl.StrengthFitnessStash;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DBSPEA2Manager {
@@ -45,12 +51,19 @@ public class DBSPEA2Manager {
         archiveSize = Integer.valueOf(params.get("archiveSize"));
     }
 
-    public DBSPEA2 Create() {
+    public DBSPEA2 Create(int stashStrategyNumber) {
         Problem problem = ProblemUtils.loadProblem(problemName);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
-        return (new DBSPEA2Builder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxIterations(maxEvaluations).setPopulationSize(populationSize).setArchiveSize(archiveSize).build();
+        StashStrategy ss = new StrengthFitnessStash(archiveSize);
+        if (stashStrategyNumber == 2)
+            ss = new SPEA2EnvironmentalSelectionStash(new EnvironmentalSelection(archiveSize));
+
+        return (new DBSPEA2Builder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxIterations(maxEvaluations)
+                .setPopulationSize(populationSize).setArchiveSize(archiveSize)
+                .setStashStrategy(ss)
+                .build();
     }
 
     private String createProblemUrl(String problemName){

@@ -42,6 +42,12 @@ public class AlgorithmParameter {
             return getArchiveSizeSettings();
         else if  (parameterName == "alphaFactor")
             return getAlphaFactorSettings();
+        else if  (parameterName == "epsilonFactor")
+            return getEpsilonFactorSettings();
+        else if  (parameterName == "angleFactor")
+            return getAngleFactorSettings();
+        else if  (parameterName == "sFactor")
+            return getSFactorSettings();
         else //if  (parameterName == "maxEvaluationsSize")
             return getMaxEvaluationsSizeSettings();
     }
@@ -69,6 +75,36 @@ public class AlgorithmParameter {
     private static Map<String, String> getAlphaFactorSettings(){
         Map<String, String> settings = new HashMap<>();
         settings.put("fullName", "Alpha factor");
+        settings.put("dataType", "Double");
+        settings.put("min", "0.0");
+        settings.put("max", "1.0");
+        settings.put("step", "0.1");
+        return settings;
+    }
+
+    private static Map<String, String> getEpsilonFactorSettings(){
+        Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Epsilon factor");
+        settings.put("dataType", "Double");
+        settings.put("min", "0.0");
+        settings.put("max", "1.0");
+        settings.put("step", "0.1");
+        return settings;
+    }
+
+    private static Map<String, String> getAngleFactorSettings(){
+        Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "Angle factor");
+        settings.put("dataType", "Double");
+        settings.put("min", "0.0");
+        settings.put("max", "100.0");
+        settings.put("step", "0.1");
+        return settings;
+    }
+
+    private static Map<String, String> getSFactorSettings(){
+        Map<String, String> settings = new HashMap<>();
+        settings.put("fullName", "S factor");
         settings.put("dataType", "Double");
         settings.put("min", "0.0");
         settings.put("max", "1.0");
