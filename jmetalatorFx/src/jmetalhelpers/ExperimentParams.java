@@ -7,6 +7,7 @@ import org.uma.jmetal.algorithm.impl.AbstractEvolutionaryAlgorithm;
 import org.uma.jmetal.solution.DoubleSolution;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,19 +69,45 @@ public class ExperimentParams{
         }
 
         private Map<String,String> getAlgorithmDefaultParameters(String algorithmName) {
-                Map<String, String> params = NSGAIIManager.getDefaultParams();
+                Map<String, String> params = new HashMap<>();
+
+                if (this.algorithmName == "NSGAII") {
+                    params = NSGAIIManager.getDefaultParams();
+                }
                 if (this.algorithmName == "SPEA2") {
                     params = SPEA2Manager.getDefaultParams();
                 }
-                if (this.algorithmName == "DBSPEA2") {
+                if (this.algorithmName == "DB1SPEA2") {
+                    params = DBSPEA2Manager.getDefaultParams();
+                }
+                if (this.algorithmName == "DB2SPEA2") {
                     params = DBSPEA2Manager.getDefaultParams();
                 }
                 if (this.algorithmName == "ASPEA2") {
                     params = ASPEA2Manager.getDefaultParams();
                 }
+                if (this.algorithmName == "AngleSPEA2") {
+                    params = AngleSPEA2Manager.getDefaultParams();
+                }
+                if (this.algorithmName == "ESPEA2") {
+                    params = ESPEA2Manager.getDefaultParams();
+                }
                 else if (this.algorithmName == "SPEA3") {
                     params = SPEA3Manager.getDefaultParams();
                 }
+                else if (this.algorithmName == "ANSGAII") {
+                    params = ANSGAIIManager.getDefaultParams();
+                }
+                else if (this.algorithmName == "ENSGAII") {
+                    params = ENSGAIIManager.getDefaultParams();
+                }
+                else if (this.algorithmName == "AngleNSGAII") {
+                    params = AngleNSGAIIManager.getDefaultParams();
+                }
+                else if (this.algorithmName == "CDASNSGAII") {
+                    params = CDASNSGAIIManager.getDefaultParams();
+                }
+
                 return params;
         }
 
@@ -106,8 +133,16 @@ public class ExperimentParams{
                 params = updateParameterList(params, algorithmParameterList);
 
             params.replace("problemName", this.problemName);
-            AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> ea = new NSGAIIManager(params).Create();
+            AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> ea = null;
+            
+            if (this.algorithmName == "NSGAII") {
+                params = NSGAIIManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
 
+                params.replace("problemName", this.problemName);
+                ea = new NSGAIIManager(params).Create();
+            }
             if (this.algorithmName == "SPEA2") {
                 params = SPEA2Manager.getDefaultParams();
                 if (algorithmParameterList != null)
@@ -116,13 +151,21 @@ public class ExperimentParams{
                 params.replace("problemName", this.problemName);
                 ea = new SPEA2Manager(params).Create();
             }
-            else if (this.algorithmName == "DBSPEA2") {
+            else if (this.algorithmName == "DB1SPEA2") {
                 params = DBSPEA2Manager.getDefaultParams();
                 if (algorithmParameterList != null)
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
-                ea = new DBSPEA2Manager(params).Create();
+                ea = new DBSPEA2Manager(params).Create(1);
+            }
+            else if (this.algorithmName == "DB2SPEA2") {
+                params = DBSPEA2Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new DBSPEA2Manager(params).Create(2);
             }
             else if (this.algorithmName == "ASPEA2") {
                 params = ASPEA2Manager.getDefaultParams();
@@ -132,6 +175,22 @@ public class ExperimentParams{
                 params.replace("problemName", this.problemName);
                 ea = new ASPEA2Manager(params).Create();
             }
+            else if (this.algorithmName == "AngleSPEA2") {
+                params = AngleSPEA2Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new AngleSPEA2Manager(params).Create();
+            }
+            else if (this.algorithmName == "ESPEA2") {
+                params = ESPEA2Manager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new ESPEA2Manager(params).Create();
+            }
             else if (this.algorithmName == "SPEA3") {
                 params = SPEA3Manager.getDefaultParams();
                 if (algorithmParameterList != null)
@@ -139,6 +198,38 @@ public class ExperimentParams{
 
                 params.replace("problemName", this.problemName);
                 ea = new SPEA3Manager(params).Create();
+            }
+            else if (this.algorithmName == "ANSGAII") {
+                params = ANSGAIIManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new ANSGAIIManager(params).Create();
+            }
+            else if (this.algorithmName == "ENSGAII") {
+                params = ENSGAIIManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new ENSGAIIManager(params).Create();
+            }
+            else if (this.algorithmName == "AngleNSGAII") {
+                params = AngleNSGAIIManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new AngleNSGAIIManager(params).Create();
+            }
+            else if (this.algorithmName == "CDASNSGAII") {
+                params = CDASNSGAIIManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new CDASNSGAIIManager(params).Create();
             }
 
             return ea;
