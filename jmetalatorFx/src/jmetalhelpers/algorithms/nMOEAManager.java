@@ -1,39 +1,44 @@
 package jmetalhelpers.algorithms;
 
-import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2;
-import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
-import org.uma.jmetal.algorithm.multiobjective.spea3.SPEA3;
-import org.uma.jmetal.algorithm.multiobjective.spea3.SPEA3Builder;
+import org.uma.jmetal.algorithm.multiobjective.nmoea.nMOEA;
+import org.uma.jmetal.algorithm.multiobjective.nmoea.nMOEABuilder;
+import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII;
+import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
+import org.uma.jmetal.util.comparator.RankingComparator;
+import org.uma.jmetal.util.comparator.RelaxationType;
+import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SPEA3Manager {
+public class nMOEAManager {
 
-    private String problemName;
-    private double crossoverProbability;
-    private double crossoverDistributionIndex;
-    private double mutationProbability;
-    private double mutationDistributionIndex;
-    private int maxEvaluations;
-    private int populationSize;
-    private int archiveSize;
+    String problemName;
+    double crossoverProbability;
+    double crossoverDistributionIndex;
+    double mutationProbability;
+    double mutationDistributionIndex;
+    int maxEvaluations;
+    int populationSize;
 
-    public SPEA3Manager(Map<String, String> params) {
+    public nMOEAManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
-            params = SPEA2Manager.getDefaultParams();
+            params = nMOEAManager.getDefaultParams();
 
         setParameters(params);
     }
 
-    public SPEA3Manager(){
-        setParameters(SPEA2Manager.getDefaultParams());
+    public nMOEAManager(){
+
+        setParameters(nMOEAManager.getDefaultParams());
     }
 
     public void setParameters(Map<String, String> params){
@@ -44,16 +49,14 @@ public class SPEA3Manager {
         mutationDistributionIndex = 20.0D; // Double.valueOf(params.get("mutationDistributionIndex"));
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
-        archiveSize = Integer.valueOf(params.get("archiveSize"));
-
     }
 
-    public SPEA3 Create() {
+    public nMOEA Create() {
         Problem problem = ProblemUtils.loadProblem(problemName);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
-        BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
-        return (new SPEA3Builder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxIterations(maxEvaluations).setPopulationSize(populationSize).setArchiveSize(archiveSize).build();
+
+        return (new nMOEABuilder(problem, crossover, mutation)).setMaxEvaluations(maxEvaluations).setPopulationSize(populationSize).build();
     }
 
     private String createProblemUrl(String problemName){
@@ -67,9 +70,8 @@ public class SPEA3Manager {
         //params.put("crossoverDistributionIndex", "20.0D");
         params.put("mutationProbability", "0.5D");
         //params.put("mutationDistributionIndex", "20.0D");
-        params.put("maxEvaluations", "10000");
+        params.put("maxEvaluations", "1000");
         params.put("populationSize", "100");
-        params.put("archiveSize", "100");
 
         return params;
     }

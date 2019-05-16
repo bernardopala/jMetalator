@@ -107,6 +107,12 @@ public class ExperimentParams{
                 else if (this.algorithmName == "CDASNSGAII") {
                     params = CDASNSGAIIManager.getDefaultParams();
                 }
+                else if (this.algorithmName == "nMOEA") {
+                    params = nMOEAManager.getDefaultParams();
+                }
+                else if (this.algorithmName == "nMOEA-Alpha") {
+                    params = nMOEAAlphaManager.getDefaultParams();
+                }
 
                 return params;
         }
@@ -230,6 +236,22 @@ public class ExperimentParams{
 
                 params.replace("problemName", this.problemName);
                 ea = new CDASNSGAIIManager(params).Create();
+            }
+            else if (this.algorithmName == "nMOEA") {
+                params = nMOEAManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new nMOEAManager(params).Create();
+            }
+            else if (this.algorithmName == "nMOEA-Alpha") {
+                params = nMOEAAlphaManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                ea = new nMOEAAlphaManager(params).Create();
             }
 
             return ea;

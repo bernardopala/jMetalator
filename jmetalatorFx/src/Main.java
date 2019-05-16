@@ -96,6 +96,7 @@ import org.uma.jmetal.util.referencePoint.impl.IdealPoint;
 import view.PairKeyFactory;
 import view.PairValueCell;
 import view.PairValueFactory;
+import view.TabEnum;
 
 import javax.swing.text.TableView;
 import java.awt.*;
@@ -240,6 +241,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private List<Tab> tabs = new ArrayList<>();
     private Tab tab2D = new Tab();
     private Tab tab3D = new Tab();
+    private Map<TabEnum, Boolean> tabEnumVisibilityDictionary = new HashMap<>();
+    private List<TabEnum> tabEnumOrder = new ArrayList<>();
+    private List<TabEnum> tabEnumCurrentOrder = new ArrayList<>();
+
     //endregion
 
     //region Private variables
@@ -348,8 +353,56 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     //endregion
 
+    private void initializeTabs(){
+        tabs = FXCollections.observableArrayList(tabPane.getTabs());
+        tabPane.getTabs().clear();
+
+        tabEnumVisibilityDictionary.put(TabEnum.Chart3D, false);
+        tabEnumVisibilityDictionary.put(TabEnum.Chart2D, false);
+//        tabEnumVisibilityDictionary.put(TabEnum.ChartParallelCoordinates, false);
+        tabEnumVisibilityDictionary.put(TabEnum.AproximationSet, false);
+        tabEnumVisibilityDictionary.put(TabEnum.GD, false);
+        tabEnumVisibilityDictionary.put(TabEnum.IGD, false);
+        tabEnumVisibilityDictionary.put(TabEnum.IGDPlus, false);
+        tabEnumVisibilityDictionary.put(TabEnum.Spread, false);
+        tabEnumVisibilityDictionary.put(TabEnum.Epsilon, false);
+        tabEnumVisibilityDictionary.put(TabEnum.HV, false);
+        tabEnumVisibilityDictionary.put(TabEnum.ER, false);
+
+        tabEnumOrder.add(TabEnum.Chart3D);
+        tabEnumOrder.add(TabEnum.Chart2D);
+//        tabEnumIndiciesDictionary.put(TabEnum.ChartParallelCoordinates, 2);
+        tabEnumOrder.add(TabEnum.AproximationSet);
+        tabEnumOrder.add(TabEnum.GD);
+        tabEnumOrder.add(TabEnum.IGD);
+        tabEnumOrder.add(TabEnum.IGDPlus);
+        tabEnumOrder.add(TabEnum.Spread);
+        tabEnumOrder.add(TabEnum.Epsilon);
+        tabEnumOrder.add(TabEnum.HV);
+        tabEnumOrder.add(TabEnum.ER);
+    }
+
+    private void setTabVisiblity(TabEnum key, Boolean value){
+        tabPane.getTabs().clear();
+        tabEnumCurrentOrder.clear();
+
+        tabEnumVisibilityDictionary.replace(key, value);
+        tabEnumOrder.forEach((k) -> {
+                int id = tabEnumOrder.indexOf(k);
+                if (tabEnumVisibilityDictionary.get(k).booleanValue()) {
+                    tabEnumCurrentOrder.add(k);
+                    tabPane.getTabs().add(tabs.get(id));
+                }
+            }
+        );
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
+        initializeTabs();
+        setTabVisiblity(TabEnum.Chart2D, true);
+        setTabVisiblity(TabEnum.AproximationSet, true);
+
         tabPane.getSelectionModel().selectedItemProperty().addListener(
             (ov, t, t1) -> {
                 if (t == null || t1 == null)
@@ -467,18 +520,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         FillComboBoxProblems();
         enableControlsOnStop();
 
-        tabs = FXCollections.observableArrayList(tabPane.getTabs());
-        tabPane.getTabs().get(0).setDisable(true);
-        tabPane.getTabs().get(1).setDisable(true);
-        tabPane.getTabs().get(3).setDisable(true);
-        tabPane.getTabs().get(4).setDisable(true);
-        tabPane.getTabs().get(5).setDisable(true);
-        tabPane.getTabs().get(6).setDisable(true);
-        tabPane.getTabs().get(7).setDisable(true);
-        tabPane.getTabs().get(8).setDisable(true);
-        tabPane.getTabs().get(9).setDisable(true);
-        selectedTab.setValue("tabAproximationSet");
-        tabPane.getSelectionModel().select(2);
+        selectedTab.setValue("tab2d");
+        tabPane.getSelectionModel().select(0);
 
         showSSCheckBox.setSelected(true);
         showRefPFCheckBox.setSelected(true);
@@ -500,6 +543,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         problemsComboBox.setValue(prob);
         selectProblem(prob.toString());
     }
+
+
 
     private void handleZoom(Chart3DViewer viewer, double multiplier) {
         ViewPoint3D viewPt = viewer.getChart().getViewPoint();
@@ -674,7 +719,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                     counter.set(-1);
                     lock.unlock();
                 } catch (Exception e) {
-                    System.out.println("EXCEPTION: ReceiveCurrentSolutionSet()->Platform.runLater()");
+                    System.out.println("EXCEPTION: ReceiveCurrentSolutionSet()->Platform.runLater()" + e.getStackTrace());
                     e.printStackTrace();
                 }
             });
@@ -788,13 +833,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 laSeries.add(point[0], point[1]);
             }
             */
-
+/*
             GoodDistribution gd = new GoodDistribution();
             double[][] results = gd.get(solutionSetResult);
             for (double[] point : results) {
                 laSeries.add(point[0], point[1]);
             }
-
+*/
             /*
             List<DoubleSolution> edList = EvenlyDistributedSolutions.get(solutionSetResult, 50);
             for (DoubleSolution point : edList) {
@@ -1070,11 +1115,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 solutionSetResult.clear();
                 update2dChartRelatedUI();
 
-                tabPane.getTabs().get(0).setDisable(true);
-                tabPane.getTabs().get(1).setDisable(false);
+                setTabVisiblity(TabEnum.Chart3D, false);
+                setTabVisiblity(TabEnum.Chart2D, true);
                 selectedTab.setValue("tab2d");
-                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-                selectionModel.select(1);
+                tabPane.getSelectionModel().select(0);
 
                 solutionsTableView.getColumns().get(2).setVisible(false);
             }
@@ -1085,11 +1129,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 solutionSetResult.clear();
                 update3dChartRelatedUI();
 
-                tabPane.getTabs().get(0).setDisable(false);
-                tabPane.getTabs().get(1).setDisable(true);
+                setTabVisiblity(TabEnum.Chart3D, true);
+                setTabVisiblity(TabEnum.Chart2D, false);
                 selectedTab.setValue("tab3d");
-                SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-                selectionModel.select(0);
+                tabPane.getSelectionModel().select(0);
 
                 solutionsTableView.getColumns().get(2).setVisible(true);
             }
@@ -1157,9 +1200,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isGdActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(3).setDisable(false);
+                setTabVisiblity(TabEnum.GD, true);
             else
-                tabPane.getTabs().get(3).setDisable(true);
+                setTabVisiblity(TabEnum.GD, false);
         }
     }
 
@@ -1169,9 +1212,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isIgdActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(4).setDisable(false);
+                setTabVisiblity(TabEnum.IGD, true);
             else
-                tabPane.getTabs().get(4).setDisable(true);
+                setTabVisiblity(TabEnum.IGD, false);
         }
     }
 
@@ -1181,9 +1224,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isIgdPlusActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(5).setDisable(false);
+                setTabVisiblity(TabEnum.IGDPlus, true);
             else
-                tabPane.getTabs().get(5).setDisable(true);
+                setTabVisiblity(TabEnum.IGDPlus, false);
         }
     }
 
@@ -1193,9 +1236,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isSpreadActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(6).setDisable(false);
+                setTabVisiblity(TabEnum.Spread, true);
             else
-                tabPane.getTabs().get(6).setDisable(true);
+                setTabVisiblity(TabEnum.Spread, false);
         }
     }
 
@@ -1205,9 +1248,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isEpsilonActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(7).setDisable(false);
+                setTabVisiblity(TabEnum.Epsilon, true);
             else
-                tabPane.getTabs().get(7).setDisable(true);
+                setTabVisiblity(TabEnum.Epsilon, false);
         }
     }
 
@@ -1217,9 +1260,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isHvActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(8).setDisable(false);
+                setTabVisiblity(TabEnum.HV, true);
             else
-                tabPane.getTabs().get(8).setDisable(true);
+                setTabVisiblity(TabEnum.HV, false);
         }
     }
 
@@ -1229,9 +1272,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             isErActive = chk.isSelected();
 
             if (chk.isSelected())
-                tabPane.getTabs().get(9).setDisable(false);
+                setTabVisiblity(TabEnum.ER, true);
             else
-                tabPane.getTabs().get(9).setDisable(true);
+                setTabVisiblity(TabEnum.ER, false);
         }
     }
     //endregion
@@ -1240,7 +1283,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void FillComboBoxAlgorithms()
     {
         ObservableList<String> algoritmhs = FXCollections.observableArrayList();
-        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DB1SPEA2", "DB2SPEA2", "ASPEA2", "AngleSPEA2", "ESPEA2", "ANSGAII", "AngleNSGAII", "CDASNSGAII");
+        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DB1SPEA2", "DB2SPEA2", "ASPEA2", "AngleSPEA2", "ESPEA2", "ANSGAII", "AngleNSGAII", "CDASNSGAII", "nMOEA", "nMOEA-Alpha");
 
         algorithmsComboBox.setItems(algoritmhs);
     }
