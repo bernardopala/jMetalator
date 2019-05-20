@@ -218,6 +218,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public StackPane stackPaneJFREE;
 
     @FXML
+    public StackPane stackPaneJFREEPC;
+
+    @FXML
     public StackPane stackPaneGD;
 
     @FXML
@@ -282,6 +285,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private XYSeries seriesFront2D = new XYSeries("front");
     private JFreeChart chart2D = createChart2D(new XYSeriesCollection());
     private ChartCanvas canvas2D = new ChartCanvas(chart2D);
+
+    private XYSeriesCollection seriesFrontPC = new XYSeriesCollection();
+    private JFreeChart chartPC = createLine2D(new XYSeriesCollection());
+    private ChartCanvas canvasPC = new ChartCanvas(chartPC);
 
     boolean isGdActive = false;
     double gd = 0;
@@ -359,7 +366,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         tabEnumVisibilityDictionary.put(TabEnum.Chart3D, false);
         tabEnumVisibilityDictionary.put(TabEnum.Chart2D, false);
-//        tabEnumVisibilityDictionary.put(TabEnum.ChartParallelCoordinates, false);
+        tabEnumVisibilityDictionary.put(TabEnum.ChartParallelCoordinates, false);
         tabEnumVisibilityDictionary.put(TabEnum.AproximationSet, false);
         tabEnumVisibilityDictionary.put(TabEnum.GD, false);
         tabEnumVisibilityDictionary.put(TabEnum.IGD, false);
@@ -371,7 +378,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         tabEnumOrder.add(TabEnum.Chart3D);
         tabEnumOrder.add(TabEnum.Chart2D);
-//        tabEnumIndiciesDictionary.put(TabEnum.ChartParallelCoordinates, 2);
+        tabEnumOrder.add(TabEnum.ChartParallelCoordinates);
         tabEnumOrder.add(TabEnum.AproximationSet);
         tabEnumOrder.add(TabEnum.GD);
         tabEnumOrder.add(TabEnum.IGD);
@@ -419,6 +426,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                         if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
                             update2dChartRelatedUI();
                         }
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabParallelCoordinates")) {
+                        if (solutionSetResult.get(0).getNumberOfObjectives() > 3) {
+                            updatePCChartRelatedUI();
+                        }
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabAproximationSet")) {
                         updateSetRelatedUI();
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabGD")) {
@@ -465,6 +476,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         });
 
         stackPaneJFREE.getChildren().add(canvas2D);
+        stackPaneJFREEPC.getChildren().add(canvasPC);
+
         stackPaneGD.getChildren().add(canvasGD);
         stackPaneIGD.getChildren().add(canvasIGD);
         stackPaneIGDPlus.getChildren().add(canvasIGDPlus);
@@ -475,6 +488,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         canvas2D.widthProperty().bind( stackPaneJFREE.widthProperty());
         canvas2D.heightProperty().bind( stackPaneJFREE.heightProperty());
+
+        canvasPC.widthProperty().bind( stackPaneJFREEPC.widthProperty());
+        canvasPC.heightProperty().bind( stackPaneJFREEPC.heightProperty());
+        canvasPC.getChart().removeLegend();
 
         canvasGD.widthProperty().bind( stackPaneGD.widthProperty());
         canvasGD.heightProperty().bind( stackPaneGD.heightProperty());
@@ -543,8 +560,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         problemsComboBox.setValue(prob);
         selectProblem(prob.toString());
     }
-
-
 
     private void handleZoom(Chart3DViewer viewer, double multiplier) {
         ViewPoint3D viewPt = viewer.getChart().getViewPoint();
@@ -698,6 +713,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                         if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
                             update2dChartRelatedUI();
                         }
+                    } else if (selectedTab.getValue().equalsIgnoreCase("tabParallelCoordinates")) {
+                        if (solutionSetResult.get(0).getNumberOfObjectives() > 3) {
+                            updatePCChartRelatedUI();
+                        }
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabAproximationSet")) {
                         updateSetRelatedUI();
                     } else if (selectedTab.getValue().equalsIgnoreCase("tabGD")) {
@@ -807,6 +826,116 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         renderer.getPlot().getZAxis().setRange(minZ, maxZ);
     }
 
+    private void updatePCChartRelatedUI(){
+        XYPlot plotPC = (XYPlot) chartPC.getPlot();
+        XYSeriesCollection datasetPC = new XYSeriesCollection();
+        XYSeriesCollection datasetFrontPC = new XYSeriesCollection();
+
+        if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
+        {
+            datasetPC = createSeriesCollectionPC(solutionSetResult);
+
+        }
+
+//        if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
+//            datasetPC.addSeries(ssSeries);
+//        else
+//            datasetPC.addSeries(new XYSeries("Solution set"));
+
+        //start
+
+//        XYSeries laSeries = new XYSeries("la");
+//
+//        if (solutionSetResult != null && solutionSetResult.size() > 0) {
+//
+//            ArrayList<double[]> points = new ArrayList<double[]>();
+//            for (int i = 0; i < solutionSetResult.size(); i++) {
+//                points.add(arrayOf(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1)));
+//            }
+//            /*
+//            GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][2]));
+//            double[][] results = gl.getClusterPoints(20);
+//            for (double[] point : results) {
+//                laSeries.add(point[0], point[1]);
+//            }
+//            */
+///*
+//            GoodDistribution gd = new GoodDistribution();
+//            double[][] results = gd.get(solutionSetResult);
+//            for (double[] point : results) {
+//                laSeries.add(point[0], point[1]);
+//            }
+//*/
+//            /*
+//            List<DoubleSolution> edList = EvenlyDistributedSolutions.get(solutionSetResult, 50);
+//            for (DoubleSolution point : edList) {
+//                laSeries.add(point.getObjective(0), point.getObjective(1));
+//            }
+//            */
+//        }
+//
+//        if (isShowingRefPointsActive)
+//            datasetPC.addSeries(laSeries);
+        //end
+
+        if (isShowingRefPFActive)
+        {
+            for (int k = 0; k < seriesFrontPC.getSeriesCount(); k++) {
+                datasetFrontPC.addSeries(seriesFrontPC.getSeries(k));
+            }
+        }
+
+        plotPC.setDataset(0,datasetPC);
+        XYItemRenderer renderer0 = new XYLineAndShapeRenderer(true, false);
+        for (int p = 0; p < datasetPC.getSeriesCount(); p++)
+            renderer0.setSeriesPaint(p, Color.BLACK);
+        plotPC.setRenderer(0, renderer0);
+
+        plotPC.setDataset(1,datasetFrontPC);
+        XYItemRenderer renderer1 = new XYLineAndShapeRenderer(true, false);
+        for (int p = 0; p < datasetFrontPC.getSeriesCount(); p++)
+            renderer1.setSeriesPaint(p, Color.RED);
+        plotPC.setRenderer(1, renderer1);
+
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (int d = 0; d < plotPC.getDatasetCount(); d++) {
+            XYSeriesCollection ds = (XYSeriesCollection)plotPC.getDataset(d);
+            for (int j = 0; j < ds.getSeriesCount(); j++) {
+                XYSeries s = ds.getSeries(j);
+                List<XYDataItem> items = (List<XYDataItem>) s.getItems();
+                for (XYDataItem item : items) {
+                    if (item.getX().doubleValue() < minX)
+                        minX = item.getX().doubleValue();
+                    if (item.getX().doubleValue() > maxX)
+                        maxX = item.getX().doubleValue();
+                    if (item.getY().doubleValue() < minY)
+                        minY = item.getY().doubleValue();
+                    if (item.getY().doubleValue() > maxY)
+                        maxY = item.getY().doubleValue();
+                }
+            }
+        }
+
+        if (minX == Double.MAX_VALUE)
+            minX = 0;
+        if (maxX == Double.MIN_VALUE)
+            maxX = 1;
+        if (minY == Double.MAX_VALUE)
+            minY = 0;
+        if (maxY == Double.MIN_VALUE)
+            maxY = 1;
+
+
+        plotPC.getDomainAxis().setRange(minX,maxX);
+        plotPC.getRangeAxis().setRange(minY,maxY);
+//        chart2D.getXYPlot().getRangeAxis(0).setRange(minX,maxX);
+//        chart2D.getXYPlot().getRangeAxis(1).setRange(minY,maxY);
+    }
+
     private void update2dChartRelatedUI(){
         XYPlot plot2D = (XYPlot) chart2D.getPlot();
         XYSeriesCollection dataset2D = new XYSeriesCollection();
@@ -898,6 +1027,14 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 solutionList.add(dto);
             }
         } else if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
+            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+                SolutionDto dto = new SolutionDto();
+                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
+                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
+                dto.setV3(String.valueOf(aSolutionSetResult.getObjective(2)));
+                solutionList.add(dto);
+            }
+        } else if (solutionSetResult.get(0).getNumberOfObjectives() > 3) {
             for (DoubleSolution aSolutionSetResult : solutionSetResult) {
                 SolutionDto dto = new SolutionDto();
                 dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
@@ -1108,22 +1245,22 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
 //            FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
 //            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
-
-            if (referenceFront.getPointDimensions() == 2) {
-                dimCount = 2;
+            dimCount = referenceFront.getPointDimensions();
+            if (dimCount == 2) {
                 seriesFront2D = createFront2D(referenceFront);
                 solutionSetResult.clear();
                 update2dChartRelatedUI();
 
-                setTabVisiblity(TabEnum.Chart3D, false);
                 setTabVisiblity(TabEnum.Chart2D, true);
+                setTabVisiblity(TabEnum.Chart3D, false);
+                setTabVisiblity(TabEnum.ChartParallelCoordinates, false);
+
                 selectedTab.setValue("tab2d");
                 tabPane.getSelectionModel().select(0);
 
                 solutionsTableView.getColumns().get(2).setVisible(false);
             }
-            else if (referenceFront.getPointDimensions() == 3) {
-                dimCount = 3;
+            else if (dimCount == 3) {
                 serieFront3D = createFront3D(referenceFront);
 
                 solutionSetResult.clear();
@@ -1131,7 +1268,23 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
                 setTabVisiblity(TabEnum.Chart3D, true);
                 setTabVisiblity(TabEnum.Chart2D, false);
+                setTabVisiblity(TabEnum.ChartParallelCoordinates, false);
+
                 selectedTab.setValue("tab3d");
+                tabPane.getSelectionModel().select(0);
+
+                solutionsTableView.getColumns().get(2).setVisible(true);
+            }
+            else if (dimCount > 3) {
+                seriesFrontPC = createFrontPC(referenceFront);
+
+                solutionSetResult.clear();
+                updatePCChartRelatedUI();
+
+                setTabVisiblity(TabEnum.ChartParallelCoordinates, true);
+                setTabVisiblity(TabEnum.Chart2D, false);
+                setTabVisiblity(TabEnum.Chart3D, false);
+                selectedTab.setValue("tabParallelCoordinates");
                 tabPane.getSelectionModel().select(0);
 
                 solutionsTableView.getColumns().get(2).setVisible(true);
@@ -1167,6 +1320,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 update2dChartRelatedUI();
             else if (dimCount == 3)
                 update3dChartRelatedUI();
+            else if (dimCount > 3)
+                updatePCChartRelatedUI();
         }
     }
 
@@ -1179,6 +1334,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 update2dChartRelatedUI();
             else if (dimCount == 3)
                 update3dChartRelatedUI();
+            else if (dimCount > 3)
+                updatePCChartRelatedUI();
         }
     }
 
@@ -1191,6 +1348,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 update2dChartRelatedUI();
             else if (dimCount == 3)
                 update3dChartRelatedUI();
+            else if (dimCount > 3)
+                updatePCChartRelatedUI();
         }
     }
 
@@ -1313,6 +1472,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                         "Osyczka2", "Schaffer", "Srinivas", "Tanaka",
                         "UF1", "UF2", "UF3", "UF4", "UF5", "UF6", "UF7", "UF8", "UF9",  "UF10",
                         "Viennet2", "Viennet3",
+                        "Water",
                         "WFG1.2D",
                         //"WFG1.3D",
                         "WFG2.2D",
@@ -1402,22 +1562,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         //    if (i % 5 == 0)
           //      i+=50;
         }
-/*
-        ArrayList<double[]> points = new ArrayList<double[]>();
-        for (int i = 0; i < front.getNumberOfPoints(); i++) {
-            points.add(arrayOf(front.getPoint(i).getDimensionValue(0), front.getPoint(i).getDimensionValue(1), front.getPoint(i).getDimensionValue(2)));
-        }
 
-        GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][2]));
-        double[][] results = gl.getClusterPoints(5);
-        for (double[] point : results)
-        {
-            serieFront3D_.add(point[0], point[1], point[2]);
-        }
-*/
         return serieFront3D_;
     }
-
     //endregion
 
     //region JFREE
@@ -1430,6 +1577,20 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
 
         return series2D_;
+    }
+
+    private XYSeriesCollection createSeriesCollectionPC(List<DoubleSolution> solutionSetResult){
+        XYSeriesCollection collection = new XYSeriesCollection();
+        int count = 0;
+        for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+            XYSeries series2D_ = new XYSeries("ss" + count++);
+            for (int i = 0; i < aSolutionSetResult.getNumberOfObjectives(); i++) {
+                series2D_.add(i+1, aSolutionSetResult.getObjective(i));
+            }
+            collection.addSeries(series2D_);
+        }
+
+        return collection;
     }
 
     private XYSeries createFront2D(ArrayFront front){
@@ -1455,6 +1616,21 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
 
         return seriesFront2D_;
+    }
+
+    private XYSeriesCollection createFrontPC(ArrayFront front){
+        XYSeriesCollection collection = new XYSeriesCollection();
+
+        int count = 0;
+        for (int i = 0; i < front.getNumberOfPoints(); i++) {
+            XYSeries series2D_ = new XYSeries("rf" + count++);
+            for (int j = 0; j < front.getPoint(i).getNumberOfDimensions(); j++) {
+                series2D_.add(j+1, front.getPoint(i).getDimensionValue(j));
+            }
+            collection.addSeries(series2D_);
+        }
+
+        return collection;
     }
 
     private static JFreeChart createChart2D(XYDataset dataset) {

@@ -115,6 +115,13 @@
                     </StackPane>
                 </content>
             </Tab>
+            <Tab text="Objective space" fx:id="tabParallelCoordinates">
+                <content>
+                    <StackPane fx:id="stackPaneJFREEPC">
+
+                    </StackPane>
+                </content>
+            </Tab>
             <Tab text="Solution set" fx:id="tabAproximationSet">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
