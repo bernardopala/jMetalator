@@ -84,6 +84,7 @@ import org.uma.jmetal.algorithm.util.CurrentSolutionSetReceiver;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.qualityindicator.impl.*;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
+import org.uma.jmetal.qualityindicator.impl.hypervolume.WFGHypervolume;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.JMetalException;
@@ -92,6 +93,7 @@ import org.uma.jmetal.util.front.Front;
 import org.uma.jmetal.util.front.imp.ArrayFront;
 import org.uma.jmetal.util.front.util.FrontNormalizer;
 import org.uma.jmetal.util.front.util.FrontUtils;
+import org.uma.jmetal.util.point.util.PointSolution;
 import org.uma.jmetal.util.referencePoint.impl.IdealPoint;
 import view.PairKeyFactory;
 import view.PairValueCell;
@@ -251,6 +253,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     //endregion
 
     //region Private variables
+
+    FrontNormalizer frontNormalizer;
 
     private Lock lock = new ReentrantLock();
     private boolean isAlgorithmWorking = false;
@@ -645,45 +649,49 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
             receiveSolutionSetCount++;
 
+            Front front = new ArrayFront(solutionSetResult);
+            Front normalizedFront = frontNormalizer.normalize(front) ;
+            List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront) ;
+
             gd = 0;
             if (isGdActive) {
-                gd = gdIdicator.evaluate(solutionSetResult);
+                gd = gdIdicator.evaluate(normalizedPopulation);
                 gdValues.add(gd);
             }
 
             igd = 0;
             if (isIgdActive) {
-                igd = igdIdicator.evaluate(solutionSetResult);
+                igd = igdIdicator.evaluate(normalizedPopulation);
                 igdValues.add(igd);
             }
 
             igdPlus = 0;
             if (isIgdPlusActive) {
-                igdPlus = igdPlusIdicator.evaluate(solutionSetResult);
+                igdPlus = igdPlusIdicator.evaluate(normalizedPopulation);
                 igdPlusValues.add(igdPlus);
             }
 
             spread = 0;
             if (isSpreadActive) {
-                spread = spreadIdicator.evaluate(solutionSetResult);
+                spread = spreadIdicator.evaluate(normalizedPopulation);
                 spreadValues.add(spread);
             }
 
             epsilon = 0;
             if (isEpsilonActive) {
-                epsilon = epsilonIdicator.evaluate(solutionSetResult);
+                epsilon = epsilonIdicator.evaluate(normalizedPopulation);
                 epsilonValues.add(epsilon);
             }
 
             hv = 0;
             if (isHvActive) {
-                hv = hvIdicator.evaluate(solutionSetResult);
+                hv = hvIdicator.evaluate(normalizedPopulation);
                 hvValues.add(hv);
             }
 
             er = 0;
             if (isErActive) {
-                er = erIdicator.evaluate(solutionSetResult);
+                er = erIdicator.evaluate(normalizedPopulation);
                 erValues.add(er);
             }
 
@@ -1290,13 +1298,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 solutionsTableView.getColumns().get(2).setVisible(true);
             }
 
-            gdIdicator = new GenerationalDistance<DoubleSolution>(referenceFront);
-            igdIdicator = new InvertedGenerationalDistance<DoubleSolution>(referenceFront);
-            igdPlusIdicator = new InvertedGenerationalDistancePlus<DoubleSolution>(referenceFront);
-            spreadIdicator = new GeneralizedSpread<DoubleSolution>(referenceFront);
-            epsilonIdicator = new Epsilon<DoubleSolution>(referenceFront);
-            hvIdicator = new PISAHypervolume(referenceFront);
-            erIdicator = new ErrorRatio(referenceFront);
+            frontNormalizer = new FrontNormalizer(referenceFront) ;
+            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront) ;
+
+            gdIdicator = new GenerationalDistance<DoubleSolution>(normalizedReferenceFront);
+            igdIdicator = new InvertedGenerationalDistance<DoubleSolution>(normalizedReferenceFront);
+            igdPlusIdicator = new InvertedGenerationalDistancePlus<DoubleSolution>(normalizedReferenceFront);
+            spreadIdicator = new GeneralizedSpread<DoubleSolution>(normalizedReferenceFront);
+            epsilonIdicator = new Epsilon<DoubleSolution>(normalizedReferenceFront);
+            hvIdicator = new PISAHypervolume<DoubleSolution>(normalizedReferenceFront);
+            erIdicator = new ErrorRatio(normalizedReferenceFront);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
