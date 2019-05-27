@@ -1216,10 +1216,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         //algorithm = null;
 
         try {
-            mainLoop.stop();
-            //mainLoop.interrupt();
-        } catch (Exception ex)
-        {
+            mainLoop.interrupt();
+        } catch (Exception ex) {
             new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
         }
         isAlgorithmWorking = false;
