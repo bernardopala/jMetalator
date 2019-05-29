@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.cdasnsgaii.CDASNSGAII;
 import org.uma.jmetal.algorithm.multiobjective.cdasnsgaii.CDASNSGAIIBuilder;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
@@ -27,6 +28,7 @@ public class CDASNSGAIIManager {
     int maxEvaluations;
     int populationSize;
     Double sFactor;
+    int objectiveCount;
 
     public CDASNSGAIIManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -49,10 +51,11 @@ public class CDASNSGAIIManager {
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
         sFactor = Double.valueOf(params.get("sFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public CDASNSGAII Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
 
@@ -81,6 +84,8 @@ public class CDASNSGAIIManager {
         params.put("maxEvaluations", "100000");
         params.put("populationSize", "100");
         params.put("sFactor", "0.1");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

@@ -14,6 +14,7 @@ import java.util.Map;
 public class ExperimentParams{
         private String algorithmName;
         private String problemName;
+        private int objectiveCount;
         private String referenceParetoFront;
 
         private List<AlgorithmParameter> algorithmParameterList;
@@ -31,8 +32,12 @@ public class ExperimentParams{
         }
 
         public void setProblemName(String problemName) {
-            if (problemName.contains("DTLZ"))
-                this.problemName = "dtlz." + problemName.replace(".3D", "").replace(".2D","");
+            if (problemName.contains("DTLZ")) {
+                this.problemName = "dtlz." + problemName.substring(0, problemName.indexOf("."));
+                String s1 =  problemName.substring(problemName.indexOf(".") + 1, problemName.length());
+                String s2 = s1.replace("D", "");
+                this.objectiveCount = Integer.parseInt(s2);
+            }
             else if (problemName.contains("GLT"))
                 this.problemName = "glt." + problemName;
             else if (problemName.contains("LZ09"))
@@ -139,6 +144,7 @@ public class ExperimentParams{
                 params = updateParameterList(params, algorithmParameterList);
 
             params.replace("problemName", this.problemName);
+            params.replace("objectiveCount", String.valueOf(this.objectiveCount));
             AbstractEvolutionaryAlgorithm<DoubleSolution, List<DoubleSolution>> ea = null;
             
             if (this.algorithmName == "NSGAII") {
@@ -147,6 +153,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new NSGAIIManager(params).Create();
             }
             if (this.algorithmName == "SPEA2") {
@@ -155,6 +162,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new SPEA2Manager(params).Create();
             }
             else if (this.algorithmName == "DB1SPEA2") {
@@ -163,6 +171,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new DBSPEA2Manager(params).Create(1);
             }
             else if (this.algorithmName == "DB2SPEA2") {
@@ -171,6 +180,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new DBSPEA2Manager(params).Create(2);
             }
             else if (this.algorithmName == "ASPEA2") {
@@ -179,6 +189,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new ASPEA2Manager(params).Create();
             }
             else if (this.algorithmName == "AngleSPEA2") {
@@ -187,6 +198,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new AngleSPEA2Manager(params).Create();
             }
             else if (this.algorithmName == "ESPEA2") {
@@ -195,6 +207,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new ESPEA2Manager(params).Create();
             }
             else if (this.algorithmName == "SPEA3") {
@@ -203,6 +216,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new SPEA3Manager(params).Create();
             }
             else if (this.algorithmName == "ANSGAII") {
@@ -211,6 +225,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new ANSGAIIManager(params).Create();
             }
             else if (this.algorithmName == "ENSGAII") {
@@ -219,6 +234,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new ENSGAIIManager(params).Create();
             }
             else if (this.algorithmName == "AngleNSGAII") {
@@ -227,6 +243,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new AngleNSGAIIManager(params).Create();
             }
             else if (this.algorithmName == "CDASNSGAII") {
@@ -235,6 +252,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new CDASNSGAIIManager(params).Create();
             }
             else if (this.algorithmName == "nMOEA") {
@@ -243,6 +261,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new nMOEAManager(params).Create();
             }
             else if (this.algorithmName == "nMOEA-Alpha") {
@@ -251,6 +270,7 @@ public class ExperimentParams{
                     params = updateParameterList(params, algorithmParameterList);
 
                 params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new nMOEAAlphaManager(params).Create();
             }
 

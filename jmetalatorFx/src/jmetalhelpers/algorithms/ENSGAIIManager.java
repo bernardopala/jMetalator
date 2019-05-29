@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.ansgaii.ANSGAII;
 import org.uma.jmetal.algorithm.multiobjective.ansgaii.ANSGAIIBuilder;
 import org.uma.jmetal.algorithm.multiobjective.ensgaii.ENSGAII;
@@ -29,6 +30,7 @@ public class ENSGAIIManager {
     int maxEvaluations;
     int populationSize;
     Double epsilonFactor;
+    int objectiveCount;
 
     public ENSGAIIManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -51,10 +53,11 @@ public class ENSGAIIManager {
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
         epsilonFactor = Double.valueOf(params.get("epsilonFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public ENSGAII Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
 
@@ -83,6 +86,8 @@ public class ENSGAIIManager {
         params.put("maxEvaluations", "100000");
         params.put("populationSize", "100");
         params.put("epsilonFactor", "0.1");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

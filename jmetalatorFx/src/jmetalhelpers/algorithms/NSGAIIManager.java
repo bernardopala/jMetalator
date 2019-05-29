@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
@@ -26,6 +27,7 @@ public class NSGAIIManager {
     double mutationDistributionIndex;
     int maxEvaluations;
     int populationSize;
+    int objectiveCount;
 
     public NSGAIIManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -47,10 +49,11 @@ public class NSGAIIManager {
         mutationDistributionIndex = 20.0D; // Double.valueOf(params.get("mutationDistributionIndex"));
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public NSGAII Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
 
@@ -78,6 +81,7 @@ public class NSGAIIManager {
         //params.put("mutationDistributionIndex", "20.0D");
         params.put("maxEvaluations", "100000");
         params.put("populationSize", "100");
+        params.put("objectiveCount", "2");
 
         return params;
     }

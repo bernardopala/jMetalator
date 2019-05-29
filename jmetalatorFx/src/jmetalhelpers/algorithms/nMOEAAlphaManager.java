@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.nmoea.nMOEA;
 import org.uma.jmetal.algorithm.multiobjective.nmoea.nMOEABuilder;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -24,6 +25,7 @@ public class nMOEAAlphaManager {
     int maxEvaluations;
     int populationSize;
     double relaxationFactor;
+    int objectiveCount;
 
     public nMOEAAlphaManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -46,10 +48,11 @@ public class nMOEAAlphaManager {
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
         relaxationFactor = Double.valueOf(params.get("alphaFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public nMOEA Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         DominanceComparator comparator =  new DominanceComparator(RelaxationType.ALPHA, this.relaxationFactor);
@@ -73,6 +76,8 @@ public class nMOEAAlphaManager {
         params.put("maxEvaluations", "1000");
         params.put("populationSize", "100");
         params.put("alphaFactor", "0.1");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

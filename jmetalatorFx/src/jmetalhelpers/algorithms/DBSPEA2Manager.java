@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.dbspea2.DBSPEA2;
 import org.uma.jmetal.algorithm.multiobjective.dbspea2.DBSPEA2Builder;
 import org.uma.jmetal.algorithm.multiobjective.dbspea2.util.EnvironmentalSelection;
@@ -28,6 +29,7 @@ public class DBSPEA2Manager {
     private int maxEvaluations;
     private int populationSize;
     private int archiveSize;
+    int objectiveCount;
 
     public DBSPEA2Manager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -49,10 +51,11 @@ public class DBSPEA2Manager {
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
         archiveSize = Integer.valueOf(params.get("archiveSize"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public DBSPEA2 Create(int stashStrategyNumber) {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
@@ -80,6 +83,8 @@ public class DBSPEA2Manager {
         params.put("maxEvaluations", "1000");
         params.put("populationSize", "100");
         params.put("archiveSize", "100");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

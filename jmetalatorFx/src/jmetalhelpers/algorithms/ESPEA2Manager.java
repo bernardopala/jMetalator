@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.espea2.ESPEA2;
 import org.uma.jmetal.algorithm.multiobjective.espea2.ESPEA2Builder;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
@@ -23,6 +24,7 @@ public class ESPEA2Manager {
     private int populationSize;
     private int archiveSize;
     private Double epsilonFactor;
+    int objectiveCount;
 
     public ESPEA2Manager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -45,10 +47,11 @@ public class ESPEA2Manager {
         populationSize = Integer.valueOf(params.get("populationSize"));
         archiveSize = Integer.valueOf(params.get("archiveSize"));
         epsilonFactor = Double.valueOf(params.get("epsilonFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public ESPEA2 Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
@@ -71,6 +74,8 @@ public class ESPEA2Manager {
         params.put("populationSize", "100");
         params.put("archiveSize", "100");
         params.put("epsilonFactor", "0.1D");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

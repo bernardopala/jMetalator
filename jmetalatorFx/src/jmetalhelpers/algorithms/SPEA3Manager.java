@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2;
 import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
 import org.uma.jmetal.algorithm.multiobjective.spea3.SPEA3;
@@ -24,6 +25,7 @@ public class SPEA3Manager {
     private int maxEvaluations;
     private int populationSize;
     private int archiveSize;
+    int objectiveCount;
 
     public SPEA3Manager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -45,11 +47,11 @@ public class SPEA3Manager {
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
         archiveSize = Integer.valueOf(params.get("archiveSize"));
-
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public SPEA3 Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
@@ -70,6 +72,8 @@ public class SPEA3Manager {
         params.put("maxEvaluations", "10000");
         params.put("populationSize", "100");
         params.put("archiveSize", "100");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

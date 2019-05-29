@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.nmoea.nMOEA;
 import org.uma.jmetal.algorithm.multiobjective.nmoea.nMOEABuilder;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAII;
@@ -28,6 +29,7 @@ public class nMOEAManager {
     double mutationDistributionIndex;
     int maxEvaluations;
     int populationSize;
+    int objectiveCount;
 
     public nMOEAManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -49,10 +51,11 @@ public class nMOEAManager {
         mutationDistributionIndex = 20.0D; // Double.valueOf(params.get("mutationDistributionIndex"));
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public nMOEA Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
 
@@ -72,6 +75,8 @@ public class nMOEAManager {
         //params.put("mutationDistributionIndex", "20.0D");
         params.put("maxEvaluations", "1000");
         params.put("populationSize", "100");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

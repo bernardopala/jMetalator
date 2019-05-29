@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.anglespea2.AngleSPEA2;
 import org.uma.jmetal.algorithm.multiobjective.anglespea2.AngleSPEA2Builder;
 import org.uma.jmetal.algorithm.multiobjective.aspea2.ASPEA2;
@@ -25,6 +26,7 @@ public class AngleSPEA2Manager {
     private int populationSize;
     private int archiveSize;
     private Double angleFactor;
+    int objectiveCount;
 
     public AngleSPEA2Manager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -47,10 +49,13 @@ public class AngleSPEA2Manager {
         populationSize = Integer.valueOf(params.get("populationSize"));
         archiveSize = Integer.valueOf(params.get("archiveSize"));
         angleFactor = Double.valueOf(params.get("angleFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
+
     }
 
     public AngleSPEA2 Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
+
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
@@ -73,7 +78,7 @@ public class AngleSPEA2Manager {
         params.put("populationSize", "100");
         params.put("archiveSize", "100");
         params.put("angleFactor", "0.1D");
-
+        params.put ("objectiveCount", "2");
         return params;
     }
 }

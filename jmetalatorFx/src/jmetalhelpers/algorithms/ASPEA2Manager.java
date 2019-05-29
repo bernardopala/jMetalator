@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.aspea2.ASPEA2;
 import org.uma.jmetal.algorithm.multiobjective.aspea2.ASPEA2Builder;
 import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2;
@@ -25,6 +26,7 @@ public class ASPEA2Manager {
     private int populationSize;
     private int archiveSize;
     private Double alphaFactor;
+    int objectiveCount;
 
     public ASPEA2Manager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -47,10 +49,11 @@ public class ASPEA2Manager {
         populationSize = Integer.valueOf(params.get("populationSize"));
         archiveSize = Integer.valueOf(params.get("archiveSize"));
         alphaFactor = Double.valueOf(params.get("alphaFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public ASPEA2 Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator());
@@ -73,6 +76,8 @@ public class ASPEA2Manager {
         params.put("populationSize", "100");
         params.put("archiveSize", "100");
         params.put("alphaFactor", "0.1D");
+        params.put("objectiveCount", "2");
+
 
         return params;
     }

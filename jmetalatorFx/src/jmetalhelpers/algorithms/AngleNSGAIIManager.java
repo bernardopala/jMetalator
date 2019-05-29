@@ -1,5 +1,6 @@
 package jmetalhelpers.algorithms;
 
+import jmetalhelpers.ProblemHelper;
 import org.uma.jmetal.algorithm.multiobjective.anglensgaii.AngleNSGAII;
 import org.uma.jmetal.algorithm.multiobjective.anglensgaii.AngleNSGAIIBuilder;
 import org.uma.jmetal.algorithm.multiobjective.ensgaii.ENSGAII;
@@ -29,6 +30,7 @@ public class AngleNSGAIIManager {
     int maxEvaluations;
     int populationSize;
     Double angleFactor;
+    int objectiveCount;
 
     public AngleNSGAIIManager(Map<String, String> params) {
         if (params == null || params.isEmpty())
@@ -51,10 +53,11 @@ public class AngleNSGAIIManager {
         maxEvaluations = Integer.valueOf(params.get("maxEvaluations"));
         populationSize = Integer.valueOf(params.get("populationSize"));
         angleFactor = Double.valueOf(params.get("angleFactor"));
+        objectiveCount = Integer.valueOf(params.get("objectiveCount"));
     }
 
     public AngleNSGAII Create() {
-        Problem problem = ProblemUtils.loadProblem(problemName);
+        Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
 
@@ -83,6 +86,7 @@ public class AngleNSGAIIManager {
         params.put("maxEvaluations", "100000");
         params.put("populationSize", "100");
         params.put("angleFactor", "0.1");
+        params.put ("objectiveCount", "2");
 
         return params;
     }
