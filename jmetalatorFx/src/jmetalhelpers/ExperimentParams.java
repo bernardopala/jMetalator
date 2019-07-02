@@ -118,6 +118,9 @@ public class ExperimentParams{
                 else if (this.algorithmName == "nMOEA-Alpha") {
                     params = nMOEAAlphaManager.getDefaultParams();
                 }
+                else if (this.algorithmName == "EpsilonBoxMOEA") {
+                    params = EpsilonBoxMOEAManager.getDefaultParams();
+                }
 
                 return params;
         }
@@ -272,6 +275,15 @@ public class ExperimentParams{
                 params.replace("problemName", this.problemName);
                 params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new nMOEAAlphaManager(params).Create();
+            }
+            else if (this.algorithmName == "EpsilonBoxMOEA") {
+                params = EpsilonBoxMOEAManager.getDefaultParams();
+                if (algorithmParameterList != null)
+                    params = updateParameterList(params, algorithmParameterList);
+
+                params.replace("problemName", this.problemName);
+                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
+                ea = new EpsilonBoxMOEAManager(params).Create();
             }
 
             return ea;

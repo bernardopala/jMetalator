@@ -1,8 +1,7 @@
 package jmetalhelpers;
 
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.problem.multiobjective.dtlz.DTLZ1;
-import org.uma.jmetal.problem.multiobjective.dtlz.DTLZ2;
+import org.uma.jmetal.problem.multiobjective.dtlz.*;
 import org.uma.jmetal.util.ProblemUtils;
 
 public class ProblemHelper {
@@ -12,6 +11,15 @@ public class ProblemHelper {
         }
         else if (problemName.equalsIgnoreCase("org.uma.jmetal.problem.multiobjective.dtlz.DTLZ2")){
             return (Problem<S>) new DTLZ2(objectiveCount + 9, objectiveCount);
+        }
+        else if (problemName.equalsIgnoreCase("org.uma.jmetal.problem.multiobjective.dtlz.DTLZ3")){
+            return (Problem<S>) new DTLZ3(objectiveCount + 9, objectiveCount);
+        }
+        else if (problemName.equalsIgnoreCase("org.uma.jmetal.problem.multiobjective.dtlz.DTLZ4")){
+            return (Problem<S>) new DTLZ4(objectiveCount + 9, objectiveCount);
+        }
+        else if (problemName.equalsIgnoreCase("org.uma.jmetal.problem.multiobjective.dtlz.DTLZ7")){
+            return (Problem<S>) new DTLZ7(objectiveCount + 19, objectiveCount);
         }
         return ProblemUtils.loadProblem(problemName);
     }

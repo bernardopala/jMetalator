@@ -1451,7 +1451,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void FillComboBoxAlgorithms()
     {
         ObservableList<String> algoritmhs = FXCollections.observableArrayList();
-        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DB1SPEA2", "DB2SPEA2", "ASPEA2", "AngleSPEA2", "ESPEA2", "ANSGAII", "AngleNSGAII", "CDASNSGAII", "nMOEA", "nMOEA-Alpha");
+        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DB1SPEA2", "DB2SPEA2", "ASPEA2", "AngleSPEA2", "ESPEA2", "ANSGAII", "AngleNSGAII", "CDASNSGAII", "nMOEA", "nMOEA-Alpha", "EpsilonBoxMOEA");
 
         algorithmsComboBox.setItems(algoritmhs);
     }
@@ -1460,11 +1460,11 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     {
         ObservableList<String> problems = FXCollections.observableArrayList();
         problems.addAll("Binh2", "ConstrEx",
-                        "DTLZ1.2D","DTLZ1.3D", "DTLZ1.4D", "DTLZ1.6D", "DTLZ1.8D", "DTLZ1.10D",
+                        "DTLZ1.2D","DTLZ1.3D", "DTLZ1.4D", "DTLZ1.6D", "DTLZ1.8D",
                         "DTLZ2.2D","DTLZ2.3D", "DTLZ2.4D", "DTLZ2.6D", "DTLZ2.8D",
-                        "DTLZ3.3D","DTLZ3.3D", "DTLZ3.4D", "DTLZ3.6D", "DTLZ3.8D",
-                        "DTLZ4.3D","DTLZ4.3D", "DTLZ4.4D", "DTLZ4.6D", "DTLZ4.8D",
-                        "DTLZ7.3D","DTLZ7.3D", "DTLZ7.4D", "DTLZ7.6D", "DTLZ7.8D",
+                        "DTLZ3.2D","DTLZ3.3D", "DTLZ3.4D", "DTLZ3.6D", "DTLZ3.8D",
+                        "DTLZ4.2D","DTLZ4.3D", "DTLZ4.4D", "DTLZ4.6D", "DTLZ4.8D",
+                        "DTLZ7.2D","DTLZ7.3D", "DTLZ7.4D", "DTLZ7.6D", "DTLZ7.8D",
                         "Fonseca",
                         "GLT1", "GLT2", "GLT3", "GLT4", "GLT5", "GLT6",
                         "Golinski", "Kursawe",
