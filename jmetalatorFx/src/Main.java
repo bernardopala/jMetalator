@@ -59,6 +59,8 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.math3.geometry.partitioning.utilities.OrderedTuple;
 import org.jfree.chart.*;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.fx.ChartCanvas;
 import org.jfree.chart.plot.CategoryPlot;
@@ -495,6 +497,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         canvasPC.widthProperty().bind( stackPaneJFREEPC.widthProperty());
         canvasPC.heightProperty().bind( stackPaneJFREEPC.heightProperty());
+        XYPlot plotPC = (XYPlot) chartPC.getPlot();
+        NumberAxis xAxis = (NumberAxis)plotPC.getDomainAxis();
+        xAxis.setTickUnit(new NumberTickUnit(1));
+        xAxis.setLabel("Fn");
+        NumberAxis yAxis = (NumberAxis)plotPC.getRangeAxis();
+        yAxis.setLabel("");
+        plotPC.setRangeAxis(yAxis);
         canvasPC.getChart().removeLegend();
 
         canvasGD.widthProperty().bind( stackPaneGD.widthProperty());
@@ -836,6 +845,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     private void updatePCChartRelatedUI(){
         XYPlot plotPC = (XYPlot) chartPC.getPlot();
+
         XYSeriesCollection datasetPC = new XYSeriesCollection();
         XYSeriesCollection datasetFrontPC = new XYSeriesCollection();
 
