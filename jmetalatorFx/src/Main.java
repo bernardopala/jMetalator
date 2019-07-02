@@ -188,7 +188,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public CheckBox erCheckBox;
 
     @FXML
-    public javafx.scene.control.TableView<SolutionDto> solutionsTableView;
+    public javafx.scene.control.TableView<ObservableList<String>> solutionsTableView;
 
     @FXML
     public TableColumn<SolutionDto, String> solutionsV1TableColumn;
@@ -1026,33 +1026,45 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private void updateSetRelatedUI(){
-        ObservableList<SolutionDto> solutionList = FXCollections.observableArrayList();
-        if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
-            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
-                SolutionDto dto = new SolutionDto();
-                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
-                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
-                solutionList.add(dto);
+        solutionsTableView.getItems().clear();
+        int count = solutionSetResult.size();// get(0).getNumberOfObjectives();
+
+        for (int i = 0; i < count; i++) {
+            ObservableList<String> solutionList = FXCollections.observableArrayList();
+            for (int j = 0; j < solutionSetResult.get(i).getNumberOfObjectives(); j++){
+                solutionList.add(String.valueOf(solutionSetResult.get(i).getObjective(j)));
             }
-        } else if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
-            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
-                SolutionDto dto = new SolutionDto();
-                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
-                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
-                dto.setV3(String.valueOf(aSolutionSetResult.getObjective(2)));
-                solutionList.add(dto);
-            }
-        } else if (solutionSetResult.get(0).getNumberOfObjectives() > 3) {
-            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
-                SolutionDto dto = new SolutionDto();
-                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
-                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
-                dto.setV3(String.valueOf(aSolutionSetResult.getObjective(2)));
-                solutionList.add(dto);
-            }
+
+            solutionsTableView.getItems().add(solutionList);
         }
 
-        solutionsTableView.setItems(solutionList);
+//        ObservableList<SolutionDto> solutionList = FXCollections.observableArrayList();
+//        if (solutionSetResult.get(0).getNumberOfObjectives() == 2) {
+//            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+//                SolutionDto dto = new SolutionDto();
+//                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
+//                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
+//                solutionList.add(dto);
+//            }
+//        } else if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
+//            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+//                SolutionDto dto = new SolutionDto();
+//                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
+//                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
+//                dto.setV3(String.valueOf(aSolutionSetResult.getObjective(2)));
+//                solutionList.add(dto);
+//            }
+//        } else if (solutionSetResult.get(0).getNumberOfObjectives() > 3) {
+//            for (DoubleSolution aSolutionSetResult : solutionSetResult) {
+//                SolutionDto dto = new SolutionDto();
+//                dto.setV1(String.valueOf(aSolutionSetResult.getObjective(0)));
+//                dto.setV2(String.valueOf(aSolutionSetResult.getObjective(1)));
+//                dto.setV3(String.valueOf(aSolutionSetResult.getObjective(2)));
+//                solutionList.add(dto);
+//            }
+//        }
+
+        //solutionsTableView.setItems(solutionList);
     }
 
     private void updateGDRelatedUI(){
@@ -1237,6 +1249,21 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
     }
 
+    private void setSolutionsTableViewColumnCount(int count){
+        solutionsTableView.getItems().clear();
+        solutionsTableView.getColumns().clear();
+        for (int i = 0; i < count; i++) {
+            final int finalIdx = i;
+            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+                    "F" + (i+1)
+            );
+            column.setCellValueFactory(param ->
+                    new SimpleStringProperty(param.getValue().get(finalIdx))
+            );
+            solutionsTableView.getColumns().add(column);
+        }
+    }
+
     private void selectProblem(String problemName){
         gdCheckBox.setDisable(false);
         igdCheckBox.setDisable(false);
@@ -1252,6 +1279,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 //            FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
 //            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
             dimCount = referenceFront.getPointDimensions();
+            setSolutionsTableViewColumnCount(dimCount);
             if (dimCount == 2) {
                 seriesFront2D = createFront2D(referenceFront);
                 solutionSetResult.clear();
@@ -1264,7 +1292,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 selectedTab.setValue("tab2d");
                 tabPane.getSelectionModel().select(0);
 
-                solutionsTableView.getColumns().get(2).setVisible(false);
+                //solutionsTableView.getColumns().get(2).setVisible(false);
             }
             else if (dimCount == 3) {
                 serieFront3D = createFront3D(referenceFront);
@@ -1279,7 +1307,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 selectedTab.setValue("tab3d");
                 tabPane.getSelectionModel().select(0);
 
-                solutionsTableView.getColumns().get(2).setVisible(true);
+                //solutionsTableView.getColumns().get(2).setVisible(true);
             }
             else if (dimCount > 3) {
                 seriesFrontPC = createFrontPC(referenceFront);
@@ -1293,7 +1321,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 selectedTab.setValue("tabParallelCoordinates");
                 tabPane.getSelectionModel().select(0);
 
-                solutionsTableView.getColumns().get(2).setVisible(true);
+                //solutionsTableView.getColumns().get(2).setVisible(true);
             }
 
             frontNormalizer = new FrontNormalizer(referenceFront) ;
