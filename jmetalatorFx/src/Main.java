@@ -40,6 +40,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -61,6 +63,7 @@ import org.apache.commons.math3.geometry.partitioning.utilities.OrderedTuple;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.fx.ChartCanvas;
 import org.jfree.chart.plot.CategoryPlot;
@@ -278,6 +281,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final SimpleDoubleProperty hvErrorProperty = new SimpleDoubleProperty();
     private final SimpleDoubleProperty erErrorProperty = new SimpleDoubleProperty();
 
+    private final SimpleIntegerProperty is2dChartAutoResizing = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty isPCChartAutoResizing = new SimpleIntegerProperty();
+
     private int receiveSolutionSetCount = 0;
 
     private Thread mainLoop = new Thread();
@@ -467,6 +473,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         viewer.getChart().setStyle(ChartStyles.createIceCubeStyle());
         viewer.setZoomMultiplier(1.05D);
         stackPaneOrson.getChildren().add(viewer);
+        stackPaneOrson.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(viewer.getChart());
+                }
+            }
+        });
 
         viewer.getCanvas().setOnScroll((ScrollEvent event) -> {
             event.consume();
@@ -481,16 +494,90 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 handleZoom(viewer, 1.0 / viewer.getZoomMultiplier());
         });
 
+        is2dChartAutoResizing.set(1);
         stackPaneJFREE.getChildren().add(canvas2D);
+        stackPaneJFREE.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chart2D, false);
+                    is2dChartAutoResizing.set(1);
+                }
+            }
+        });
+        stackPaneJFREE.setOnScroll((ScrollEvent event) -> {
+            is2dChartAutoResizing.set(0);
+        });
+
+        isPCChartAutoResizing.set(1);
         stackPaneJFREEPC.getChildren().add(canvasPC);
+        stackPaneJFREEPC.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartPC, false);
+                    isPCChartAutoResizing.set(1);
+                }
+            }
+        });
+        stackPaneJFREEPC.setOnScroll((ScrollEvent event) -> {
+            isPCChartAutoResizing.set(0);
+        });
 
         stackPaneGD.getChildren().add(canvasGD);
+        stackPaneGD.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartGD);
+                }
+            }
+        });
         stackPaneIGD.getChildren().add(canvasIGD);
+        stackPaneIGD.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartIGD);
+                }
+            }
+        });
         stackPaneIGDPlus.getChildren().add(canvasIGDPlus);
+        stackPaneIGDPlus.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartIGDPlus);
+                }
+            }
+        });
         stackPaneSpread.getChildren().add(canvasSpread);
+        stackPaneSpread.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartSpread);
+                }
+            }
+        });
         stackPaneEpsilon.getChildren().add(canvasEpsilon);
+        stackPaneEpsilon.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartEpsilon);
+                }
+            }
+        });
         stackPaneHV.getChildren().add(canvasHV);
+        stackPaneHV.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartHV);
+                }
+            }
+        });
         stackPaneER.getChildren().add(canvasEr);
+        stackPaneER.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    resetZoom(chartEr);
+                }
+            }
+        });
 
         canvas2D.widthProperty().bind( stackPaneJFREE.widthProperty());
         canvas2D.heightProperty().bind( stackPaneJFREE.heightProperty());
@@ -572,6 +659,76 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         Object prob = (String)problemsComboBox.getItems().get(0);
         problemsComboBox.setValue(prob);
         selectProblem(prob.toString());
+    }
+
+    private void resetZoom(JFreeChart chart){
+        resetZoom(chart, true);
+    }
+
+    private void resetZoom(JFreeChart chart, boolean forceZeroOnMinY){
+        XYPlot plot2D = (XYPlot) chart.getPlot();
+        XYSeriesCollection ds = (XYSeriesCollection)plot2D.getDataset();
+
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+
+        for (XYSeries s : (List<XYSeries>)ds.getSeries()) {
+            List<XYDataItem> items = (List<XYDataItem>)s.getItems();
+            for (XYDataItem item : items) {
+                if (item.getX().doubleValue() < minX)
+                    minX = item.getX().doubleValue();
+                if (item.getX().doubleValue() > maxX)
+                    maxX = item.getX().doubleValue();
+                if (item.getY().doubleValue() < minY)
+                    minY = item.getY().doubleValue();
+                if (item.getY().doubleValue() > maxY)
+                    maxY = item.getY().doubleValue();
+            }
+        }
+
+        if (forceZeroOnMinY && minY >= 0)
+            minY = 0;
+
+        plot2D.getDomainAxis().setRange(minX,maxX);
+        plot2D.getRangeAxis().setRange(minY,maxY);
+        plot2D.getDomainAxis().setAutoRange(true);
+        plot2D.getRangeAxis().setAutoRange(true);
+    }
+
+    private void resetZoom(Chart3D chart){
+        XYZPlot plot = (XYZPlot) chart.getPlot();
+        XYZSeriesCollection dataset3D = (XYZSeriesCollection)plot.getDataset();
+
+
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        double minZ = Double.MAX_VALUE;
+        double maxZ = Double.MIN_VALUE;
+
+        for (XYZSeries s : (List<XYZSeries>)dataset3D) {
+            List<XYZDataItem> items = s.getItems();
+            for (XYZDataItem item : items) {
+                if (item.getX() < minX)
+                    minX = item.getX();
+                if (item.getX() > maxX)
+                    maxX = item.getX();
+                if (item.getY() < minY)
+                    minY = item.getY();
+                if (item.getY() > maxY)
+                    maxY = item.getY();
+                if (item.getZ() < minZ)
+                    minZ = item.getZ();
+                if (item.getZ() > maxZ)
+                    maxZ = item.getZ();
+            }
+        }
+        renderer.getPlot().getXAxis().setRange(minX, maxX);
+        renderer.getPlot().getYAxis().setRange(minY, maxY);
+        renderer.getPlot().getZAxis().setRange(minZ, maxZ);
     }
 
     private void handleZoom(Chart3DViewer viewer, double multiplier) {
@@ -915,41 +1072,43 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             renderer1.setSeriesPaint(p, Color.RED);
         plotPC.setRenderer(1, renderer1);
 
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
+        if (isPCChartAutoResizing.get() == 1) {
+            double minX = Double.MAX_VALUE;
+            double maxX = Double.MIN_VALUE;
+            double minY = Double.MAX_VALUE;
+            double maxY = Double.MIN_VALUE;
 
-        for (int d = 0; d < plotPC.getDatasetCount(); d++) {
-            XYSeriesCollection ds = (XYSeriesCollection)plotPC.getDataset(d);
-            for (int j = 0; j < ds.getSeriesCount(); j++) {
-                XYSeries s = ds.getSeries(j);
-                List<XYDataItem> items = (List<XYDataItem>) s.getItems();
-                for (XYDataItem item : items) {
-                    if (item.getX().doubleValue() < minX)
-                        minX = item.getX().doubleValue();
-                    if (item.getX().doubleValue() > maxX)
-                        maxX = item.getX().doubleValue();
-                    if (item.getY().doubleValue() < minY)
-                        minY = item.getY().doubleValue();
-                    if (item.getY().doubleValue() > maxY)
-                        maxY = item.getY().doubleValue();
+            for (int d = 0; d < plotPC.getDatasetCount(); d++) {
+                XYSeriesCollection ds = (XYSeriesCollection) plotPC.getDataset(d);
+                for (int j = 0; j < ds.getSeriesCount(); j++) {
+                    XYSeries s = ds.getSeries(j);
+                    List<XYDataItem> items = (List<XYDataItem>) s.getItems();
+                    for (XYDataItem item : items) {
+                        if (item.getX().doubleValue() < minX)
+                            minX = item.getX().doubleValue();
+                        if (item.getX().doubleValue() > maxX)
+                            maxX = item.getX().doubleValue();
+                        if (item.getY().doubleValue() < minY)
+                            minY = item.getY().doubleValue();
+                        if (item.getY().doubleValue() > maxY)
+                            maxY = item.getY().doubleValue();
+                    }
                 }
             }
+
+            if (minX == Double.MAX_VALUE)
+                minX = 0;
+            if (maxX == Double.MIN_VALUE)
+                maxX = 1;
+            if (minY == Double.MAX_VALUE)
+                minY = 0;
+            if (maxY == Double.MIN_VALUE)
+                maxY = 1;
+
+
+            plotPC.getDomainAxis().setRange(minX, maxX);
+            plotPC.getRangeAxis().setRange(minY, maxY);
         }
-
-        if (minX == Double.MAX_VALUE)
-            minX = 0;
-        if (maxX == Double.MIN_VALUE)
-            maxX = 1;
-        if (minY == Double.MAX_VALUE)
-            minY = 0;
-        if (maxY == Double.MIN_VALUE)
-            maxY = 1;
-
-
-        plotPC.getDomainAxis().setRange(minX,maxX);
-        plotPC.getRangeAxis().setRange(minY,maxY);
 //        chart2D.getXYPlot().getRangeAxis(0).setRange(minX,maxX);
 //        chart2D.getXYPlot().getRangeAxis(1).setRange(minY,maxY);
     }
@@ -1004,33 +1163,34 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         plot2D.setDataset(dataset2D);
 
+        if (is2dChartAutoResizing.get() == 1) {
+            List<XYSeries> union = new ArrayList<>();
+            union.add(ssSeries);
+            union.add(seriesFront2D);
+            union.add(laSeries);
 
-        List<XYSeries> union = new ArrayList<>();
-        union.add(ssSeries);
-        union.add(seriesFront2D);
-        union.add(laSeries);
+            double minX = Double.MAX_VALUE;
+            double maxX = Double.MIN_VALUE;
+            double minY = Double.MAX_VALUE;
+            double maxY = Double.MIN_VALUE;
 
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
-
-        for (XYSeries s : union) {
-            List<XYDataItem> items = (List<XYDataItem>)s.getItems();
-            for (XYDataItem item : items) {
-                if (item.getX().doubleValue() < minX)
-                    minX = item.getX().doubleValue();
-                if (item.getX().doubleValue() > maxX)
-                    maxX = item.getX().doubleValue();
-                if (item.getY().doubleValue() < minY)
-                    minY = item.getY().doubleValue();
-                if (item.getY().doubleValue() > maxY)
-                    maxY = item.getY().doubleValue();
+            for (XYSeries s : union) {
+                List<XYDataItem> items = (List<XYDataItem>) s.getItems();
+                for (XYDataItem item : items) {
+                    if (item.getX().doubleValue() < minX)
+                        minX = item.getX().doubleValue();
+                    if (item.getX().doubleValue() > maxX)
+                        maxX = item.getX().doubleValue();
+                    if (item.getY().doubleValue() < minY)
+                        minY = item.getY().doubleValue();
+                    if (item.getY().doubleValue() > maxY)
+                        maxY = item.getY().doubleValue();
+                }
             }
-        }
 
-        plot2D.getDomainAxis().setRange(minX,maxX);
-        plot2D.getRangeAxis().setRange(minY,maxY);
+            plot2D.getDomainAxis().setRange(minX, maxX);
+            plot2D.getRangeAxis().setRange(minY, maxY);
+        }
 //        chart2D.getXYPlot().getRangeAxis(0).setRange(minX,maxX);
 //        chart2D.getXYPlot().getRangeAxis(1).setRange(minY,maxY);
     }
