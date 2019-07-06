@@ -67,7 +67,7 @@ public class CDASNSGAIIManager {
         rankAndCrowd.setRankingComparator(rankComp);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(rankAndCrowd);
 
-        return (new CDASNSGAIIBuilder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxEvaluations(maxEvaluations).setSFactor(sFactor).setPopulationSize(populationSize).build();
+        return (new CDASNSGAIIBuilder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxEvaluations(maxEvaluations * populationSize).setSFactor(sFactor).setPopulationSize(populationSize).build();
     }
 
     private String createProblemUrl(String problemName){
@@ -81,7 +81,7 @@ public class CDASNSGAIIManager {
         //params.put("crossoverDistributionIndex", "20.0D");
         params.put("mutationProbability", "0.5D");
         //params.put("mutationDistributionIndex", "20.0D");
-        params.put("maxEvaluations", "100000");
+        params.put("maxEvaluations", "1000");
         params.put("populationSize", "100");
         params.put("sFactor", "0.1");
         params.put("objectiveCount", "2");

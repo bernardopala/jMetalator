@@ -65,7 +65,7 @@ public class NSGAIIManager {
         rankAndCrowd.setRankingComparator(rankComp);
         BinaryTournamentSelection selection = new BinaryTournamentSelection(rankAndCrowd);
 
-        return (new NSGAIIBuilder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxEvaluations(maxEvaluations).setPopulationSize(populationSize).build();
+        return (new NSGAIIBuilder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxEvaluations(maxEvaluations * populationSize).setPopulationSize(populationSize).build();
     }
 
     private String createProblemUrl(String problemName){
@@ -79,7 +79,7 @@ public class NSGAIIManager {
         //params.put("crossoverDistributionIndex", "20.0D");
         params.put("mutationProbability", "0.5D");
         //params.put("mutationDistributionIndex", "20.0D");
-        params.put("maxEvaluations", "100000");
+        params.put("maxEvaluations", "1000");
         params.put("populationSize", "100");
         params.put("objectiveCount", "2");
 
