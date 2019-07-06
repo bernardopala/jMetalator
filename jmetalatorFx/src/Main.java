@@ -70,8 +70,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     @FXML
     public TabPane tabPane;
 
-    @FXML
-    public Label qiResultsLabel;
+//    @FXML
+//    public Label qiResultsLabel;
 
     @FXML
     public Label receivedSSLabel;
@@ -135,6 +135,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     @FXML
     public CheckBox stepByStepCheckBox;
+
+    @FXML
+    public Hyperlink selectAllQIsLink;
+
+    @FXML
+    public Hyperlink selectNoneQILink;
 
     @FXML
     public javafx.scene.control.TableView<ObservableList<String>> solutionsTableView;
@@ -569,7 +575,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         ep = new ExperimentParams();
 
-        qiResultsLabel.textProperty().bind(qiResults);
+        //qiResultsLabel.textProperty().bind(qiResults);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
         gdErrorValueLabel.textProperty().bind(gdErrorProperty);
         igdErrorValueLabel.textProperty().bind(igdErrorProperty);
@@ -1305,6 +1311,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         hvErrorProperty.setValue("0.0");
         erErrorProperty.setValue("0.0");
 
+        selectAllQIsLink.setDisable(true);
+        selectNoneQILink.setDisable(true);
         gdCheckBox.setDisable(true);
         igdCheckBox.setDisable(true);
         igdPlusCheckBox.setDisable(true);
@@ -1324,6 +1332,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         nextButton.setDisable(true);
         stopButton.setDisable(true);
 
+        selectAllQIsLink.setDisable(false);
+        selectNoneQILink.setDisable(false);
         gdCheckBox.setDisable(false);
         igdCheckBox.setDisable(false);
         igdPlusCheckBox.setDisable(false);
@@ -1640,6 +1650,49 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
     }
 
+    public void selectAllQIsLinkClicked(ActionEvent event) {
+        if (event.getSource() instanceof Hyperlink) {
+            Hyperlink hl = (Hyperlink) event.getSource();
+            hl.setVisited(false);
+
+            gdCheckBox.setSelected(false);
+            gdCheckBox.fire();
+            igdCheckBox.setSelected(false);
+            igdCheckBox.fire();
+            igdPlusCheckBox.setSelected(false);
+            igdPlusCheckBox.fire();
+            spreadCheckBox.setSelected(false);
+            spreadCheckBox.fire();
+            epsilonCheckBox.setSelected(false);
+            epsilonCheckBox.fire();
+            hvCheckBox.setSelected(false);
+            hvCheckBox.fire();
+            erCheckBox.setSelected(false);
+            erCheckBox.fire();
+        }
+    }
+
+    public void selectNoneQIsLinkClicked(ActionEvent event) {
+        if (event.getSource() instanceof Hyperlink) {
+            Hyperlink hl = (Hyperlink) event.getSource();
+            hl.setVisited(false);
+
+            gdCheckBox.setSelected(true);
+            gdCheckBox.fire();
+            igdCheckBox.setSelected(true);
+            igdCheckBox.fire();
+            igdPlusCheckBox.setSelected(true);
+            igdPlusCheckBox.fire();
+            spreadCheckBox.setSelected(true);
+            spreadCheckBox.fire();
+            epsilonCheckBox.setSelected(true);
+            epsilonCheckBox.fire();
+            hvCheckBox.setSelected(true);
+            hvCheckBox.fire();
+            erCheckBox.setSelected(true);
+            erCheckBox.fire();
+        }
+    }
     //endregion
 
     //region Methods
