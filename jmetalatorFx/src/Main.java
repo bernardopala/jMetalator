@@ -134,6 +134,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public CheckBox erCheckBox;
 
     @FXML
+    public CheckBox stepByStepCheckBox;
+
+    @FXML
     public javafx.scene.control.TableView<ObservableList<String>> solutionsTableView;
 
     @FXML
@@ -155,6 +158,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     @FXML
     public Button startButton;
+
+    @FXML
+    public Button nextButton;
 
     @FXML
     public Button stopButton;
@@ -289,6 +295,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     boolean isShowingRefPFActive = true;
     boolean isShowingSSActive = true;
 
+    boolean isStepByStepActive = false;
+
     int dimCount = 0;
 
     private List<DoubleSolution> solutionSetResult = new ArrayList<>();
@@ -374,7 +382,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
                 selectedTab.setValue(t1.getId());
 
-                if (!isAlgorithmWorking && solutionSetResult != null && solutionSetResult.size() > 0) {
+                if ((!isAlgorithmWorking || isAlgorithmWorking && isStepByStepActive) && solutionSetResult != null && solutionSetResult.size() > 0) {
                     if (selectedTab.getValue().equalsIgnoreCase("tab3d")) {
                         if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
                             update3dChartRelatedUI();
@@ -581,6 +589,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         FillComboBoxAlgorithms();
         FillComboBoxProblems();
         enableControlsOnStop();
+        nextButton.setDisable(true);
 
         selectedTab.setValue("tab2d");
         tabPane.getSelectionModel().select(0);
@@ -873,6 +882,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         } catch (Exception e) {
             System.out.println("EXCEPTION: ReceiveCurrentSolutionSet()");
             e.printStackTrace();
+        }
+
+        if (isStepByStepActive) {
+            mainLoop.suspend();
         }
 
         if (!isAlgorithmWorking)
@@ -1279,6 +1292,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         problemsComboBox.setDisable(true);
         algorithmParametersTableView.setDisable(true);
         startButton.setDisable(true);
+        if (stepByStepCheckBox.isSelected())
+            nextButton.setDisable(false);
         stopButton.setDisable(false);
 
         receiveSolutionSetCount = 0;
@@ -1306,6 +1321,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         problemsComboBox.setDisable(false);
         algorithmParametersTableView.setDisable(false);
         startButton.setDisable(false);
+        nextButton.setDisable(true);
         stopButton.setDisable(true);
 
         gdCheckBox.setDisable(false);
@@ -1360,6 +1376,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
         isAlgorithmWorking = false;
         enableControlsOnStop();
+    }
+
+    public void nextButtonClicked(ActionEvent actionEvent) throws InterruptedException {
+        if (isAlgorithmWorking){
+            mainLoop.resume();
+        }
     }
 
     public void algorithmSelected(ActionEvent actionEvent){
@@ -1599,6 +1621,25 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 setTabVisiblity(TabEnum.ER, false);
         }
     }
+
+    public void stepByStepCheckBoxChecked(ActionEvent event) {
+        if (event.getSource() instanceof CheckBox) {
+            CheckBox chk = (CheckBox) event.getSource();
+            isStepByStepActive = chk.isSelected();
+
+            if (isAlgorithmWorking) {
+                if (chk.isSelected())
+                    nextButton.setDisable(false);
+                else {
+                    nextButton.setDisable(true);
+                    mainLoop.resume();
+                }
+            }
+            else
+                nextButton.setDisable(true);
+        }
+    }
+
     //endregion
 
     //region Methods
