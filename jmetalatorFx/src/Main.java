@@ -8,6 +8,7 @@ import com.orsoncharts.fx.Chart3DViewer;
 import com.orsoncharts.graphics3d.ViewPoint3D;
 import com.orsoncharts.plot.XYZPlot;
 import com.orsoncharts.renderer.xyz.ScatterXYZRenderer;
+import com.orsoncharts.renderer.xyz.XYZRenderer;
 import com.orsoncharts.style.ChartStyles;
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -32,6 +33,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.fx.ChartCanvas;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataItem;
@@ -54,7 +56,9 @@ import view.PairValueCell;
 import view.PairValueFactory;
 import view.TabEnum;
 
+import javax.swing.border.StrokeBorder;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -297,7 +301,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private ChartCanvas canvasEr = new ChartCanvas(chartEr);
     private XYSeries erSeries = new XYSeries("er");
 
-    boolean isShowingRefPointsActive = true;
+    boolean isShowingRefPointsActive = false;
     boolean isShowingRefPFActive = true;
     boolean isShowingSSActive = true;
 
@@ -554,24 +558,31 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         canvasGD.widthProperty().bind( stackPaneGD.widthProperty());
         canvasGD.heightProperty().bind( stackPaneGD.heightProperty());
+        setChartDefaults(chartGD);
 
         canvasIGD.widthProperty().bind( stackPaneIGD.widthProperty());
         canvasIGD.heightProperty().bind( stackPaneIGD.heightProperty());
+        setChartDefaults(chartIGD);
 
         canvasIGDPlus.widthProperty().bind( stackPaneIGDPlus.widthProperty());
         canvasIGDPlus.heightProperty().bind( stackPaneIGDPlus.heightProperty());
+        setChartDefaults(chartIGDPlus);
 
         canvasSpread.widthProperty().bind( stackPaneSpread.widthProperty());
         canvasSpread.heightProperty().bind( stackPaneSpread.heightProperty());
+        setChartDefaults(chartSpread);
 
         canvasEpsilon.widthProperty().bind( stackPaneEpsilon.widthProperty());
         canvasEpsilon.heightProperty().bind( stackPaneEpsilon.heightProperty());
+        setChartDefaults(chartEpsilon);
 
         canvasHV.widthProperty().bind( stackPaneHV.widthProperty());
         canvasHV.heightProperty().bind( stackPaneHV.heightProperty());
+        setChartDefaults(chartHV);
 
         canvasEr.widthProperty().bind( stackPaneER.widthProperty());
         canvasEr.heightProperty().bind( stackPaneER.heightProperty());
+        setChartDefaults(chartEr);
 
         ep = new ExperimentParams();
 
@@ -627,6 +638,18 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         Object prob = (String)problemsComboBox.getItems().get(0);
         problemsComboBox.setValue(prob);
         selectProblem(prob.toString());
+    }
+
+    private void setChartDefaults(JFreeChart chart){
+        XYPlot _plot = (XYPlot) chart.getPlot();
+        NumberAxis _xAxis = (NumberAxis)_plot.getDomainAxis();
+        _xAxis.setTickUnit(new NumberTickUnit(1));
+    }
+
+    private void setChartAutoTick(JFreeChart chart){
+        XYPlot _plot = (XYPlot) chart.getPlot();
+        NumberAxis _xAxis = (NumberAxis)_plot.getDomainAxis();
+        _xAxis.setAutoTickUnitSelection(true);
     }
 
     private void resetZoom(JFreeChart chart){
@@ -783,6 +806,16 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
             receiveSolutionSetCount++;
 
+            if (receiveSolutionSetCount == 20){
+                setChartAutoTick(chartGD);
+                setChartAutoTick(chartIGD);
+                setChartAutoTick(chartIGDPlus);
+                setChartAutoTick(chartSpread);
+                setChartAutoTick(chartHV);
+                setChartAutoTick(chartEpsilon);
+                setChartAutoTick(chartEr);
+            }
+
             Front front = new ArrayFront(solutionSetResult);
             Front normalizedFront = frontNormalizer.normalize(front) ;
             List<PointSolution> normalizedPopulation = FrontUtils.convertFrontToSolutionList(normalizedFront) ;
@@ -906,6 +939,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             dataset3D.add(ssSeries);
         else
             dataset3D.add(new XYZSeries("Solution set"));
+
+         ScatterXYZRenderer rndr = (ScatterXYZRenderer)plot.getRenderer();
+         rndr.setColors(Color.RED, Color.darkGray, Color.GREEN);
 
         //start
         XYZSeries laSeries = new XYZSeries("la");
@@ -1035,13 +1071,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         plotPC.setDataset(0,datasetPC);
         XYItemRenderer renderer0 = new XYLineAndShapeRenderer(true, false);
         for (int p = 0; p < datasetPC.getSeriesCount(); p++)
-            renderer0.setSeriesPaint(p, Color.BLACK);
+            renderer0.setSeriesPaint(p, Color.red);
         plotPC.setRenderer(0, renderer0);
 
         plotPC.setDataset(1,datasetFrontPC);
         XYItemRenderer renderer1 = new XYLineAndShapeRenderer(true, false);
         for (int p = 0; p < datasetFrontPC.getSeriesCount(); p++)
-            renderer1.setSeriesPaint(p, Color.RED);
+            renderer1.setSeriesPaint(p, Color.darkGray);
         plotPC.setRenderer(1, renderer1);
 
         if (isPCChartAutoResizing.get() == 1) {
@@ -1089,12 +1125,30 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         XYPlot plot2D = (XYPlot) chart2D.getPlot();
         XYSeriesCollection dataset2D = new XYSeriesCollection();
         XYSeries ssSeries = createSeries2D(solutionSetResult);
+        plot2D.setDataset(dataset2D);
 
         if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
             dataset2D.addSeries(ssSeries);
         else
             dataset2D.addSeries(new XYSeries("Solution set"));
 
+        XYLineAndShapeRenderer rndr0 = (XYLineAndShapeRenderer)plot2D.getRenderer(0);
+        rndr0.setUseOutlinePaint(true);
+
+        rndr0.setSeriesShape(0, new Rectangle(8,8));
+        rndr0.setSeriesPaint(0, Color.RED);
+        rndr0.setSeriesOutlinePaint(0, Color.darkGray);
+        rndr0.setSeriesOutlineStroke(0, new BasicStroke(1));
+
+        rndr0.setSeriesShape(1, new Rectangle(6,6));
+        rndr0.setSeriesPaint(1, Color.darkGray);
+        rndr0.setSeriesOutlinePaint(1, Color.gray);
+        rndr0.setSeriesOutlineStroke(1, new BasicStroke(1));
+
+        rndr0.setSeriesShape(2, new Rectangle(8,8));
+        rndr0.setSeriesPaint(2, Color.GREEN);
+        rndr0.setSeriesOutlinePaint(2, Color.BLACK);
+        rndr0.setSeriesOutlineStroke(2, new BasicStroke(1));
         //start
         XYSeries laSeries = new XYSeries("la");
 
@@ -1126,14 +1180,22 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             */
         }
 
-        if (isShowingRefPointsActive)
+        if (isShowingRefPointsActive) {
             dataset2D.addSeries(laSeries);
+//            XYItemRenderer renderer1 = new XYDotRenderer();
+//            renderer1.setSeriesPaint(1, Color.GREEN);
+//            plot2D.setRenderer(1, renderer1);
+        }
         //end
 
-        if (isShowingRefPFActive)
+        if (isShowingRefPFActive) {
             dataset2D.addSeries(seriesFront2D);
+//            XYItemRenderer renderer2 = new XYDotRenderer();
+//            renderer2.setSeriesPaint(2, Color.BLACK);
+//            plot2D.setRenderer(2, renderer2);
+        }
 
-        plot2D.setDataset(dataset2D);
+
 
         if (is2dChartAutoResizing.get() == 1) {
             List<XYSeries> union = new ArrayList<>();
