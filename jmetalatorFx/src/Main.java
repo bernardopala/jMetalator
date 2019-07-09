@@ -31,11 +31,16 @@ import maths.GenLloyd;
 import org.jfree.chart.*;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.fx.ChartCanvas;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -556,6 +561,17 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         plotPC.setRangeAxis(yAxis);
         canvasPC.getChart().removeLegend();
 
+//        LegendItemCollection chartLegend = new LegendItemCollection();
+//        Shape shape = new Rectangle(7, 7);
+//        chartLegend.add(new LegendItem("Solution set", null, null, null, shape, Color.red));
+//        chartLegend.add(new LegendItem("Pareto front", null, null, null, shape, Color.darkGray));
+//        plotPC.setFixedLegendItems(chartLegend);
+        LegendTitle lt = new LegendTitle((Plot)chart2D.getPlot());
+        lt.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
+        lt.setBackgroundPaint(Color.white);
+        lt.setPosition(RectangleEdge.BOTTOM);
+        canvasPC.getChart().addLegend(lt);
+
         canvasGD.widthProperty().bind( stackPaneGD.widthProperty());
         canvasGD.heightProperty().bind( stackPaneGD.heightProperty());
         setChartDefaults(chartGD);
@@ -1017,7 +1033,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
         {
             datasetPC = createSeriesCollectionPC(solutionSetResult);
-
         }
 
 //        if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
