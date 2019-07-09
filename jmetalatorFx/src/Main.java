@@ -27,6 +27,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
 import jmetalhelpers.ExperimentParams;
+import jmetalhelpers.ProblemHelper;
 import jmetalhelpers.SolutionDto;
 import jmetalhelpers.algorithms.AlgorithmParameter;
 import maths.GenLloyd;
@@ -50,6 +51,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.impl.AbstractEvolutionaryAlgorithm;
 import org.uma.jmetal.algorithm.util.CurrentSolutionSetReceiver;
+import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.qualityindicator.impl.*;
 import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -89,6 +91,15 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     @FXML
     public Label receivedSSCountLabel;
+
+    @FXML
+    public Label problemObjCountLabel;
+
+    @FXML
+    public Label problemVariableCountLabel;
+
+    @FXML
+    public Label problemRefSolutionCountLabel;
 
     @FXML
     public Label gdErrorValueLabel;
@@ -241,6 +252,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final StringProperty qiResults = new SimpleStringProperty();
     private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
     private final SimpleIntegerProperty receivedSSCountProperty = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty problemObjCountProperty = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty problemVariableCountProperty = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty problemRefSolutionCountProperty = new SimpleIntegerProperty();
+
     private final SimpleStringProperty gdErrorProperty = new SimpleStringProperty();
     private final SimpleStringProperty igdErrorProperty = new SimpleStringProperty();
     private final SimpleStringProperty igdPlusErrorProperty = new SimpleStringProperty();
@@ -617,6 +632,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         //qiResultsLabel.textProperty().bind(qiResults);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
         receivedSSCountLabel.textProperty().bind(receivedSSCountProperty.asString());
+        problemObjCountLabel.textProperty().bind(problemObjCountProperty.asString());
+        problemVariableCountLabel.textProperty().bind(problemVariableCountProperty.asString());
+        problemRefSolutionCountLabel.textProperty().bind(problemRefSolutionCountProperty.asString());
         gdErrorValueLabel.textProperty().bind(gdErrorProperty);
         igdErrorValueLabel.textProperty().bind(igdErrorProperty);
         igdPlusErrorValueLabel.textProperty().bind(igdPlusErrorProperty);
@@ -1518,6 +1536,10 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         }
     }
 
+    private String createProblemUrl(String problemName){
+        return "org.uma.jmetal.problem.multiobjective." + problemName;
+    }
+
     private void selectProblem(String problemName){
         gdCheckBox.setDisable(false);
         igdCheckBox.setDisable(false);
@@ -1528,11 +1550,19 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         erCheckBox.setDisable(false);
 
         ep.setProblemName(problemName);
+
         try {
             ArrayFront referenceFront = new ArrayFront(ep.getReferenceParetoFront());
+            dimCount = referenceFront.getPointDimensions();
+
+            String problemUrl = createProblemUrl(ep.getProblemName());
+            Problem problem = ProblemHelper.loadProblem(problemUrl,dimCount);
+            problemObjCountProperty.setValue(problem.getNumberOfObjectives());
+            problemVariableCountProperty.setValue(problem.getNumberOfVariables());
+            problemRefSolutionCountProperty.setValue(referenceFront.getNumberOfPoints());
 //            FrontNormalizer frontNormalizer = new FrontNormalizer(referenceFront);
 //            Front normalizedReferenceFront = frontNormalizer.normalize(referenceFront);
-            dimCount = referenceFront.getPointDimensions();
+
             setSolutionsTableViewColumnCount(dimCount);
             if (dimCount == 2) {
                 seriesFront2D = createFront2D(referenceFront);
@@ -1897,7 +1927,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private XYZSeries createFront3D(ArrayFront front){
-        XYZSeries serieFront3D_ = new XYZSeries<>("Pareto front");
+        XYZSeries serieFront3D_ = new XYZSeries<>("Reference Pareto-front");
 
         for (int i = 0; i < front.getNumberOfPoints(); i++ /*i+=5*/) {
             if (i <= front.getNumberOfPoints()) {
@@ -1938,7 +1968,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     }
 
     private XYSeries createFront2D(ArrayFront front){
-        XYSeries seriesFront2D_ = new XYSeries("Pareto front");
+        XYSeries seriesFront2D_ = new XYSeries("Reference Pareto-front");
         List<Pair<Double, Double>> pairs = new ArrayList<>();
 
         int count = 1;
