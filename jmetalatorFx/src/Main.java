@@ -455,7 +455,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         clearControls();
 
         renderer.setSize(0.20);
-        renderer.setColors(Colors.getEarthColors());
+        renderer.setColors(Colors.getColors2());
 
         viewer.getCanvas().setPanIncrement(0.01D);
         viewer.getCanvas().setRotateIncrement(0.01D);
@@ -466,7 +466,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         s.setLegendItemFont(new Font("Tahoma", 0,12));
         s.setAxisTickLabelFont(new Font("Tahoma", 0,12));
 
-        viewer.setZoomMultiplier(1.05D);
+        viewer.setZoomMultiplier(0.95D);
+        //viewer.getCanvas().getChart().setViewPoint(new ViewPoint3D(0.52, 1.42, 23, 3.11));
         stackPaneOrson.getChildren().add(viewer);
         stackPaneOrson.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
