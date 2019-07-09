@@ -9,7 +9,9 @@ import com.orsoncharts.graphics3d.ViewPoint3D;
 import com.orsoncharts.plot.XYZPlot;
 import com.orsoncharts.renderer.xyz.ScatterXYZRenderer;
 import com.orsoncharts.renderer.xyz.XYZRenderer;
+import com.orsoncharts.style.ChartStyle;
 import com.orsoncharts.style.ChartStyles;
+import com.orsoncharts.style.StandardChartStyle;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -438,7 +440,13 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         viewer.getCanvas().setPanIncrement(0.01D);
         viewer.getCanvas().setRotateIncrement(0.01D);
-        viewer.getChart().setStyle(ChartStyles.createIceCubeStyle());
+        StandardChartStyle s = (StandardChartStyle )viewer.getChart().getStyle();
+        s.setAxisLabelFont(new Font("Tahoma", 1,14));
+        s.setLegendFooterFont(new Font("Tahoma", 0,12));
+        s.setLegendHeaderFont(new Font("Tahoma", 0,12));
+        s.setLegendItemFont(new Font("Tahoma", 0,12));
+        s.setAxisTickLabelFont(new Font("Tahoma", 0,12));
+
         viewer.setZoomMultiplier(1.05D);
         stackPaneOrson.getChildren().add(viewer);
         stackPaneOrson.setOnMouseClicked(mouseEvent -> {
