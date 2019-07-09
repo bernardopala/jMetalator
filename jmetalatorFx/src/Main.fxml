@@ -280,7 +280,7 @@
                      </CheckBox>
                      <Label fx:id="erErrorValueLabel" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                          <GridPane.margin>
-                             <Insets left="5.0" right="5.0" top="5.0" />
+                             <Insets left="5.0" right="5.0" top="5.0" bottom="5.0"/>
                          </GridPane.margin>
                      </Label>
                  </children>
@@ -291,23 +291,35 @@
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
               </rowConstraints>
 
               <children>
                   <Label text="Algorithm execution info:" GridPane.columnIndex="0" GridPane.rowIndex="0">
                       <GridPane.margin>
-                          <Insets left="5.0" right="5.0" top="15.0" />
+                          <Insets left="5.0" right="5.0" top="10.0" />
                       </GridPane.margin>
                   </Label>
-                  <Label text="Iterations:"  GridPane.columnIndex="0" GridPane.rowIndex="1">
+                  <Label text="Iteration count:"  GridPane.columnIndex="0" GridPane.rowIndex="1">
+                  <GridPane.margin>
+                      <Insets left="5.0" right="5.0" top="5.0"/>
+                  </GridPane.margin>
+              </Label>
+                  <Label fx:id="receivedSSLabel" text="0" GridPane.columnIndex="1"  GridPane.rowIndex="1">
+                      <GridPane.margin>
+                          <Insets left="5.0" right="5.0" top="5.0" />
+                      </GridPane.margin>
+                  </Label>
+                  <Label text="Solution count:"  GridPane.columnIndex="0" GridPane.rowIndex="2">
                       <GridPane.margin>
                           <Insets left="5.0" right="5.0" top="5.0"/>
                       </GridPane.margin>
                   </Label>
-                  <Label fx:id="receivedSSLabel" text="0" GridPane.columnIndex="1"  GridPane.rowIndex="1">
+                  <Label fx:id="receivedSSCountLabel" text="0" GridPane.columnIndex="1"  GridPane.rowIndex="2">
                       <GridPane.margin>
                           <Insets left="5.0" right="5.0" top="5.0" />
                       </GridPane.margin>

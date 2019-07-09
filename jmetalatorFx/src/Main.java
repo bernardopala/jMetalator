@@ -88,6 +88,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     public Label receivedSSLabel;
 
     @FXML
+    public Label receivedSSCountLabel;
+
+    @FXML
     public Label gdErrorValueLabel;
 
     @FXML
@@ -237,6 +240,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private final StringProperty selectedTab = new SimpleStringProperty();
     private final StringProperty qiResults = new SimpleStringProperty();
     private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty receivedSSCountProperty = new SimpleIntegerProperty();
     private final SimpleStringProperty gdErrorProperty = new SimpleStringProperty();
     private final SimpleStringProperty igdErrorProperty = new SimpleStringProperty();
     private final SimpleStringProperty igdPlusErrorProperty = new SimpleStringProperty();
@@ -612,6 +616,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
         //qiResultsLabel.textProperty().bind(qiResults);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
+        receivedSSCountLabel.textProperty().bind(receivedSSCountProperty.asString());
         gdErrorValueLabel.textProperty().bind(gdErrorProperty);
         igdErrorValueLabel.textProperty().bind(igdErrorProperty);
         igdPlusErrorValueLabel.textProperty().bind(igdPlusErrorProperty);
@@ -823,7 +828,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             }
 
             solutionSetResult = algorithm.getResult();
+
             if (solutionSetResult.size() == 0) {
+                Platform.runLater(() -> {
+                    receivedSSProperty.setValue(receiveSolutionSetCount);
+                    receivedSSCountProperty.setValue(solutionSetResult.size());
+                });
                 lock.unlock();
                 return;
             }
@@ -903,6 +913,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                     hvErrorProperty.setValue(decimalFormat.format(hv) + " (" + decimalFormat2.format(hv) + ")");
                     erErrorProperty.setValue(decimalFormat.format(er) + " (" + decimalFormat2.format(er) + ")");
                     receivedSSProperty.setValue(receiveSolutionSetCount);
+                    receivedSSCountProperty.setValue(solutionSetResult.size());
 
                     if (selectedTab.getValue().equalsIgnoreCase("tab3d")) {
                         if (solutionSetResult.get(0).getNumberOfObjectives() == 3) {
