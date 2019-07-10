@@ -467,11 +467,12 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         s.setAxisTickLabelFont(new Font("Tahoma", 0,12));
 
         viewer.setZoomMultiplier(0.95D);
-        //viewer.getCanvas().getChart().setViewPoint(new ViewPoint3D(0.52, 1.42, 23, 3.11));
+        //viewer.getCanvas().getChart().setViewPoint(new ViewPoint3D(0.7502, 1.1555, 38.1964, 45));
         stackPaneOrson.getChildren().add(viewer);
         stackPaneOrson.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                 if(mouseEvent.getClickCount() == 2){
+                    //ViewPoint3D vp = viewer.getCanvas().getChart().getViewPoint();;
                     resetZoom(viewer.getChart());
                 }
             }

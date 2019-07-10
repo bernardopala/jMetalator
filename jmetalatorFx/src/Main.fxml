@@ -24,7 +24,9 @@
 
    </left>
    <center>
-      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+       <VBox BorderPane.alignment="TOP_LEFT" >
+           <children>
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" VBox.vgrow="ALWAYS">
         <tabs>
             <Tab fx:id="tab3d" text="Objective space">
                 <content>
@@ -112,6 +114,30 @@
             </Tab>
         </tabs>
       </TabPane>
+       <HBox prefHeight="25.0" >
+           <Label style="-fx-font-weight: BOLD;"  text="Chart options:">
+               <HBox.margin>
+                   <Insets left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+           </Label>
+           <CheckBox fx:id="showSSCheckBox" onAction="#showSSCheckBoxChecked" text="Show solution set">
+               <HBox.margin>
+                   <Insets left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+           </CheckBox>
+           <CheckBox fx:id="showRefPFCheckBox" onAction="#showRefPFCheckBoxChecked" text="Show reference Pareto-front">
+               <HBox.margin>
+                   <Insets left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+           </CheckBox>
+           <CheckBox fx:id="showRefPointsCheckBox" onAction="#showRefPointsCheckBoxChecked" text="Show ref. points" visible="false">
+               <HBox.margin>
+                   <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+           </CheckBox>
+       </HBox>
+           </children>
+       </VBox>
    </center>
    <right>
       <VBox prefHeight="582.0" prefWidth="333.0" BorderPane.alignment="TOP_RIGHT">
@@ -408,28 +434,7 @@
       </VBox>
    </right>
    <bottom>
-       <HBox prefHeight="25.0" BorderPane.alignment="BOTTOM_LEFT">
-       <Label style="-fx-font-weight: BOLD;"  text="Chart options:">
-           <HBox.margin>
-               <Insets left="5.0" right="5.0" top="5.0" />
-           </HBox.margin>
-       </Label>
-       <CheckBox fx:id="showSSCheckBox" onAction="#showSSCheckBoxChecked" text="Show solution set">
-           <HBox.margin>
-               <Insets left="5.0" right="5.0" top="5.0" />
-           </HBox.margin>
-       </CheckBox>
-       <CheckBox fx:id="showRefPFCheckBox" onAction="#showRefPFCheckBoxChecked" text="Show reference Pareto-front">
-           <HBox.margin>
-               <Insets left="5.0" right="5.0" top="5.0" />
-           </HBox.margin>
-       </CheckBox>
-       <CheckBox fx:id="showRefPointsCheckBox" onAction="#showRefPointsCheckBoxChecked" text="Show ref. points" visible="false">
-           <HBox.margin>
-               <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
-           </HBox.margin>
-       </CheckBox>
-       </HBox>
+
       <!--<Label fx:id="qiResultsLabel" alignment="TOP_LEFT" prefHeight="81.0" prefWidth="600.0" text="Tu bedo wyniki..." BorderPane.alignment="CENTER_LEFT" />-->
    </bottom>
 </BorderPane>
