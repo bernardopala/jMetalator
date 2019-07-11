@@ -20,12 +20,17 @@ public class jmetalator extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Main.fxml"));
+        Parent root = loader.load();
+        Main main = loader.getController();
+        main.setStage(primaryStage);
         primaryStage.setScene(new Scene(root));
 
         primaryStage.setTitle("jMetalator v0.1 - jMetal 5.x Simulator");
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
         primaryStage.show();
+
+
     }
 
     @Override

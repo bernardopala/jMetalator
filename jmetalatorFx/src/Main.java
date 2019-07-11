@@ -19,12 +19,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import jmetalhelpers.ExperimentParams;
 import jmetalhelpers.ProblemHelper;
@@ -233,6 +236,8 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private List<TabEnum> tabEnumOrder = new ArrayList<>();
     private List<TabEnum> tabEnumCurrentOrder = new ArrayList<>();
 
+    private Stage stage;
+
     //endregion
 
     //region Private variables
@@ -405,9 +410,15 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         );
     }
 
+    public void setStage(Stage s){
+        this.stage = s;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
         initializeTabs();
+
+
         setTabVisiblity(TabEnum.Chart2D, true);
         setTabVisiblity(TabEnum.AproximationSet, true);
 
