@@ -86,6 +86,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     @FXML
     public TabPane tabPane;
 
+    @FXML
+    public ProgressBar progressBar;
+
 //    @FXML
 //    public Label qiResultsLabel;
 
@@ -255,6 +258,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
 
     private final StringProperty selectedTab = new SimpleStringProperty();
     private final StringProperty qiResults = new SimpleStringProperty();
+    private final SimpleDoubleProperty progressProperty = new SimpleDoubleProperty();
     private final SimpleIntegerProperty receivedSSProperty = new SimpleIntegerProperty();
     private final SimpleIntegerProperty receivedSSCountProperty = new SimpleIntegerProperty();
     private final SimpleIntegerProperty problemObjCountProperty = new SimpleIntegerProperty();
@@ -643,6 +647,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         ep = new ExperimentParams();
 
         //qiResultsLabel.textProperty().bind(qiResults);
+        progressBar.progressProperty().bind(progressProperty);
         receivedSSLabel.textProperty().bind(receivedSSProperty.asString());
         receivedSSCountLabel.textProperty().bind(receivedSSCountProperty.asString());
         problemObjCountLabel.textProperty().bind(problemObjCountProperty.asString());
@@ -863,6 +868,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             if (solutionSetResult.size() == 0) {
                 Platform.runLater(() -> {
                     receivedSSProperty.setValue(receiveSolutionSetCount);
+                    progressProperty.setValue(getProgress(receiveSolutionSetCount));
                     receivedSSCountProperty.setValue(solutionSetResult.size());
                 });
                 lock.unlock();
@@ -936,6 +942,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
                 try {
                     lock.lock();
 
+                    progressProperty.setValue(getProgress(receiveSolutionSetCount));
                     gdErrorProperty.setValue(decimalFormat.format(gd) + " (" + decimalFormat2.format(gd) + ")");
                     igdErrorProperty.setValue(decimalFormat.format(igd) + " (" + decimalFormat2.format(igd) + ")");
                     igdPlusErrorProperty.setValue(decimalFormat.format(igdPlus) + " (" + decimalFormat2.format(igdPlus) + ")");
@@ -1430,6 +1437,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         stopButton.setDisable(false);
 
         receiveSolutionSetCount = 0;
+        progressProperty.setValue(0);
         gdErrorProperty.setValue("0.0");
         igdErrorProperty.setValue("0.0");
         igdPlusErrorProperty.setValue("0.0");
@@ -1470,6 +1478,18 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         erCheckBox.setDisable(false);
     }
 
+    private double getProgress(int currentEvaluation){
+        List<AlgorithmParameter> list =  algorithmParametersTableView.getItems();
+        for(int i = 0; i < list.size(); i++){
+            AlgorithmParameter ap = list.get(i);
+            if(ap.getName() == "maxEvaluations"){
+                return ((double)currentEvaluation/ap.getValue());
+            }
+        }
+
+        return 0;
+    }
+
     //region Events
     public void startButtonClicked(ActionEvent actionEvent){
         if (!ep.IsReady()){
@@ -1483,6 +1503,9 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         Platform.setImplicitExit(false);
 
         ep.setAlgorithmParameterList(algorithmParametersTableView.getItems());
+        List<AlgorithmParameter> list =  algorithmParametersTableView.getItems();
+        progressProperty.setValue(0);
+
         eaAlgorithm = ep.getJMetalAlgorithm();
         eaAlgorithm.subscribeCurrentSolutionSetReceiver(this);
         algorithm = eaAlgorithm;
