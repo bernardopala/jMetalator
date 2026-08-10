@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="jmetalatorFx">
+    <output-path>$PROJECT_DIR$/out/artifacts/jmetalatorFx</output-path>
+    <root id="archive" name="jmetalatorFx.jar">
+      <element id="archive" name="jmetalatorFx.jar">
+        <element id="module-output" name="jmetalatorFx" />
+        <element id="module-output" name="jmetalator" />
+      </element>
+    </root>
+  </artifact>
+</component>

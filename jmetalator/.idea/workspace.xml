@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="jmetalator:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/jmetalatorFx/src/Main.java" line="1969" />
+    <bookmark url="file://$PROJECT_DIR$/jmetalatorFx/src/Main.java" line="985" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8ce62b9f-70a1-4660-bd1f-365f4f2c1d24" name="Default" comment="Added progress bar. Changed &quot;iteration&quot; to &quot;evaluation&quot;.">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/jmetalatorFx.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/jmetalator_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jmetal_exec_5_5_SNAPSHOT_jar_with_dependencies.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalator.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/jmetalatorFx.iml" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalatorFx/jmetalatorFx.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/Main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalatorFx/src/Main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalatorFx/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalator.java" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalatorFx/src/jmetalator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ExperimentParams.java" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ExperimentParams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ANSGAIIManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ASPEA2Manager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleNSGAIIManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleSPEA2Manager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASNSGAIIManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/DBSPEA2Manager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ENSGAIIManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ESPEA2Manager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxMOEAManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/NSGAIIManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/NSGAIIManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/SPEA3Manager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/nMOEAAlphaManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/nMOEAManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jmetalatorFx/src/maths/GoodDistribution.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="20">
+              <caret line="1509" column="34" lean-forward="false" selection-start-line="1509" selection-start-column="34" selection-end-line="1509" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#setTabVisiblity#0;class#Main#0" expanded="false" />
+                <element signature="e#14039#14040#0" expanded="true" />
+                <element signature="e#14069#14070#0" expanded="true" />
+                <element signature="e#17703#18051#0" expanded="false" />
+                <element signature="method#resetZoom#2;class#Main#0" expanded="false" />
+                <element signature="method#handleZoom#0;class#Main#0" expanded="false" />
+                <element signature="method#clearControls#0;class#Main#0" expanded="false" />
+                <element signature="method#update3dChartRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updatePCChartRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#update2dChartRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updateSetRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updateGDRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updateIGDRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updateIGDPlusRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updateSpreadRelatedIU#0;class#Main#0" expanded="false" />
+                <element signature="method#updateEpsilonRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#updateHvRelatedUI#0;class#Main#0" expanded="false" />
+                <element signature="method#stopButtonClicked#0;class#Main#0" expanded="false" />
+                <element signature="method#nextButtonClicked#0;class#Main#0" expanded="false" />
+                <element signature="method#algorithmSelected#0;class#Main#0" expanded="false" />
+                <element signature="method#setSolutionsTableViewColumnCount#0;class#Main#0" expanded="false" />
+                <element signature="method#showSSCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#showRefPFCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#igdCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#igdPlusCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#spreadCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#epsilonCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#hvCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#erCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#stepByStepCheckBoxChecked#0;class#Main#0" expanded="false" />
+                <element signature="method#FillComboBoxProblems#0;class#Main#0" expanded="false" />
+                <element signature="method#printQualityIndicators#0;class#Main#0" expanded="false" />
+                <element signature="method#createSeries3D#0;class#Main#0" expanded="false" />
+                <element signature="method#arrayOf#0;class#Main#0" expanded="false" />
+                <element signature="method#arrayOf#1;class#Main#0" expanded="false" />
+                <element signature="method#createFront3D#0;class#Main#0" expanded="false" />
+                <element signature="method#createSeries2D#0;class#Main#0" expanded="false" />
+                <element signature="method#createSeriesCollectionPC#0;class#Main#0" expanded="false" />
+                <element signature="method#createFront2D#0;class#Main#0" expanded="false" />
+                <element signature="method#createFrontPC#0;class#Main#0" expanded="false" />
+                <element signature="method#createChart2D#0;class#Main#0" expanded="false" />
+                <element signature="method#createLine2D#0;class#Main#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.fxml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/Main.fxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1380">
+              <caret line="69" column="48" lean-forward="false" selection-start-line="63" selection-start-column="36" selection-end-line="69" selection-end-column="48" />
+              <folding>
+                <element signature="n#HBox#0;n#children#0;n#VBox#0;n#center#0;n#BorderPane#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+          <provider editor-type-id="JavaFX-Scene-Builder">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="jmetalator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExperimentParams.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ExperimentParams.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="6100">
+              <caret line="320" column="47" lean-forward="false" selection-start-line="320" selection-start-column="47" selection-end-line="320" selection-end-column="47" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GuidedEpsilonBoxNMOEAManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBoxNMOEAManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="920">
+              <caret line="54" column="96" lean-forward="false" selection-start-line="54" selection-start-column="96" selection-end-line="54" selection-end-column="96" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GuidedEpsilonBox2NMOEAManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBox2NMOEAManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="920">
+              <caret line="54" column="94" lean-forward="false" selection-start-line="54" selection-start-column="94" selection-end-line="54" selection-end-column="94" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EpsilonBoxNSGAIIManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxNSGAIIManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1080">
+              <caret line="71" column="29" lean-forward="false" selection-start-line="71" selection-start-column="29" selection-end-line="71" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EpsilonBoxNSGAIIBuilder.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/multiobjective/EpsilonBoxNSGAII/EpsilonBoxNSGAIIBuilder.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1580">
+              <caret line="93" column="24" lean-forward="false" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
+              <folding>
+                <marker date="1564608001148" expanded="false" signature="0:104" ph="/.../" />
+                <marker date="1564608001148" expanded="false" signature="180:797" ph="..." />
+                <marker date="1564608001148" expanded="true" signature="1444:1928" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="1995:2194" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="2272:2503" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="2581:2813" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="2923:3147" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="3248:3440" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="3538:3598" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="3639:3891" ph="{...}" />
+                <marker date="1564608001148" expanded="false" signature="3927:3938" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="3958:3964" ph=" }" />
+                <marker date="1564608001148" expanded="false" signature="3999:4010" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="4037:4043" ph=" }" />
+                <marker date="1564608001148" expanded="false" signature="4079:4090" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="4117:4123" ph=" }" />
+                <marker date="1564608001148" expanded="false" signature="4179:4190" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="4220:4226" ph=" }" />
+                <marker date="1564608001148" expanded="false" signature="4280:4291" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="4320:4326" ph=" }" />
+                <marker date="1564608001148" expanded="false" signature="4391:4402" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="4432:4438" ph=" }" />
+                <marker date="1564608001148" expanded="false" signature="4502:4513" ph=" { " />
+                <marker date="1564608001148" expanded="false" signature="4535:4541" ph=" }" />
+                <marker date="1564608001148" expanded="true" signature="4580:4711" ph="{...}" />
+                <marker date="1564608001148" expanded="true" signature="4694:4705" ph="{}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EpsilonBoxNSGAII.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/multiobjective/EpsilonBoxNSGAII/EpsilonBoxNSGAII.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="27" column="30" lean-forward="false" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+              <folding>
+                <marker date="1564608001148" expanded="true" signature="4382:4398" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaFXApplication" />
+        <option value="FxmlFile" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>width</find>
+      <find>enableco</find>
+      <find>qiResultsLabel</find>
+      <find>.red</find>
+      <find>plot_</find>
+      <find>xAxis_</find>
+      <find>autoTickUnitSelection</find>
+      <find>standardTickUnits</find>
+      <find>blac</find>
+      <find>black</find>
+      <find>red</find>
+      <find>color.</find>
+      <find>gree</find>
+      <find>elli</find>
+      <find>legenditemcol</find>
+      <find>set</find>
+      <find>receivedSSLabel</find>
+      <find>receivedSSProperty</find>
+      <find>ProblemHelper</find>
+      <find>loadProblem</find>
+      <find>selectpr</find>
+      <find>ref.</find>
+      <find>viewpo</find>
+      <find>Pareto fro</find>
+      <find>quality</find>
+      <find>tickuni</find>
+      <find>anchor</find>
+      <find>ansga</find>
+      <find>nsgaii</find>
+      <find>db1</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Bernard" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/gittest.txt" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.txt" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/dupa.fxml" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/Error.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/QualityIndicator.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AlgorithmHelper.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/view/PairValueFactory.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/view/PairKeyFactory.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/view/PairValueCell.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/SolutionDto.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/NotifyingThread.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/thread/ThreadCompleteListener.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/thread/NotifyingThread.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/AlgorithmExecutor.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/maths/GenLloyd.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/maths/EvenlyDistributedSolutions.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/maths/ConvexHull.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/maths/GoodDistribution.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AlgorithmParameter.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/view/TabEnum.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleNSGAIIManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ASPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/DBSPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ESPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/nMOEAAlphaManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/nMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/SPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/SPEA3Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ENSGAIIManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleSPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ProblemHelper.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/maths/NumberFormatter.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/NSGAIIManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/ANSGAIIManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASNSGAIIManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/Main.fxml" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalator.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleNMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AlphaNMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASSPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASNMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonSPEA2Builder.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBoxMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxNSGAIIManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxSPEA2Manager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBoxNMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBox2NMOEAManager.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/Main.java" />
+        <option value="$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ExperimentParams.java" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1612" />
+    <option name="height" value="876" />
+  </component>
+  <component name="ProjectId" id="3HXwJFjHSHSbFGU7gSi2tyxWB4q" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="jmetalator" type="58d84e3e:PackageViewProjectNode" />
+              <item name="jmetalatorFx" type="616d4139:PackageViewModuleNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="jmetalator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jmetalator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jmetalator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jmetalator" type="462c0819:PsiDirectoryNode" />
+              <item name="jmetalatorFx" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jmetalator" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jmetalator" type="462c0819:PsiDirectoryNode" />
+              <item name="jmetalatorFx" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scratches">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+              <item name="Scratches" type="d62648e6:ScratchProjectViewPane$MyRootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.jmetalator.executor": "Run",
+    "Application.main.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.36124796"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="jmetalhelpers.algorithms" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="jmetalhelpers.algorithms" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\Java\jdk1.8.0_152\jre" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="jmetalator" />
+      <module name="jmetalatorFx" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-63390994e64e-intellij.indexing.shared.core-IU-262.8665.337" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.8665.337" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8ce62b9f-70a1-4660-bd1f-365f4f2c1d24" name="Default" comment="" />
+      <created>1514566349677</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1514566349677</updated>
+    </task>
+    <task id="LOCAL-00001" summary="First commit">
+      <created>1514567623837</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1514567623837</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Functionality from PoC added">
+      <created>1515028286646</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1515028286647</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Quality parameters (GD, Spread) and solution set monitoring added. Algorithm parameters table sketch added.">
+      <created>1515361059272</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1515361059272</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Algorithm parameters editing added">
+      <created>1515847815747</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1515847815747</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Algorithm parameters settings added. Classes for different cell factory depending on the data inside the cell added.">
+      <created>1515852860778</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1515852860778</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Setting algorithm parameters from UI done">
+      <created>1516458070952</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1516458070952</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Binding and validation algorithm parameters fixed. Stopping algorithm added. Disabling/enabling controls on start/stop added.">
+      <created>1516467698187</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1516467698187</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Algorithm execution info added">
+      <created>1516469625814</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1516469625814</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Setting controls on application start added. Settings controls when algorithm finishes added.">
+      <created>1516548830153</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1516548830153</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added DBSPEA2 algorithm. Changed all 2D charts to jfreechart. Added Orson 3D chart. Added showing reference Pareto front. Added IGD quality indicator. Now controls are updated only in active tab. Optimized GUI updates. Some warning resloved.">
+      <created>1550089686504</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1550089686504</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added lock when changing tab. Added some refactorings.">
+      <created>1550098118445</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1550098118445</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Refactorings due to GUI throttling (stable version). Fixed some warnings.">
+      <created>1550340439753</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1550340439753</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added zooming 3D charts.">
+      <created>1550601649019</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1550601649019</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added remaining QIs (IGD+, Epsilon, HV, Error ratio). Complemented IGD. Added turning on/off computing and showing QIs through checkboxes.">
+      <created>1550616758776</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1550616758776</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added showing on/off reference Pareto Front.">
+      <created>1550789783153</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1550789783153</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Fixed charts and solution set descriptions.">
+      <created>1551894928839</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1551894928839</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Added setting algorithm and problem at app start.">
+      <created>1551895558140</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1551895558140</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Added problems. Added justifying chart to max and min values during chart refreshing.">
+      <created>1552508405796</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1552508405796</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Added alpha-SPEA2.">
+      <created>1552599416647</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1552599416647</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Added modified SPEA2 and NSGA-II algorithms. Added turing on/off showing of ref. PF and additional ref points.">
+      <created>1556643485681</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1556643485681</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Added algorithm-related functionality.">
+      <created>1556643529134</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1556643529134</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Added dynamic tab managing and nMOEA + nMOEAAlpha algorithms.">
+      <created>1558037933421</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1558037933421</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Added parallel coordinates chart fro problems with objective count &gt; 3.">
+      <created>1558384480311</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1558384480311</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Added normalizing front befor computing qi-s.">
+      <created>1558986281118</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1558986281118</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Changed killing long-running thread method.">
+      <created>1558986542240</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1558986542240</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Updated picking many-objective DTLZ problem mechanism.">
+      <created>1559164443898</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1559164443898</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Added EpsilonBoxMOEA. Fixed picking DTLZ problems.">
+      <created>1562094070547</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1562094070547</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Added dynamic resizing to solution set table view.">
+      <created>1562097103839</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1562097103844</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Changed axes properties of parallel coordinates chart.">
+      <created>1562101695782</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1562101695782</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Added resetting 2D charts on mouse double-click.">
+      <created>1562176547603</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1562176547603</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Added unification of quality indicators value format.">
+      <created>1562408099188</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1562408099188</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Added step-by-step execution mode.">
+      <created>1562413361324</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1562413361324</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Added 'select all'/'select none' option to QIs. Merged choosing QIs with showing QIs values and moved to right pane. Rearranged right pane.">
+      <created>1562423489960</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1562423489960</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Updated setting maxIterations count for NSGA-II (and derivatives) due to final solutions count.">
+      <created>1562424151982</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1562424151982</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Unified shapes and colors of all charts (2d, 3d, PC). Hided showing &quot;ref&quot; points. Added granularity of X axis of QI charts as integers.">
+      <created>1562614062210</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1562614062210</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Added custom legend do PC chart.">
+      <created>1562693550525</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1562693550525</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Changed font of legend and axes of 3D chart.">
+      <created>1562695037673</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1562695037673</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Added monitoring solution count.">
+      <created>1562697800202</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1562697800202</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Added problem description. Rearranged controls (moved algorithm and porblem choice from left to right, moved charts options to bottom). Updated legends strings.">
+      <created>1562702978685</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1562702978685</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Changed scroll behaviour on 3D chart.">
+      <created>1562706066263</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1562706066263</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Rearranged chart options on BorderPane.">
+      <created>1562786051508</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1562786051508</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Adjusted UI to changes of main window size.">
+      <created>1562872632439</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1562872632439</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Added progress bar. Changed &quot;iteration&quot; to &quot;evaluation&quot;.">
+      <created>1562878258684</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1562878258684</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.72478634" sideWeight="0.43494704" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22239032" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.3423913" sideWeight="0.4969743" order="2" side_tool="false" content_ui="tabs" x="262" y="535" width="440" height="124" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14381272" sideWeight="0.4969743" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2730711" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Learn" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991454" sideWeight="0.5650529" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28874025" sideWeight="0.46588486" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35451505" sideWeight="0.4978678" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2909699" sideWeight="0.46588486" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.72478634" sideWeight="0.43494704" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.3423913" sideWeight="0.4969743" order="2" side_tool="false" content_ui="tabs" x="260" y="533" width="440" height="124" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14381272" sideWeight="0.4969743" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.007995736" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35451505" sideWeight="0.4978678" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Learn" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18617614" sideWeight="0.5650529" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added alpha-SPEA2." />
+    <MESSAGE value="Added modified SPEA2 and NSGA-II algorithms. Added turing on/off showing of ref. PF and additional ref points." />
+    <MESSAGE value="Added algorithm-related functionality." />
+    <MESSAGE value="Added dynamic tab managing and nMOEA + nMOEAAlpha algorithms." />
+    <MESSAGE value="Added parallel coordinates chart fro problems with objective count &gt; 3." />
+    <MESSAGE value="Added normalizing front befor computing qi-s." />
+    <MESSAGE value="Changed killing long-running thread method." />
+    <MESSAGE value="Updated picking many-objective DTLZ problem mechanism." />
+    <MESSAGE value="Added EpsilonBoxMOEA. Fixed picking DTLZ problems." />
+    <MESSAGE value="Added dynamic resizing to solution set table view." />
+    <MESSAGE value="Changed axes properties of parallel coordinates chart." />
+    <MESSAGE value="Added resetting 2D charts on mouse double-click." />
+    <MESSAGE value="Added unification of quality indicators value format." />
+    <MESSAGE value="Added step-by-step execution mode." />
+    <MESSAGE value="Added 'select all'/'select none' option to QIs. Merged choosing QIs with showing QIs values and moved to right pane. Rearranged right pane." />
+    <MESSAGE value="Updated setting maxIterations count for NSGA-II (and derivatives) due to final solutions count." />
+    <MESSAGE value="Unified shapes and colors of all charts (2d, 3d, PC). Hided showing &quot;ref&quot; points. Added granularity of X axis of QI charts as integers." />
+    <MESSAGE value="Added custom legend do PC chart." />
+    <MESSAGE value="Changed font of legend and axes of 3D chart." />
+    <MESSAGE value="Added monitoring solution count." />
+    <MESSAGE value="Added problem description. Rearranged controls (moved algorithm and porblem choice from left to right, moved charts options to bottom). Updated legends strings." />
+    <MESSAGE value="Changed scroll behaviour on 3D chart." />
+    <MESSAGE value="Rearranged chart options on BorderPane." />
+    <MESSAGE value="Adjusted UI to changes of main window size." />
+    <MESSAGE value="Added progress bar. Changed &quot;iteration&quot; to &quot;evaluation&quot;." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added progress bar. Changed &quot;iteration&quot; to &quot;evaluation&quot;." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/org/jfree/jfreechart/1.5.0/jfreechart-1.5.0.jar!/org/jfree/chart/MouseWheelHandler.class</url>
+          <line>35</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/jmetalatorFx/src/Main.java</url>
+          <line>865</line>
+          <option name="timeStamp" value="283" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="((EpsilonBoxMOEA)algorithm).epsilons" custom="org.uma.jmetal.algorithm.multiobjective.epsilonboxmoea.EpsilonBoxMOEA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="setValue">
+      <expression>
+        <expression-string>5</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>1</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>1.0</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/scene/control/TableColumn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="577" column="0" lean-forward="false" selection-start-line="577" selection-start-column="0" selection-end-line="577" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orsoncharts/1.7/orsoncharts-1.7.jar!/com/orsoncharts/plot/XYZPlot.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="153" column="23" lean-forward="false" selection-start-line="153" selection-start-column="23" selection-end-line="153" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orsoncharts/1.7/orsoncharts-1.7.jar!/com/orsoncharts/renderer/xyz/XYZRenderer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="25" column="32" lean-forward="false" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jfree/jfreechart/1.5.0/jfreechart-1.5.0.jar!/org/jfree/chart/LegendItemCollection.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jfree/jfreechart/1.5.0/jfreechart-1.5.0.jar!/org/jfree/chart/JFreeChart.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="344" column="16" lean-forward="false" selection-start-line="344" selection-start-column="16" selection-end-line="344" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orsoncharts/1.7/orsoncharts-1.7.jar!/com/orsoncharts/style/StandardChartStyle.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1111">
+          <caret line="235" column="19" lean-forward="false" selection-start-line="235" selection-start-column="16" selection-end-line="235" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orson-charts-fx/1.0/orson-charts-fx-1.0.jar!/com/orsoncharts/fx/Chart3DCanvas.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="74" column="15" lean-forward="false" selection-start-line="74" selection-start-column="15" selection-end-line="74" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orson-charts-fx/1.0/orson-charts-fx-1.0.jar!/com/orsoncharts/fx/Chart3DViewer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="36" column="11" lean-forward="false" selection-start-line="36" selection-start-column="11" selection-end-line="36" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orsoncharts/1.7/orsoncharts-1.7.jar!/com/orsoncharts/Chart3D.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="424" column="49" lean-forward="false" selection-start-line="424" selection-start-column="48" selection-end-line="424" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="2234" column="17" lean-forward="false" selection-start-line="2234" selection-start-column="17" selection-end-line="2234" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/scene/control/TableView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="843" column="35" lean-forward="false" selection-start-line="843" selection-start-column="35" selection-end-line="843" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/javafx-src.zip!/com/sun/javafx/application/PlatformImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="294" column="0" lean-forward="false" selection-start-line="294" selection-start-column="0" selection-end-line="294" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/object-refinery/orsoncharts/1.7/orsoncharts-1.7.jar!/com/orsoncharts/graphics3d/ViewPoint3D.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2160">
+          <caret line="130" column="19" lean-forward="false" selection-start-line="130" selection-start-column="19" selection-end-line="130" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/nMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1140">
+          <caret line="75" column="34" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ProblemHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AlphaNSGAIIManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1260">
+          <caret line="78" column="42" lean-forward="false" selection-start-line="78" selection-start-column="42" selection-end-line="78" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleSPEA2Manager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="79" column="31" lean-forward="false" selection-start-line="79" selection-start-column="20" selection-end-line="79" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASNSGAIIManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-185">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASNMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="23" column="23" lean-forward="true" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/CDASSPEA2Manager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="48" column="24" lean-forward="false" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonSPEA2Builder.java" />
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/solutionattribute/impl/ModifiedStrengthRawFitness.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxNMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="62" column="46" lean-forward="false" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/multiobjective/anglespea2/AngleSPEA2.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="71" column="43" lean-forward="false" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/scene/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="1565" column="0" lean-forward="false" selection-start-line="1565" selection-start-column="0" selection-end-line="1565" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/pseudorandom/JMetalRandom.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/SolutionListUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/impl/AbstractGeneticAlgorithm.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AlphaSPEA2Manager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleNMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="59" column="28" lean-forward="false" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/SolutionUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/comparator/RankingAndCrowdingDistanceComparator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/solution/impl/AbstractGenericSolution.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/solutionattribute/impl/GenericSolutionAttribute.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/util/comparator/RankingComparator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/operator/impl/selection/TournamentSelection.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AngleNSGAIIManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="69" column="40" lean-forward="false" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/AlphaNMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="860">
+          <caret line="56" column="35" lean-forward="false" selection-start-line="56" selection-start-column="35" selection-end-line="56" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxSPEA2Manager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="800">
+          <caret line="54" column="81" lean-forward="false" selection-start-line="54" selection-start-column="81" selection-end-line="54" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/jre/lib/rt.jar!/sun/nio/cs/CharsetMapping.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="363">
+          <caret line="28" column="20" lean-forward="true" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk1.8.0_152/javafx-src.zip!/javafx/fxml/Initializable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="40" column="17" lean-forward="false" selection-start-line="40" selection-start-column="17" selection-end-line="40" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/ExperimentParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6100">
+          <caret line="320" column="47" lean-forward="false" selection-start-line="320" selection-start-column="47" selection-end-line="320" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBoxNMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="920">
+          <caret line="54" column="96" lean-forward="false" selection-start-line="54" selection-start-column="96" selection-end-line="54" selection-end-column="96" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/GuidedEpsilonBox2NMOEAManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="920">
+          <caret line="54" column="94" lean-forward="false" selection-start-line="54" selection-start-column="94" selection-end-line="54" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalhelpers/algorithms/EpsilonBoxNSGAIIManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="71" column="29" lean-forward="false" selection-start-line="71" selection-start-column="29" selection-end-line="71" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/multiobjective/EpsilonBoxNSGAII/EpsilonBoxNSGAIIBuilder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1580">
+          <caret line="93" column="24" lean-forward="false" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
+          <folding>
+            <marker date="1564608001148" expanded="false" signature="0:104" ph="/.../" />
+            <marker date="1564608001148" expanded="false" signature="180:797" ph="..." />
+            <marker date="1564608001148" expanded="true" signature="1444:1928" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="1995:2194" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="2272:2503" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="2581:2813" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="2923:3147" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="3248:3440" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="3538:3598" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="3639:3891" ph="{...}" />
+            <marker date="1564608001148" expanded="false" signature="3927:3938" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="3958:3964" ph=" }" />
+            <marker date="1564608001148" expanded="false" signature="3999:4010" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="4037:4043" ph=" }" />
+            <marker date="1564608001148" expanded="false" signature="4079:4090" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="4117:4123" ph=" }" />
+            <marker date="1564608001148" expanded="false" signature="4179:4190" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="4220:4226" ph=" }" />
+            <marker date="1564608001148" expanded="false" signature="4280:4291" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="4320:4326" ph=" }" />
+            <marker date="1564608001148" expanded="false" signature="4391:4402" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="4432:4438" ph=" }" />
+            <marker date="1564608001148" expanded="false" signature="4502:4513" ph=" { " />
+            <marker date="1564608001148" expanded="false" signature="4535:4541" ph=" }" />
+            <marker date="1564608001148" expanded="true" signature="4580:4711" ph="{...}" />
+            <marker date="1564608001148" expanded="true" signature="4694:4705" ph="{}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/multiobjective/EpsilonBoxNSGAII/EpsilonBoxNSGAII.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="27" column="30" lean-forward="false" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+          <folding>
+            <marker date="1564608001148" expanded="true" signature="4382:4398" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/Main.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1380">
+          <caret line="69" column="48" lean-forward="false" selection-start-line="63" selection-start-column="36" selection-end-line="69" selection-end-column="48" />
+          <folding>
+            <element signature="n#HBox#0;n#children#0;n#VBox#0;n#center#0;n#BorderPane#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/jmetalator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/org/uma/jmetal/algorithm/impl/AbstractEvolutionaryAlgorithm.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1064">
+          <caret line="17" column="33" lean-forward="false" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jmetalatorFx/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="1509" column="34" lean-forward="false" selection-start-line="1509" selection-start-column="34" selection-end-line="1509" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#setTabVisiblity#0;class#Main#0" expanded="false" />
+            <element signature="e#14039#14040#0" expanded="true" />
+            <element signature="e#14069#14070#0" expanded="true" />
+            <element signature="e#17703#18051#0" expanded="false" />
+            <element signature="method#resetZoom#2;class#Main#0" expanded="false" />
+            <element signature="method#handleZoom#0;class#Main#0" expanded="false" />
+            <element signature="method#clearControls#0;class#Main#0" expanded="false" />
+            <element signature="method#update3dChartRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updatePCChartRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#update2dChartRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updateSetRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updateGDRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updateIGDRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updateIGDPlusRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updateSpreadRelatedIU#0;class#Main#0" expanded="false" />
+            <element signature="method#updateEpsilonRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#updateHvRelatedUI#0;class#Main#0" expanded="false" />
+            <element signature="method#stopButtonClicked#0;class#Main#0" expanded="false" />
+            <element signature="method#nextButtonClicked#0;class#Main#0" expanded="false" />
+            <element signature="method#algorithmSelected#0;class#Main#0" expanded="false" />
+            <element signature="method#setSolutionsTableViewColumnCount#0;class#Main#0" expanded="false" />
+            <element signature="method#showSSCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#showRefPFCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#igdCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#igdPlusCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#spreadCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#epsilonCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#hvCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#erCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#stepByStepCheckBoxChecked#0;class#Main#0" expanded="false" />
+            <element signature="method#FillComboBoxProblems#0;class#Main#0" expanded="false" />
+            <element signature="method#printQualityIndicators#0;class#Main#0" expanded="false" />
+            <element signature="method#createSeries3D#0;class#Main#0" expanded="false" />
+            <element signature="method#arrayOf#0;class#Main#0" expanded="false" />
+            <element signature="method#arrayOf#1;class#Main#0" expanded="false" />
+            <element signature="method#createFront3D#0;class#Main#0" expanded="false" />
+            <element signature="method#createSeries2D#0;class#Main#0" expanded="false" />
+            <element signature="method#createSeriesCollectionPC#0;class#Main#0" expanded="false" />
+            <element signature="method#createFront2D#0;class#Main#0" expanded="false" />
+            <element signature="method#createFrontPC#0;class#Main#0" expanded="false" />
+            <element signature="method#createChart2D#0;class#Main#0" expanded="false" />
+            <element signature="method#createLine2D#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor>
+            <show-content>
+              <type id="library" />
+              <type id="artifact" />
+            </show-content>
+          </artifact-editor>
+          <last-edited>jmetalator:jar</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8 (32)</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>jmetalatorFx</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>org.jfree:jfreechart-fx:1.0.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+  <component name="mavenExecuteGoalHistory">
+    <option value="" />
+  </component>
+</project>
