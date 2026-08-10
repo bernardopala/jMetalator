@@ -23,6 +23,7 @@ public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPE
   protected final Problem<S> problem;
   protected int maxIterations;
   protected int populationSize;
+  protected int archiveSize;
   protected CrossoverOperator<S> crossoverOperator;
   protected MutationOperator<S> mutationOperator;
   protected SelectionOperator<List<S>, S> selectionOperator;
@@ -79,9 +80,18 @@ public class SPEA2Builder<S extends Solution<?>> implements AlgorithmBuilder<SPE
     return this;
   }
 
+  public SPEA2Builder<S> setArchiveSize(int archiveSize) {
+    if (archiveSize < 0) {
+      throw new JMetalException("Population size is negative: " + archiveSize);
+    } else {
+      this.archiveSize = archiveSize;
+      return this;
+    }
+  }
+
   public SPEA2<S> build() {
     SPEA2<S> algorithm = null ;
-    algorithm = new SPEA2<S>(problem, maxIterations, populationSize, crossoverOperator,
+    algorithm = new SPEA2<S>(problem, maxIterations, populationSize, archiveSize, crossoverOperator,
           mutationOperator, selectionOperator, evaluator);
     
     return algorithm ;
