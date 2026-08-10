@@ -7,8 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies" level="project" />
-    <orderEntry type="library" name="com.object-refinery:orson-charts-fx:1.0" level="project" />
-    <orderEntry type="library" name="org.jfree:jfreechart-fx:1.0.1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />
+    <orderEntry type="module" module-name="jmetal-algorithm" exported="" />
+    <orderEntry type="module" module-name="jmetal-core" exported="" />
+    <orderEntry type="module" module-name="jmetal-problem" exported="" />
+    <orderEntry type="library" exported="" name="com.object-refinery:orson-charts-fx:1.0" level="project" />
+    <orderEntry type="library" exported="" name="org.jfree:jfreechart-fx:1.0.1" level="project" />
   </component>
 </module>

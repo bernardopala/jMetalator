@@ -1092,47 +1092,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             datasetPC = createSeriesCollectionPC(solutionSetResult);
         }
 
-//        if (isShowingSSActive && solutionSetResult != null && solutionSetResult.size() > 0)
-//            datasetPC.addSeries(ssSeries);
-//        else
-//            datasetPC.addSeries(new XYSeries("Solution set"));
-
-        //start
-
-//        XYSeries laSeries = new XYSeries("la");
-//
-//        if (solutionSetResult != null && solutionSetResult.size() > 0) {
-//
-//            ArrayList<double[]> points = new ArrayList<double[]>();
-//            for (int i = 0; i < solutionSetResult.size(); i++) {
-//                points.add(arrayOf(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1)));
-//            }
-//            /*
-//            GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][2]));
-//            double[][] results = gl.getClusterPoints(20);
-//            for (double[] point : results) {
-//                laSeries.add(point[0], point[1]);
-//            }
-//            */
-///*
-//            GoodDistribution gd = new GoodDistribution();
-//            double[][] results = gd.get(solutionSetResult);
-//            for (double[] point : results) {
-//                laSeries.add(point[0], point[1]);
-//            }
-//*/
-//            /*
-//            List<DoubleSolution> edList = EvenlyDistributedSolutions.get(solutionSetResult, 50);
-//            for (DoubleSolution point : edList) {
-//                laSeries.add(point.getObjective(0), point.getObjective(1));
-//            }
-//            */
-//        }
-//
-//        if (isShowingRefPointsActive)
-//            datasetPC.addSeries(laSeries);
-        //end
-
         if (isShowingRefPFActive)
         {
             for (int k = 0; k < seriesFrontPC.getSeriesCount(); k++) {
@@ -1221,7 +1180,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         rndr0.setSeriesPaint(2, Color.GREEN);
         rndr0.setSeriesOutlinePaint(2, Color.BLACK);
         rndr0.setSeriesOutlineStroke(2, new BasicStroke(1));
-        //start
+
         XYSeries laSeries = new XYSeries("la");
 
         if (solutionSetResult != null && solutionSetResult.size() > 0) {
@@ -1230,44 +1189,15 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
             for (int i = 0; i < solutionSetResult.size(); i++) {
                 points.add(arrayOf(solutionSetResult.get(i).getObjective(0), solutionSetResult.get(i).getObjective(1)));
             }
-            /*
-            GenLloyd gl = new GenLloyd(points.toArray(new double[points.size()][2]));
-            double[][] results = gl.getClusterPoints(20);
-            for (double[] point : results) {
-                laSeries.add(point[0], point[1]);
-            }
-            */
-/*
-            GoodDistribution gd = new GoodDistribution();
-            double[][] results = gd.get(solutionSetResult);
-            for (double[] point : results) {
-                laSeries.add(point[0], point[1]);
-            }
-*/
-            /*
-            List<DoubleSolution> edList = EvenlyDistributedSolutions.get(solutionSetResult, 50);
-            for (DoubleSolution point : edList) {
-                laSeries.add(point.getObjective(0), point.getObjective(1));
-            }
-            */
         }
 
         if (isShowingRefPointsActive) {
             dataset2D.addSeries(laSeries);
-//            XYItemRenderer renderer1 = new XYDotRenderer();
-//            renderer1.setSeriesPaint(1, Color.GREEN);
-//            plot2D.setRenderer(1, renderer1);
         }
-        //end
 
         if (isShowingRefPFActive) {
             dataset2D.addSeries(seriesFront2D);
-//            XYItemRenderer renderer2 = new XYDotRenderer();
-//            renderer2.setSeriesPaint(2, Color.BLACK);
-//            plot2D.setRenderer(2, renderer2);
         }
-
-
 
         if (is2dChartAutoResizing.get() == 1) {
             List<XYSeries> union = new ArrayList<>();
@@ -1861,7 +1791,7 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
     private void FillComboBoxAlgorithms()
     {
         ObservableList<String> algoritmhs = FXCollections.observableArrayList();
-        algoritmhs.addAll("NSGAII", "SPEA2", "SPEA3", "DB1SPEA2", "DB2SPEA2", "ASPEA2", "AngleSPEA2", "ESPEA2", "ANSGAII", "AngleNSGAII", "CDASNSGAII", "nMOEA", "nMOEA-Alpha", "EpsilonBoxMOEA");
+        algoritmhs.addAll("NSGAII", "SPEA2");
 
         algorithmsComboBox.setItems(algoritmhs);
     }
@@ -2020,9 +1950,6 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         for (int i = 0; i < pairs.size(); i+=5) {
             if (i <= pairs.size())
                 seriesFront2D_.add(pairs.get(i).getKey(), pairs.get(i).getValue());
-
-//            if (i % count == 0)
-//                i+=count;
         }
 
         return seriesFront2D_;
@@ -2051,5 +1978,4 @@ public class Main implements CurrentSolutionSetReceiver<DoubleSolution>, Initial
         return ChartFactory.createXYLineChart("", "F1", "F2", dataset);
     }
     //endregion
-
 }

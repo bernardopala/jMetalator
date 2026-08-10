@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../jMetal/jmetal-exec/target/jmetal-exec-5.5-SNAPSHOT-jar-with-dependencies.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

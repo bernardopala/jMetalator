@@ -1,7 +1,5 @@
 package jmetalhelpers;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import jmetalhelpers.algorithms.*;
 import org.uma.jmetal.algorithm.impl.AbstractEvolutionaryAlgorithm;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -79,47 +77,8 @@ public class ExperimentParams{
                 if (this.algorithmName == "NSGAII") {
                     params = NSGAIIManager.getDefaultParams();
                 }
-                if (this.algorithmName == "SPEA2") {
+                else if (this.algorithmName == "SPEA2") {
                     params = SPEA2Manager.getDefaultParams();
-                }
-                if (this.algorithmName == "DB1SPEA2") {
-                    params = DBSPEA2Manager.getDefaultParams();
-                }
-                if (this.algorithmName == "DB2SPEA2") {
-                    params = DBSPEA2Manager.getDefaultParams();
-                }
-                if (this.algorithmName == "ASPEA2") {
-                    params = ASPEA2Manager.getDefaultParams();
-                }
-                if (this.algorithmName == "AngleSPEA2") {
-                    params = AngleSPEA2Manager.getDefaultParams();
-                }
-                if (this.algorithmName == "ESPEA2") {
-                    params = ESPEA2Manager.getDefaultParams();
-                }
-                else if (this.algorithmName == "SPEA3") {
-                    params = SPEA3Manager.getDefaultParams();
-                }
-                else if (this.algorithmName == "ANSGAII") {
-                    params = ANSGAIIManager.getDefaultParams();
-                }
-                else if (this.algorithmName == "ENSGAII") {
-                    params = ENSGAIIManager.getDefaultParams();
-                }
-                else if (this.algorithmName == "AngleNSGAII") {
-                    params = AngleNSGAIIManager.getDefaultParams();
-                }
-                else if (this.algorithmName == "CDASNSGAII") {
-                    params = CDASNSGAIIManager.getDefaultParams();
-                }
-                else if (this.algorithmName == "nMOEA") {
-                    params = nMOEAManager.getDefaultParams();
-                }
-                else if (this.algorithmName == "nMOEA-Alpha") {
-                    params = nMOEAAlphaManager.getDefaultParams();
-                }
-                else if (this.algorithmName == "EpsilonBoxMOEA") {
-                    params = EpsilonBoxMOEAManager.getDefaultParams();
                 }
 
                 return params;
@@ -167,123 +126,6 @@ public class ExperimentParams{
                 params.replace("problemName", this.problemName);
                 params.replace("objectiveCount", String.valueOf(this.objectiveCount));
                 ea = new SPEA2Manager(params).Create();
-            }
-            else if (this.algorithmName == "DB1SPEA2") {
-                params = DBSPEA2Manager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new DBSPEA2Manager(params).Create(1);
-            }
-            else if (this.algorithmName == "DB2SPEA2") {
-                params = DBSPEA2Manager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new DBSPEA2Manager(params).Create(2);
-            }
-            else if (this.algorithmName == "ASPEA2") {
-                params = ASPEA2Manager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new ASPEA2Manager(params).Create();
-            }
-            else if (this.algorithmName == "AngleSPEA2") {
-                params = AngleSPEA2Manager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new AngleSPEA2Manager(params).Create();
-            }
-            else if (this.algorithmName == "ESPEA2") {
-                params = ESPEA2Manager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new ESPEA2Manager(params).Create();
-            }
-            else if (this.algorithmName == "SPEA3") {
-                params = SPEA3Manager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new SPEA3Manager(params).Create();
-            }
-            else if (this.algorithmName == "ANSGAII") {
-                params = ANSGAIIManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new ANSGAIIManager(params).Create();
-            }
-            else if (this.algorithmName == "ENSGAII") {
-                params = ENSGAIIManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new ENSGAIIManager(params).Create();
-            }
-            else if (this.algorithmName == "AngleNSGAII") {
-                params = AngleNSGAIIManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new AngleNSGAIIManager(params).Create();
-            }
-            else if (this.algorithmName == "CDASNSGAII") {
-                params = CDASNSGAIIManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new CDASNSGAIIManager(params).Create();
-            }
-            else if (this.algorithmName == "nMOEA") {
-                params = nMOEAManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new nMOEAManager(params).Create();
-            }
-            else if (this.algorithmName == "nMOEA-Alpha") {
-                params = nMOEAAlphaManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new nMOEAAlphaManager(params).Create();
-            }
-            else if (this.algorithmName == "EpsilonBoxMOEA") {
-                params = EpsilonBoxMOEAManager.getDefaultParams();
-                if (algorithmParameterList != null)
-                    params = updateParameterList(params, algorithmParameterList);
-
-                params.replace("problemName", this.problemName);
-                params.replace("objectiveCount", String.valueOf(this.objectiveCount));
-                ea = new EpsilonBoxMOEAManager(params).Create();
             }
 
             return ea;

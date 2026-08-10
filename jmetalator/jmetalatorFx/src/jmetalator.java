@@ -26,7 +26,7 @@ public class jmetalator extends Application {
         main.setStage(primaryStage);
         primaryStage.setScene(new Scene(root));
 
-        primaryStage.setTitle("jMetalator v0.1 - jMetal 5.x Simulator");
+        primaryStage.setTitle("jMetalator v0.12 - jMetal 5.x Simulator");
         //primaryStage.setMaximized(true);
         primaryStage.show();
 

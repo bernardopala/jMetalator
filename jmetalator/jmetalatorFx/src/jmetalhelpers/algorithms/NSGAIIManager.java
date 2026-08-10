@@ -7,12 +7,12 @@ import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.ProblemUtils;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import org.uma.jmetal.util.comparator.RankingComparator;
-import org.uma.jmetal.util.comparator.RelaxationType;
 import org.uma.jmetal.util.solutionattribute.impl.DominanceRanking;
 
 import java.util.HashMap;
@@ -56,14 +56,7 @@ public class NSGAIIManager {
         Problem problem = ProblemHelper.loadProblem(problemName, objectiveCount);
         SBXCrossover crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex);
         PolynomialMutation mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex);
-
-        RankingComparator rankComp = new RankingComparator<>();
-        DominanceRanking domRank = new DominanceRanking<>();
-        domRank.setDominanceComparator(new DominanceComparator<Solution<?>>(RelaxationType.NONE));
-        rankComp.setRanking(domRank);
-        RankingAndCrowdingDistanceComparator rankAndCrowd = new RankingAndCrowdingDistanceComparator<>();
-        rankAndCrowd.setRankingComparator(rankComp);
-        BinaryTournamentSelection selection = new BinaryTournamentSelection(rankAndCrowd);
+        BinaryTournamentSelection selection = new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator<DoubleSolution>());
 
         return (new NSGAIIBuilder(problem, crossover, mutation)).setSelectionOperator(selection).setMaxEvaluations(maxEvaluations * populationSize).setPopulationSize(populationSize).build();
     }
